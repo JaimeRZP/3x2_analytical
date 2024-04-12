@@ -30,9 +30,7 @@ cov = meta.cov
 iΓ = inv(Γ)
 data = iΓ * data
 
-init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
-            1.9, 1.9, 1.9, 1.9, 1.9,
-            0.0, 0.0, 0.0, 0.0, 0.0]
+init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
 
 @model function model(data;
     meta=meta, 
@@ -45,31 +43,21 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    DESgc__0_b ~ Uniform(0.8, 3.0)
-    DESgc__1_b ~ Uniform(0.8, 3.0)
-    DESgc__2_b ~ Uniform(0.8, 3.0)
-    DESgc__3_b ~ Uniform(0.8, 3.0)
-    DESgc__4_b ~ Uniform(0.8, 3.0)
-    DESgc__0_dz ~ TruncatedNormal(0.0, 0.007, -0.2, 0.2)
-    DESgc__1_dz ~ TruncatedNormal(0.0, 0.007, -0.2, 0.2)
-    DESgc__2_dz ~ TruncatedNormal(0.0, 0.006, -0.2, 0.2)
-    DESgc__3_dz ~ TruncatedNormal(0.0, 0.01, -0.2, 0.2)
-    DESgc__4_dz ~ TruncatedNormal(0.0, 0.01, -0.2, 0.2)
+    DESgc__0_b = 1.9
+    DESgc__1_b = 1.9
+    DESgc__2_b = 1.9
+    DESgc__3_b = 1.9
+    DESgc__4_b = 1.9
 
     nuisances = Dict("DESgc__0_b" => DESgc__0_b,
                      "DESgc__1_b" => DESgc__1_b,
                      "DESgc__2_b" => DESgc__2_b,
                      "DESgc__3_b" => DESgc__3_b,
-                     "DESgc__4_b" => DESgc__4_b,
-                     "DESgc__0_dz" => DESgc__0_dz,
-                     "DESgc__1_dz" => DESgc__1_dz,
-                     "DESgc__2_dz" => DESgc__2_dz,
-                     "DESgc__3_dz" => DESgc__3_dz,
-                     "DESgc__4_dz" => DESgc__4_dz)
+                     "DESgc__4_b" => DESgc__4_b)
 
-    cosmology = Cosmology(Ωm, Ωb, h, ns, σ8;
-                          tk_mode="EisHu",
-                          Pk_mode="Halofit")
+    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+        tk_mode=:EisHu,
+        pk_mode=:Halofit)
 
     theory = Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(theory, cov)
@@ -87,8 +75,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains/numerical/"
-folname = string("DES_gcgc_EisHu_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folpath = "../../chains/analytical/"
+folname = string("DES_gcgc_dz_ana_TAP_", TAP,  "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)

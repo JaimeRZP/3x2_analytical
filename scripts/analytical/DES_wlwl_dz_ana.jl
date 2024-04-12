@@ -9,7 +9,7 @@ sacc = pyimport("sacc");
 #println("My id is ", myid(), " and I have ", Threads.nthreads(), " threads")
 
 sacc_path = "../../data/FD/cls_FD_covG.fits"
-yaml_path = "../../data/DESY1/gcgc.yml"
+yaml_path = "../../data/DESY1/wlwl.yml"
 nz_path = "../../data/DESY1/nzs"
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
@@ -17,7 +17,7 @@ yaml_file = YAML.load_file(yaml_path)
 #nz_DESwl__1 = npzread(string(nz_path, "nz_DESwl__1.npz"))
 #nz_DESwl__2 = npzread(string(nz_path, "nz_DESwl__2.npz"))
 #nz_DESwl__3 = npzread(string(nz_path, "nz_DESwl__3.npz"))
-meta, files = make_data(sacc_file, yaml_file)
+meta, files = make_data(sacc_file, yaml_file)#,
                         #nz_DESwl__0=nz_DESwl__0,
                         #nz_DESwl__1=nz_DESwl__1,
                         #nz_DESwl__2=nz_DESwl__2,
@@ -30,9 +30,7 @@ cov = meta.cov
 iΓ = inv(Γ)
 data = iΓ * data
 
-init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
-            1.9, 1.9, 1.9, 1.9, 1.9,
-            0.0, 0.0, 0.0, 0.0, 0.0]
+init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
 
 @model function model(data;
     meta=meta, 
@@ -45,34 +43,23 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    DESgc__0_b ~ Uniform(0.8, 3.0)
-    DESgc__1_b ~ Uniform(0.8, 3.0)
-    DESgc__2_b ~ Uniform(0.8, 3.0)
-    DESgc__3_b ~ Uniform(0.8, 3.0)
-    DESgc__4_b ~ Uniform(0.8, 3.0)
-    DESgc__0_dz ~ TruncatedNormal(0.0, 0.007, -0.2, 0.2)
-    DESgc__1_dz ~ TruncatedNormal(0.0, 0.007, -0.2, 0.2)
-    DESgc__2_dz ~ TruncatedNormal(0.0, 0.006, -0.2, 0.2)
-    DESgc__3_dz ~ TruncatedNormal(0.0, 0.01, -0.2, 0.2)
-    DESgc__4_dz ~ TruncatedNormal(0.0, 0.01, -0.2, 0.2)
+    nuisances = Dict("DESwl__0_dz" => DESwl__0_dz,
+                     "DESwl__1_dz" => DESwl__1_dz,
+                     "DESwl__2_dz" => DESwl__2_dz,
+                     "DESwl__3_dz" => DESwl__3_dz,
+                     "DESwl__0_m" => DESwl__0_m,
+                     "DESwl__1_m" => DESwl__1_m,
+                     "DESwl__2_m" => DESwl__2_m,
+                     "DESwl__3_m" => DESwl__3_m,
+                     "A_IA" => A_IA,
+                     "alpha_IA" => alpha_IA,)
 
-    nuisances = Dict("DESgc__0_b" => DESgc__0_b,
-                     "DESgc__1_b" => DESgc__1_b,
-                     "DESgc__2_b" => DESgc__2_b,
-                     "DESgc__3_b" => DESgc__3_b,
-                     "DESgc__4_b" => DESgc__4_b,
-                     "DESgc__0_dz" => DESgc__0_dz,
-                     "DESgc__1_dz" => DESgc__1_dz,
-                     "DESgc__2_dz" => DESgc__2_dz,
-                     "DESgc__3_dz" => DESgc__3_dz,
-                     "DESgc__4_dz" => DESgc__4_dz)
+    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+        tk_mode=:EisHu,
+        pk_mode=:Halofit)
 
-    cosmology = Cosmology(Ωm, Ωb, h, ns, σ8;
-                          tk_mode="EisHu",
-                          Pk_mode="Halofit")
-
-    theory = Theory(cosmology, meta, files; Nuisances=nuisances)
-    data ~ MvNormal(theory, cov)
+    theory = Theory(cosmology, meta, files)
+    data ~ MvNormal(iΓ * theory, I)
 end
 
 iterations = 2000
@@ -88,7 +75,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains/analytical/"
-folname = string("DES_gcgc_EisHu_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folname = string("DES_wlwl_dz_ana_TAP_", TAP,  "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
