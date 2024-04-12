@@ -9,9 +9,9 @@ sacc = pyimport("sacc");
 
 #println("My id is ", myid(), " and I have ", Threads.nthreads(), " threads")
 
-sacc_path = "../data/FD/cls_FD_covG.fits"
-yaml_path = "../data/DESY1/gcgc_gcwl_wlwl.yml"
-nz_path = "../data/DESY1/nzs"
+sacc_path = "../../data/FD/cls_FD_covG.fits"
+yaml_path = "../../data/DESY1/gcgc_gcwl_wlwl.yml"
+nz_path = "../../data/DESY1/nzs"
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 meta, files = make_data(sacc_file, yaml_file)
@@ -22,7 +22,7 @@ cov = meta.cov
 iΓ = inv(Γ)
 data = iΓ * data
 
-init_params_DES=[0.30, 0.05, 0.67, 0.81, 0.95,
+init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
             1.9, 1.9, 1.9, 1.9, 1.9,
             0.0, 0.0, 0.0, 0.0, 0.0,
             0.0, 0.0, 0.0, 0.0,
@@ -32,6 +32,7 @@ init_params_DES=[0.30, 0.05, 0.67, 0.81, 0.95,
 @model function model(data;
     meta=meta, 
     files=files)
+
     #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
     Ωb ~ Uniform(0.028, 0.065)
@@ -81,9 +82,9 @@ init_params_DES=[0.30, 0.05, 0.67, 0.81, 0.95,
                      "A_IA" => A_IA,
                      "alpha_IA" => alpha_IA,)
 
-    cosmology = Cosmology(Ωm, Ωb, h, ns, σ8;
-                          tk_mode=:EisHu,
-                          Pk_mode=:Halofit)
+    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+            tk_mode=:EisHu,
+            pk_mode=:Halofit)
 
     theory = Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
@@ -101,7 +102,7 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../chains/"
+folpath = "../../chains/analytical/"
 folname = string("DES_EisHu_TAP_", TAP,  "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
