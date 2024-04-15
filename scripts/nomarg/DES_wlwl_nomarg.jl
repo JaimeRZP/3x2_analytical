@@ -52,8 +52,8 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
     data ~ MvNormal(iΓ * theory, I)
 end
 
-iterations = 10
-adaptation = 10
+iterations = 2000
+adaptation = 500
 TAP = 0.65
 init_ϵ = 0.03
 
