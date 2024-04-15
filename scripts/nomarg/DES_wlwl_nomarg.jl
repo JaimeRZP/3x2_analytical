@@ -3,8 +3,8 @@ using Turing
 using LimberJack
 using CSV
 using YAML
-using PythonCall
 using JLD2
+using PythonCall
 sacc = pyimport("sacc");
 
 #println("My id is ", myid(), " and I have ", Threads.nthreads(), " threads")

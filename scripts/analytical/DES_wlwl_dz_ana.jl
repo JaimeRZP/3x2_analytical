@@ -2,7 +2,9 @@ using LinearAlgebra
 using Turing
 using LimberJack
 using CSV
+using NPZ
 using YAML
+using JLD2
 using PythonCall
 sacc = pyimport("sacc");
 
@@ -11,20 +13,12 @@ sacc = pyimport("sacc");
 sacc_path = "../../data/FD/cls_FD_covG.fits"
 yaml_path = "../../data/DESY1/wlwl.yml"
 nz_path = "../../data/DESY1/nzs"
+cov_path = "../../cov/dz_covs.npz"
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
-#nz_DESwl__0 = npzread(string(nz_path, "nz_DESwl__0.npz"))
-#nz_DESwl__1 = npzread(string(nz_path, "nz_DESwl__1.npz"))
-#nz_DESwl__2 = npzread(string(nz_path, "nz_DESwl__2.npz"))
-#nz_DESwl__3 = npzread(string(nz_path, "nz_DESwl__3.npz"))
-meta, files = make_data(sacc_file, yaml_file)#,
-                        #nz_DESwl__0=nz_DESwl__0,
-                        #nz_DESwl__1=nz_DESwl__1,
-                        #nz_DESwl__2=nz_DESwl__2,
-                        #nz_DESwl__3=nz_DESwl__3)
-
+meta, files = make_data(sacc_file, yaml_file)
 data = meta.data
-cov = meta.cov
+cov = npzread(path)["wlwl_AD"]
 
 Γ = sqrt(cov)
 iΓ = inv(Γ)
@@ -102,7 +96,7 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 cond_model = model(data)
 sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
 chain = sample(cond_model, sampler, iterations;
-                init_params=init_params_DES,
+                init_params=init_params,
                 progress=true, save_state=true)
 
 # Save the actual chain.       

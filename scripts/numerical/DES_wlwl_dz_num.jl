@@ -3,6 +3,7 @@ using Turing
 using LimberJack
 using CSV
 using YAML
+using JLD2
 using PythonCall
 sacc = pyimport("sacc");
 
@@ -102,7 +103,7 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 cond_model = model(data)
 sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
 chain = sample(cond_model, sampler, iterations;
-                init_params=init_params_DES,
+                init_params=init_params,
                 progress=true, save_state=true)
 
 # Save the actual chain.       
