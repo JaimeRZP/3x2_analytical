@@ -12,9 +12,9 @@ Run chains
 ### $\Delta z$ Model
 
 Compute the $TPT$ matrices
-- [ ] DES wlwl
-- [ ] DES gcgc
-- [ ] DES 3x2
+- [x] DES wlwl
+- [x] DES gcgc
+- [x] DES 3x2
 
 Run chains
 - Numerical
