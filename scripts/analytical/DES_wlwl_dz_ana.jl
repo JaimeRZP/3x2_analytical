@@ -18,7 +18,7 @@ sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 meta, files = make_data(sacc_file, yaml_file)
 data = meta.data
-cov = npzread(path)["wlwl_AD"]
+cov = npzread(cov_path)["wlwl_AD"]
 
 Γ = sqrt(cov)
 iΓ = inv(Γ)
