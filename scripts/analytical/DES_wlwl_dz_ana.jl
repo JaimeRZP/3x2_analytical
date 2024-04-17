@@ -37,17 +37,6 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    nuisances = Dict("DESwl__0_dz" => DESwl__0_dz,
-                     "DESwl__1_dz" => DESwl__1_dz,
-                     "DESwl__2_dz" => DESwl__2_dz,
-                     "DESwl__3_dz" => DESwl__3_dz,
-                     "DESwl__0_m" => DESwl__0_m,
-                     "DESwl__1_m" => DESwl__1_m,
-                     "DESwl__2_m" => DESwl__2_m,
-                     "DESwl__3_m" => DESwl__3_m,
-                     "A_IA" => A_IA,
-                     "alpha_IA" => alpha_IA,)
-
     cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit)

@@ -24,12 +24,7 @@ cov = npzread(cov_path)["3x2_AD"]
 iΓ = inv(Γ)
 data = iΓ * data
 
-init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
-            1.9, 1.9, 1.9, 1.9, 1.9,
-            0.0, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0]
+init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
 
 @model function model(data;
     meta=meta, 
