@@ -36,17 +36,17 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    DESgc__0_b = 1.9
-    DESgc__1_b = 1.9
-    DESgc__2_b = 1.9
-    DESgc__3_b = 1.9
-    DESgc__4_b = 1.9
-
-    nuisances = Dict("DESgc__0_b" => DESgc__0_b,
-                     "DESgc__1_b" => DESgc__1_b,
-                     "DESgc__2_b" => DESgc__2_b,
-                     "DESgc__3_b" => DESgc__3_b,
-                     "DESgc__4_b" => DESgc__4_b)
+    nuisances = Dict("DESgc__0_b" => 1.484,
+                     "DESgc__1_b" => 1.805,
+                     "DESgc__2_b" => 1.776,
+                     "DESgc__3_b" => 2.168,
+                     "DESgc__4_b" => 2.23,
+                     "DESwl__0_m" => 0.018,
+                     "DESwl__1_m" => 0.014,
+                     "DESwl__2_m" => 0.01,
+                     "DESwl__3_m" => 0.004,
+                     "A_IA" => 0.294,
+                     "alpha_IA" => 0.378)
 
     cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
@@ -58,8 +58,8 @@ end
 
 iterations = 2000
 adaptation = 500
-TAP = 0.65
-init_ϵ = 0.03
+TAP = 0.8
+init_ϵ = 0.005
 
 println("sampling settings: ")
 println("iterations ", iterations)

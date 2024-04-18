@@ -42,10 +42,21 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
     DESwl__2_dz ~ TruncatedNormal(0.009, 0.011, -0.2, 0.2)
     DESwl__3_dz ~ TruncatedNormal(-0.018, 0.022, -0.2, 0.2)
 
-    nuisances = Dict("DESwl__0_dz" => DESwl__0_dz,
-                     "DESwl__1_dz" => DESwl__1_dz,
-                     "DESwl__2_dz" => DESwl__2_dz,
-                     "DESwl__3_dz" => DESwl__3_dz)
+    nuisances = Dict("DESgc__0_b" => 1.484,
+                    "DESgc__1_b" => 1.805,
+                    "DESgc__2_b" => 1.776,
+                    "DESgc__3_b" => 2.168,
+                    "DESgc__4_b" => 2.23,
+                    "DESwl__0_dz" => DESwl__0_dz,
+                    "DESwl__1_dz" => DESwl__1_dz,
+                    "DESwl__2_dz" => DESwl__2_dz,
+                    "DESwl__3_dz" => DESwl__3_dz,
+                    "DESwl__0_m" => 0.018,
+                    "DESwl__1_m" => 0.014,
+                    "DESwl__2_m" => 0.01,
+                    "DESwl__3_m" => 0.004,
+                    "A_IA" => 0.294,
+                    "alpha_IA" => 0.378)
 
     cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
