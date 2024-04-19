@@ -5,9 +5,9 @@
 ### No Marginalisation
 
 Run chains
-- [ ] DES wlwl
+- [x] DES wlwl
 - [ ] DES gcgc
-- [ ] DES 3x2
+- [x] DES 3x2
 
 ### $\Delta z$ Model
 
@@ -18,14 +18,14 @@ Compute the $TPT$ matrices
 
 Run chains
 - Numerical
-    - [ ] DES wlwl
+    - [x] DES wlwl
     - [ ] DES gcgc
-    - [ ] DES 3x2
+    - [x] DES 3x2
 
 - Analytical
-    - [ ] DES wlwl
+    - [x] DES wlwl
     - [ ] DES gcgc
-    - [ ] DES 3x2
+    - [x] DES 3x2
 
 ### $N(z)$ Model
 
