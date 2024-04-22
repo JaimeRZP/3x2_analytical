@@ -65,7 +65,7 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
         pk_mode=:Halofit)
 
     theory = Theory(cosmology, meta, files; Nuisances=nuisances)
-    data ~ MvNormal(theory, cov)
+    data ~ MvNormal(iΓ * theory, I)
 end
 
 iterations = 2000
