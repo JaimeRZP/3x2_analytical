@@ -24,6 +24,11 @@ zs_k1, nz_k1, cov_k1 = nz_DESgc__1["z"], nz_DESgc__1["dndz"], nz_DESgc__1["cov"]
 zs_k2, nz_k2, cov_k2 = nz_DESgc__2["z"], nz_DESgc__2["dndz"], nz_DESgc__2["cov"]
 zs_k3, nz_k3, cov_k3 = nz_DESgc__3["z"], nz_DESgc__3["dndz"], nz_DESgc__3["cov"]
 zs_k4, nz_k4, cov_k4 = nz_DESgc__4["z"], nz_DESgc__4["dndz"], nz_DESgc__4["cov"]
+chol_k0 = cholesky(cov_k0).U'
+chol_k1 = cholesky(cov_k1).U'
+chol_k2 = cholesky(cov_k2).U'
+chol_k3 = cholesky(cov_k3).U'
+chol_k4 = cholesky(cov_k4).U'
 meta_gcgc, files_gcgc = make_data(sacc_gcgc, yaml_gcgc;
                                   nz_DESgc__0=nz_DESgc__0,
                                   nz_DESgc__1=nz_DESgc__1,
@@ -63,11 +68,11 @@ init_params = [init_params;
     DESgc__3_a ~ MvNormal(zeros(length(zs_k3)), I)
     DESgc__4_a ~ MvNormal(zeros(length(zs_k4)), I)
 
-    DESgc__0_nz = nz_k0 .+ cholesky(cov_k0).U' * DESgc__0_a
-    DESgc__1_nz = nz_k1 .+ cholesky(cov_k1).U' * DESgc__1_a
-    DESgc__2_nz = nz_k2 .+ cholesky(cov_k2).U' * DESgc__2_a
-    DESgc__3_nz = nz_k3 .+ cholesky(cov_k3).U' * DESgc__3_a
-    DESgc__4_nz = nz_k4 .+ cholesky(cov_k4).U' * DESgc__4_a
+    DESgc__0_nz = nz_k0 .+ chol_k0 * DESgc__0_a
+    DESgc__1_nz = nz_k1 .+ chol_k1 * DESgc__1_a
+    DESgc__2_nz = nz_k2 .+ chol_k2 * DESgc__2_a
+    DESgc__3_nz = nz_k3 .+ chol_k3 * DESgc__3_a
+    DESgc__4_nz = nz_k4 .+ chol_k4 * DESgc__4_a
 
     nuisances = Dict("DESgc__0_b" => 1.484,
                      "DESgc__1_b" => 1.805,
@@ -107,7 +112,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains/numerical/"
-folname = string("DES_gcgc_dz_num_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folname = string("DES_gcgc_nz_num_TAP_", TAP,  "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)

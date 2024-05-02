@@ -14,7 +14,23 @@ yaml_path = "../../data/DESY1/wlwl.yml"
 nz_path = "../../data/DESY1/nzs"
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
-meta, files = make_data(sacc_file, yaml_file)
+nz_DESwl__0 = npzread(string(nz_path, "nz_DESwl__0.npz"))
+nz_DESwl__1 = npzread(string(nz_path, "nz_DESwl__1.npz"))
+nz_DESwl__2 = npzread(string(nz_path, "nz_DESwl__2.npz"))
+nz_DESwl__3 = npzread(string(nz_path, "nz_DESwl__3.npz"))
+zs_k0, nz_k0, cov_k0 = nz_DESwl__0["z"], nz_DESwl__0["dndz"], nz_DESwl__0["cov"]
+zs_k1, nz_k1, cov_k1 = nz_DESwl__1["z"], nz_DESwl__1["dndz"], nz_DESwl__1["cov"]
+zs_k2, nz_k2, cov_k2 = nz_DESwl__2["z"], nz_DESwl__2["dndz"], nz_DESwl__2["cov"]
+zs_k3, nz_k3, cov_k3 = nz_DESwl__3["z"], nz_DESwl__3["dndz"], nz_DESwl__3["cov"]
+chol_k0 = cholesky(cov_k0).U'
+chol_k1 = cholesky(cov_k1).U'
+chol_k2 = cholesky(cov_k2).U'
+chol_k3 = cholesky(cov_k3).U'
+meta_gcgc, files_gcgc = make_data(sacc_gcgc, yaml_gcgc;
+                                  nz_DESwl__0=nz_DESwl__0,
+                                  nz_DESwl__1=nz_DESwl__1,
+                                  nz_DESwl__2=nz_DESwl__2,
+                                  nz_DESwl__3=nz_DESwl__3);
 
 data = meta.data
 cov = meta.cov
@@ -23,8 +39,12 @@ cov = meta.cov
 iΓ = inv(Γ)
 data = iΓ * data
 
-init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
-            0.0, 0.0, 0.0, 0.0]
+init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
+init_params = [init_params; 
+    zeros(length(zs_k0));
+    zeros(length(zs_k1));
+    zeros(length(zs_k2));
+    zeros(length(zs_k3))]
 
 @model function model(data;
     meta=meta, 
@@ -37,20 +57,25 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    DESwl__0_dz ~ TruncatedNormal(-0.001, 0.016, -0.2, 0.2)
-    DESwl__1_dz ~ TruncatedNormal(-0.019, 0.013, -0.2, 0.2)
-    DESwl__2_dz ~ TruncatedNormal(0.009, 0.011, -0.2, 0.2)
-    DESwl__3_dz ~ TruncatedNormal(-0.018, 0.022, -0.2, 0.2)
+    DESwl__0_a ~ MvNormal(zeros(length(zs_k0)), I)
+    DESwl__1_a ~ MvNormal(zeros(length(zs_k1)), I)
+    DESwl__2_a ~ MvNormal(zeros(length(zs_k2)), I)
+    DESwl__3_a ~ MvNormal(zeros(length(zs_k3)), I)
+
+    DESwl__0_nz = nz_k0 .+ chol_k0 * DESwl__0_a
+    DESwl__1_nz = nz_k1 .+ chol_k1 * DESwl__1_a
+    DESwl__2_nz = nz_k2 .+ chol_k2 * DESwl__2_a
+    DESwl__3_nz = nz_k3 .+ chol_k3 * DESwl__3_a
 
     nuisances = Dict("DESgc__0_b" => 1.484,
                     "DESgc__1_b" => 1.805,
                     "DESgc__2_b" => 1.776,
                     "DESgc__3_b" => 2.168,
                     "DESgc__4_b" => 2.23,
-                    "DESwl__0_dz" => DESwl__0_dz,
-                    "DESwl__1_dz" => DESwl__1_dz,
-                    "DESwl__2_dz" => DESwl__2_dz,
-                    "DESwl__3_dz" => DESwl__3_dz,
+                    "DESwl__0_nz" => DESwl__0_nz,
+                    "DESwl__1_nz" => DESwl__1_nz,
+                    "DESwl__2_nz" => DESwl__2_nz,
+                    "DESwl__3_nz" => DESwl__3_nz,
                     "DESwl__0_m" => 0.018,
                     "DESwl__1_m" => 0.014,
                     "DESwl__2_m" => 0.01,
@@ -79,7 +104,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains/numerical/"
-folname = string("DES_wlwl_dz_num_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folname = string("DES_wlwl_nz_num_TAP_", TAP,  "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)

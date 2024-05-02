@@ -13,7 +13,7 @@ sacc = pyimport("sacc");
 sacc_path = "../../data/FD/cls_FD_covG.fits"
 yaml_path = "../../data/DESY1/gcgc_gcwl_wlwl.yml"
 nz_path = "../../data/DESY1/nzs"
-cov_path = "../../covs/dz_covs.npz"
+cov_path = "../../covs/nz_covs.npz"
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 meta, files = make_data(sacc_file, yaml_file)
@@ -70,7 +70,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains/analytical/"
-folname = string("DES_3x2_dz_ana_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folname = string("DES_3x2_nz_ana_TAP_", TAP,  "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
