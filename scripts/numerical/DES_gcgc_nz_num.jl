@@ -11,8 +11,8 @@ sacc = pyimport("sacc");
 #println("My id is ", myid(), " and I have ", Threads.nthreads(), " threads")
 
 sacc_path = "../../PhD/LimberJack.jl/data/FD/cls_FD_covG.fits"
-yaml_path_gcgc = "data/DESY1/gcgc.yml"
-nz_path = "data/DESY1/nzs/"
+yaml_path_gcgc = "../../data/DESY1/gcgc.yml"
+nz_path = "../../data/DESY1/nzs/"
 sacc_gcgc = sacc.Sacc().load_fits(sacc_path)
 yaml_gcgc = YAML.load_file(yaml_path_gcgc)
 nz_DESgc__0 = npzread(string(nz_path, "nz_DESgc__0.npz"))
