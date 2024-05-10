@@ -27,11 +27,11 @@ chol_k0 = cholesky(cov_k0).U'
 chol_k1 = cholesky(cov_k1).U'
 chol_k2 = cholesky(cov_k2).U'
 chol_k3 = cholesky(cov_k3).U'
-meta_gcgc, files_gcgc = make_data(sacc_file, yaml_file;
-                                  nz_DESwl__0=nz_DESwl__0,
-                                  nz_DESwl__1=nz_DESwl__1,
-                                  nz_DESwl__2=nz_DESwl__2,
-                                  nz_DESwl__3=nz_DESwl__3);
+meta, files = make_data(sacc_file, yaml_file;
+                        nz_DESwl__0=nz_DESwl__0,
+                        nz_DESwl__1=nz_DESwl__1,
+                        nz_DESwl__2=nz_DESwl__2,
+                        nz_DESwl__3=nz_DESwl__3);
 
 data = meta.data
 cov = meta.cov
