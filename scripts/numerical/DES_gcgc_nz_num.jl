@@ -3,6 +3,7 @@ using Turing
 using LimberJack
 using CSV
 using YAML
+using NPZ
 using JLD2
 using PythonCall
 sacc = pyimport("sacc");
