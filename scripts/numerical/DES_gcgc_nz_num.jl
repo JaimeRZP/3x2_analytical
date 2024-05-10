@@ -11,10 +11,10 @@ sacc = pyimport("sacc");
 #println("My id is ", myid(), " and I have ", Threads.nthreads(), " threads")
 
 sacc_path = "../../data/FD/cls_FD_covG.fits"
-yaml_path_gcgc = "../../data/DESY1/gcgc.yml"
+yaml_path = "../../data/DESY1/gcgc.yml"
 nz_path = "../../data/DESY1/nzs/"
-sacc_gcgc = sacc.Sacc().load_fits(sacc_path)
-yaml_gcgc = YAML.load_file(yaml_path_gcgc)
+sacc_file = sacc.Sacc().load_fits(sacc_path)
+yaml_file = YAML.load_file(yaml_path)
 nz_DESgc__0 = npzread(string(nz_path, "nz_DESgc__0.npz"))
 nz_DESgc__1 = npzread(string(nz_path, "nz_DESgc__1.npz"))
 nz_DESgc__2 = npzread(string(nz_path, "nz_DESgc__2.npz"))
@@ -30,7 +30,7 @@ chol_k1 = cholesky(cov_k1).U'
 chol_k2 = cholesky(cov_k2).U'
 chol_k3 = cholesky(cov_k3).U'
 chol_k4 = cholesky(cov_k4).U'
-meta_gcgc, files_gcgc = make_data(sacc_gcgc, yaml_gcgc;
+meta_gcgc, files_gcgc = make_data(sacc_file, yaml_file;
                                   nz_DESgc__0=nz_DESgc__0,
                                   nz_DESgc__1=nz_DESgc__1,
                                   nz_DESgc__2=nz_DESgc__2,
