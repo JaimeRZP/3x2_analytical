@@ -1,7 +1,11 @@
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 CondaPkg = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
 LimberJack = "6b86205d-155a-4b14-b82d-b6a149ea78f2"
+NPZ = "15e1cf62-19b3-5cfa-8e77-841668bca605"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
 YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
