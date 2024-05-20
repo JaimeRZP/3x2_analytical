@@ -58,10 +58,10 @@ init_params = [init_params;
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    DESwl__0_a ~ MvNormal(zeros(length(zs_k0)), I)
-    DESwl__1_a ~ MvNormal(zeros(length(zs_k1)), I)
-    DESwl__2_a ~ MvNormal(zeros(length(zs_k2)), I)
-    DESwl__3_a ~ MvNormal(zeros(length(zs_k3)), I)
+    DESwl__0_a ~ filldist(truncated(Normal(0, 1), -0.07, 0.5), zeros(length(zs_k0)))
+    DESwl__1_a ~ filldist(truncated(Normal(0, 1), -0.07, 0.5), zeros(length(zs_k1)))
+    DESwl__2_a ~ filldist(truncated(Normal(0, 1), -0.07, 0.5), zeros(length(zs_k2)))
+    DESwl__3_a ~ filldist(truncated(Normal(0, 1), -0.07, 0.5), zeros(length(zs_k3)))
 
     DESwl__0_nz = nz_k0 .+ chol_k0 * DESwl__0_a
     DESwl__1_nz = nz_k1 .+ chol_k1 * DESwl__1_a

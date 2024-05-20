@@ -63,11 +63,11 @@ init_params = [init_params;
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    DESgc__0_a ~ MvNormal(zeros(length(zs_k0)), I)
-    DESgc__1_a ~ MvNormal(zeros(length(zs_k1)), I)
-    DESgc__2_a ~ MvNormal(zeros(length(zs_k2)), I)
-    DESgc__3_a ~ MvNormal(zeros(length(zs_k3)), I)
-    DESgc__4_a ~ MvNormal(zeros(length(zs_k4)), I)
+    DESgc__0_a ~ filldist(truncated(Normal(0, 1), -0.07, 0.5), zeros(length(zs_k0)))
+    DESgc__1_a ~ filldist(truncated(Normal(0, 1), -0.07, 0.5), zeros(length(zs_k1)))
+    DESgc__2_a ~ filldist(truncated(Normal(0, 1), -0.07, 0.5), zeros(length(zs_k2)))
+    DESgc__3_a ~ filldist(truncated(Normal(0, 1), -0.07, 0.5), zeros(length(zs_k3)))
+    DESgc__4_a ~ filldist(truncated(Normal(0, 1), -0.07, 0.5), zeros(length(zs_k4)))
 
     DESgc__0_nz = nz_k0 .+ chol_k0 * DESgc__0_a
     DESgc__1_nz = nz_k1 .+ chol_k1 * DESgc__1_a
