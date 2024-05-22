@@ -51,16 +51,18 @@ init_params = [init_params;
     meta=meta, 
     files=files)
 
-    #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
-    Ωb ~ Uniform(0.028, 0.065)
-    h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
-    σ8 ~ Uniform(0.4, 1.2)
-    ns ~ Uniform(0.84, 1.1)
+    s8 ~ Uniform(0.6, 0.9)
+    Ωb ~ Uniform(0.03, 0.07)
+    h ~ Uniform(0.55, 0.91)
+    ns ~ Uniform(0.87, 1.07)
 
-    cosmology = Cosmology(Ωm, Ωb, h, ns, σ8,
-                          tk_mode="EisHu",
-                          Pk_mode="Halofit")
+    cosmology = Cosmology(Ωm, Ωb, h, ns, s8,
+                        tk_mode="EisHu",
+                        Pk_mode="Halofit")
+
+    A_IA = 0.0 #~ Uniform(-5, 5)
+    alpha_IA = 0.0 #~ Uniform(-5, 5)
 
     n = length(nz_k0)
     DESwl__0_nz = zeros(cosmology.settings.cosmo_type, n)
@@ -74,21 +76,22 @@ init_params = [init_params;
         DESwl__3_nz[i] ~ TruncatedNormal(nz_k3[i], sqrt.(diag(cov_k3))[i], -0.07, 0.5)
     end
 
-    nuisances = Dict("DESgc__0_b" => 1.484,
-                    "DESgc__1_b" => 1.805,
-                    "DESgc__2_b" => 1.776,
-                    "DESgc__3_b" => 2.168,
-                    "DESgc__4_b" => 2.23,
-                    "DESwl__0_nz" => DESwl__0_nz,
-                    "DESwl__1_nz" => DESwl__1_nz,
-                    "DESwl__2_nz" => DESwl__2_nz,
-                    "DESwl__3_nz" => DESwl__3_nz,
-                    "DESwl__0_m" => 0.018,
-                    "DESwl__1_m" => 0.014,
-                    "DESwl__2_m" => 0.01,
-                    "DESwl__3_m" => 0.004,
-                    "A_IA" => 0.294,
-                    "alpha_IA" => 0.378)
+    DESwl__0_m = 0.012 #~ Normal(0.012, 0.023)
+    DESwl__1_m = 0.012 #~ Normal(0.012, 0.023)
+    DESwl__2_m = 0.012 #~ Normal(0.012, 0.023)
+    DESwl__3_m = 0.012 #~ Normal(0.012, 0.023)
+
+    nuisances = Dict("A_IA" => A_IA,
+                     "alpha_IA" => alpha_IA,
+                     "DESwl__0_nz" => DESwl__0_nz,
+                     "DESwl__1_nz" => DESwl__1_nz,
+                     "DESwl__2_nz" => DESwl__2_nz,
+                     "DESwl__3_nz" => DESwl__3_nz,
+                     "DESwl__0_m" => DESwl__0_m,
+                     "DESwl__1_m" => DESwl__1_m,
+                     "DESwl__2_m" => DESwl__2_m,
+                     "DESwl__3_m" => DESwl__3_m)
+
 
     theory = Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
