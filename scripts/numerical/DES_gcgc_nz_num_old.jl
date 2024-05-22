@@ -63,6 +63,10 @@ init_params = [init_params;
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
+    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+        tk_mode=:EisHu,
+        pk_mode=:Halofit)
+
     n = length(nz_k0)
     DESgc__0_nz = zeros(cosmology.settings.cosmo_type, n)
     DESgc__1_nz = zeros(cosmology.settings.cosmo_type, n)
@@ -93,10 +97,6 @@ init_params = [init_params;
                      "DESwl__3_m" => 0.004,
                      "A_IA" => 0.294,
                      "alpha_IA" => 0.378)
-
-    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
-        tk_mode=:EisHu,
-        pk_mode=:Halofit)
 
     theory = Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
