@@ -1,6 +1,6 @@
 using LinearAlgebra
 using Turing
-using LimberJack
+using MyLimberJack
 using CSV
 using YAML
 using JLD2
@@ -58,9 +58,9 @@ init_params = [init_params;
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
-        tk_mode=:EisHu,
-        pk_mode=:Halofit)
+    cosmology = Cosmology(Ωm, Ωb, h, ns, s8,
+                          tk_mode="EisHu",
+                          Pk_mode="Halofit")
 
     n = length(nz_k0)
     DESwl__0_nz = zeros(cosmology.settings.cosmo_type, n)
