@@ -58,7 +58,7 @@ init_params = [init_params;
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit)
 
