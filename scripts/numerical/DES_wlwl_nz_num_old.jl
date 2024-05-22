@@ -1,6 +1,6 @@
 using LinearAlgebra
 using Turing
-using MyLimberJack
+using LimberJack
 using CSV
 using YAML
 using JLD2
@@ -51,15 +51,16 @@ init_params = [init_params;
     meta=meta, 
     files=files)
 
+    #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
-    Ωb ~ Uniform(0.03, 0.07)
-    h ~ Uniform(0.55, 0.91)
-    s8 ~ Uniform(0.6, 0.9)
-    ns ~ Uniform(0.87, 1.07)
+    Ωb ~ Uniform(0.028, 0.065)
+    h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
+    σ8 ~ Uniform(0.4, 1.2)
+    ns ~ Uniform(0.84, 1.1)
 
-    cosmology = Cosmology(Ωm, Ωb, h, ns, s8,
-                        tk_mode="EisHu",
-                        Pk_mode="Halofit")
+    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+        tk_mode=:EisHu,
+        pk_mode=:Halofit)
 
     A_IA = 0.0 #~ Uniform(-5, 5)
     alpha_IA = 0.0 #~ Uniform(-5, 5)
