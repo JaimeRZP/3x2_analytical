@@ -115,7 +115,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains/numerical/"
-folname = string("DES_gcgc_nz_num_trunc_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folname = string("DES_gcgc_nz_num_old_TAP_", TAP,  "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
