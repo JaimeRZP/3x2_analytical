@@ -52,9 +52,9 @@ init_params = [init_params;
     files=files)
 
     Ωm ~ Uniform(0.2, 0.6)
-    s8 ~ Uniform(0.6, 0.9)
     Ωb ~ Uniform(0.03, 0.07)
     h ~ Uniform(0.55, 0.91)
+    s8 ~ Uniform(0.6, 0.9)
     ns ~ Uniform(0.87, 1.07)
 
     cosmology = Cosmology(Ωm, Ωb, h, ns, s8,
