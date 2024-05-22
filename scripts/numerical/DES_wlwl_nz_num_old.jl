@@ -42,10 +42,10 @@ data = iΓ * data
 
 init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
 init_params = [init_params; 
-    zeros(length(zs_k0));
-    zeros(length(zs_k1));
-    zeros(length(zs_k2));
-    zeros(length(zs_k3))]
+    nz_k0;
+    nz_k1;
+    nz_k2;
+    nz_k3]
 
 @model function model(data;
     meta=meta, 
