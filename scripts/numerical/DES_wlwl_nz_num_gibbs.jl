@@ -42,10 +42,10 @@ data = iΓ * data
 
 init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
 init_params = [init_params; 
-    nz_k0;
-    nz_k1;
-    nz_k2;
-    nz_k3]
+    zeros(length(zs_k0));
+    zeros(length(zs_k1));
+    zeros(length(zs_k2));
+    zeros(length(zs_k3))]
 
 @model function model(data;
     meta=meta, 
@@ -58,48 +58,42 @@ init_params = [init_params;
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+    DESwl__0_a ~ filldist(Normal(0, 1), length(zs_k0))
+    DESwl__1_a ~ filldist(Normal(0, 1), length(zs_k1))
+    DESwl__2_a ~ filldist(Normal(0, 1), length(zs_k2))
+    DESwl__3_a ~ filldist(Normal(0, 1), length(zs_k3))
+
+    DESwl__0_nz = nz_k0 .+ chol_k0 * DESwl__0_a
+    DESwl__1_nz = nz_k1 .+ chol_k1 * DESwl__1_a
+    DESwl__2_nz = nz_k2 .+ chol_k2 * DESwl__2_a
+    DESwl__3_nz = nz_k3 .+ chol_k3 * DESwl__3_a
+
+    nuisances = Dict("DESgc__0_b" => 1.484,
+                    "DESgc__1_b" => 1.805,
+                    "DESgc__2_b" => 1.776,
+                    "DESgc__3_b" => 2.168,
+                    "DESgc__4_b" => 2.23,
+                    "DESwl__0_nz" => DESwl__0_nz,
+                    "DESwl__1_nz" => DESwl__1_nz,
+                    "DESwl__2_nz" => DESwl__2_nz,
+                    "DESwl__3_nz" => DESwl__3_nz,
+                    "DESwl__0_m" => 0.018,
+                    "DESwl__1_m" => 0.014,
+                    "DESwl__2_m" => 0.01,
+                    "DESwl__3_m" => 0.004,
+                    "A_IA" => 0.294,
+                    "alpha_IA" => 0.378)
+
+    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit)
-
-    A_IA = 0.0 #~ Uniform(-5, 5)
-    alpha_IA = 0.0 #~ Uniform(-5, 5)
-
-    n = length(nz_k0)
-    DESwl__0_nz = zeros(cosmology.settings.cosmo_type, n)
-    DESwl__1_nz = zeros(cosmology.settings.cosmo_type, n)
-    DESwl__2_nz = zeros(cosmology.settings.cosmo_type, n)
-    DESwl__3_nz = zeros(cosmology.settings.cosmo_type, n)
-    for i in 1:n
-        DESwl__0_nz[i] ~ TruncatedNormal(nz_k0[i], sqrt.(diag(cov_k0))[i], -0.07, 0.5)
-        DESwl__1_nz[i] ~ TruncatedNormal(nz_k1[i], sqrt.(diag(cov_k1))[i], -0.07, 0.5)
-        DESwl__2_nz[i] ~ TruncatedNormal(nz_k2[i], sqrt.(diag(cov_k2))[i], -0.07, 0.5)
-        DESwl__3_nz[i] ~ TruncatedNormal(nz_k3[i], sqrt.(diag(cov_k3))[i], -0.07, 0.5)
-    end
-
-    DESwl__0_m = 0.012 #~ Normal(0.012, 0.023)
-    DESwl__1_m = 0.012 #~ Normal(0.012, 0.023)
-    DESwl__2_m = 0.012 #~ Normal(0.012, 0.023)
-    DESwl__3_m = 0.012 #~ Normal(0.012, 0.023)
-
-    nuisances = Dict("A_IA" => A_IA,
-                     "alpha_IA" => alpha_IA,
-                     "DESwl__0_nz" => DESwl__0_nz,
-                     "DESwl__1_nz" => DESwl__1_nz,
-                     "DESwl__2_nz" => DESwl__2_nz,
-                     "DESwl__3_nz" => DESwl__3_nz,
-                     "DESwl__0_m" => DESwl__0_m,
-                     "DESwl__1_m" => DESwl__1_m,
-                     "DESwl__2_m" => DESwl__2_m,
-                     "DESwl__3_m" => DESwl__3_m)
-
 
     theory = Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
 end
 
-iterations = 200
-adaptation = 200
+iterations = 300
+adaptation = 300
 TAP = 0.65
 init_ϵ = 0.03
 
@@ -111,7 +105,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains/numerical/"
-folname = string("DES_wlwl_nz_num_old_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folname = string("DES_wlwl_nz_num_Gibbs_TAP_", TAP,  "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -136,7 +130,12 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP)
+sampler = Gibbs(
+        NUTS(adaptation, TAP,
+        :Ωm, :Ωb, :h, :σ8, :ns,
+        init_ϵ=init_ϵ),
+        NUTS(adaptation, TAP,
+        :DESwl__0_a, :DESwl__1_a, :DESwl__2_a, :DESwl__3_a;))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
