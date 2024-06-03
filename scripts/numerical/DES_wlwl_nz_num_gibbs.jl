@@ -68,7 +68,8 @@ init_params = [init_params;
     DESwl__2_nz = nz_k2 .+ chol_k2 * DESwl__2_a
     DESwl__3_nz = nz_k3 .+ chol_k3 * DESwl__3_a
 
-    nuisances = Dict("DESgc__0_b" => 1.484,
+    nuisances = Dict{String}{eltype(valtype(DESwl__0_nz))}(
+                    "DESgc__0_b" => 1.484,
                     "DESgc__1_b" => 1.805,
                     "DESgc__2_b" => 1.776,
                     "DESgc__3_b" => 2.168,
@@ -87,6 +88,11 @@ init_params = [init_params;
     cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit)
+
+        println(cosmology.settings.cosmo_type)
+        println(eltype(valtype(DESwl__0_nz)))
+        eltype(valtype(nuisances))
+        println("=====")
 
     theory = Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
