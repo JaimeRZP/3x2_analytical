@@ -88,11 +88,15 @@ init_params = [init_params;
     cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit)
+    
+    nui_type = eltype(valtype(DESwl__0_nz))
+    if cosmology.settings.cosmo_type == Float64 && nui_type == Float64
+        cosmology.settings.cosmo_type = nui_type
+    end
 
-        println(cosmology.settings.cosmo_type)
-        println(eltype(valtype(DESwl__0_nz)))
-        eltype(valtype(nuisances))
-        println("=====")
+    println(cosmology.settings.cosmo_type)
+    println(eltype(valtype(DESwl__0_nz)))
+    println("=====")
 
     theory = Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
