@@ -68,7 +68,7 @@ init_params = [init_params;
     DESwl__2_nz = nz_k2 .+ chol_k2 * DESwl__2_a
     DESwl__3_nz = nz_k3 .+ chol_k3 * DESwl__3_a
 
-    nuisances = Dict{String}{eltype(valtype(DESwl__0_nz))}(
+    nuisances = Dict(
                     "DESgc__0_b" => 1.484,
                     "DESgc__1_b" => 1.805,
                     "DESgc__2_b" => 1.776,
