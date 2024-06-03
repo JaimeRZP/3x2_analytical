@@ -90,7 +90,7 @@ init_params = [init_params;
         pk_mode=:Halofit)
     
     nui_type = eltype(valtype(DESwl__0_nz))
-    if cosmology.settings.cosmo_type == Float64 && nui_type == Float64
+    if cosmology.settings.cosmo_type == Float64 && nui_type != Float64
         cosmology.settings.cosmo_type = nui_type
     end
 
