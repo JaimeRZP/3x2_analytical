@@ -40,7 +40,7 @@ cov = meta.cov
 iΓ = inv(Γ)
 data = iΓ * data
 
-init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
+init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 init_params = [init_params; 
     zeros(length(zs_k0));
     zeros(length(zs_k1));
@@ -53,7 +53,8 @@ init_params = [init_params;
 
     #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
-    Ωb ~ Uniform(0.028, 0.065)
+    Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
+    Ωb = 0.1*Ωbb 
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
@@ -98,10 +99,11 @@ init_params = [init_params;
     data ~ MvNormal(iΓ * theory, I)
 end
 
-iterations = 300
-adaptation = 300
+iterations = 1000
+adaptation = 500
 TAP = 0.65
-init_ϵ = 0.03
+#init_ϵ_1 = 0.03
+#init_ϵ_2 = 0.8
 
 println("sampling settings: ")
 println("iterations ", iterations)
@@ -111,7 +113,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains/numerical/"
-folname = string("DES_wlwl_nz_num_Gibbs_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folname = string("DES_wlwl_nz_num_Gibbs_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -138,10 +140,11 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 cond_model = model(data)
 sampler = Gibbs(
         NUTS(adaptation, TAP,
-        :Ωm, :Ωb, :h, :σ8, :ns,
-        init_ϵ=init_ϵ),
+        :Ωm, :Ωbb, :h, :σ8, :ns,
+        init_ϵ=init_ϵ_1),
         NUTS(adaptation, TAP,
-        :DESwl__0_a, :DESwl__1_a, :DESwl__2_a, :DESwl__3_a;))
+        :DESwl__0_a, :DESwl__1_a, :DESwl__2_a, :DESwl__3_a,
+        init_ϵ=init_ϵ_2))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
