@@ -147,11 +147,9 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 cond_model = model(data)
 sampler = Gibbs(
         NUTS(adaptation, TAP,
-        :Ωm, :Ωbb, :h, :σ8, :ns,
-        init_ϵ=init_ϵ_1),
+        :Ωm, :Ωbb, :h, :σ8, :ns),
         NUTS(adaptation, TAP,
-        :DESwl__0_a, :DESwl__1_a, :DESwl__2_a, :DESwl__3_a,
-        init_ϵ=init_ϵ_2))
+        :DESgc__0_a, :DESgc__1_a, :DESgc__2_a, :DESgc__3_a, :DESgc__4_a))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
