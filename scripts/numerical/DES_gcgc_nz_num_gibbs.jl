@@ -93,11 +93,11 @@ init_params = [init_params;
                      "A_IA" => 0.294,
                      "alpha_IA" => 0.378)
 
-    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit)
 
-    nui_type = eltype(valtype(DESwl__0_nz))
+    nui_type = eltype(valtype(DESgc__0_nz))
     if cosmology.settings.cosmo_type == Float64 && nui_type != Float64
         cosmology.settings.cosmo_type = nui_type
     end
