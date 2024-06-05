@@ -4,6 +4,7 @@ using LimberJack
 using CSV
 using YAML
 using JLD2
+using NPZ
 using PythonCall
 sacc = pyimport("sacc");
 
@@ -11,10 +12,28 @@ sacc = pyimport("sacc");
 
 sacc_path = "../../data/FD/cls_FD_covG.fits"
 yaml_path = "../../data/DESY1/gcgc_gcwl_wlwl.yml"
-nz_path = "../../data/DESY1/nzs"
+nz_path = "../../data/DESY1/nzs/"
 sacc_file = sacc.Sacc().load_fits(sacc_path)
+nz_DESwl__0 = npzread(string(nz_path, "nz_DESwl__0.npz"))
+nz_DESwl__1 = npzread(string(nz_path, "nz_DESwl__1.npz"))
+nz_DESwl__2 = npzread(string(nz_path, "nz_DESwl__2.npz"))
+nz_DESwl__3 = npzread(string(nz_path, "nz_DESwl__3.npz"))
+nz_DESgc__0 = npzread(string(nz_path, "nz_DESgc__0.npz"))
+nz_DESgc__1 = npzread(string(nz_path, "nz_DESgc__1.npz"))
+nz_DESgc__2 = npzread(string(nz_path, "nz_DESgc__2.npz"))
+nz_DESgc__3 = npzread(string(nz_path, "nz_DESgc__3.npz"))
+nz_DESgc__4 = npzread(string(nz_path, "nz_DESgc__4.npz"))
 yaml_file = YAML.load_file(yaml_path)
-meta, files = make_data(sacc_file, yaml_file)
+meta, files = make_data(sacc_file, yaml_file;
+                        nz_DESwl__0=nz_DESwl__0,
+                        nz_DESwl__1=nz_DESwl__1,
+                        nz_DESwl__2=nz_DESwl__2,
+                        nz_DESwl__3=nz_DESwl__3,
+                        nz_DESgc__0=nz_DESgc__0,
+                        nz_DESgc__1=nz_DESgc__1,
+                        nz_DESgc__2=nz_DESgc__2,
+                        nz_DESgc__3=nz_DESgc__3,
+                        nz_DESgc__4=nz_DESgc__4)
 data = meta.data
 cov = meta.cov
 
@@ -23,8 +42,8 @@ iΓ = inv(Γ)
 data = iΓ * data
 
 init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
-            0.0, 0.0, 0.0, 0.0, 0.0,
-	    0.0, 0.0, 0.0, 0.0]
+             0.0, 0.0, 0.0, 0.0, 0.0,
+	         0.0, 0.0, 0.0, 0.0]
 
 @model function model(data;
     meta=meta, 
@@ -32,7 +51,7 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
 
     #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
-    Ωb ~ Uniform(0.028, 0.065)
+    Ωb ~ Uniform(0.028, 0.065) 
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
@@ -72,7 +91,7 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
             tk_mode=:EisHu,
             pk_mode=:Halofit)
 
-    theory = Theory(cosmology, meta, files; Nuisances=nuisances)
+    theory := Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
 end
 
@@ -88,8 +107,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains/numerical/"
-folname = string("DES_3x2_dz_num_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folpath = "../../chains_right_nzs/numerical/"
+folname = string("DES_3x2_dz_num_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)

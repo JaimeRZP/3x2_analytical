@@ -4,6 +4,7 @@ using LimberJack
 using CSV
 using YAML
 using JLD2
+using NPZ
 using PythonCall
 sacc = pyimport("sacc");
 
@@ -14,7 +15,17 @@ yaml_path = "../../data/DESY1/gcgc.yml"
 nz_path = "../../data/DESY1/nzs"
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
-meta, files = make_data(sacc_file, yaml_file)
+nz_DESgc__0 = npzread(string(nz_path, "nz_DESgc__0.npz"))
+nz_DESgc__1 = npzread(string(nz_path, "nz_DESgc__1.npz"))
+nz_DESgc__2 = npzread(string(nz_path, "nz_DESgc__2.npz"))
+nz_DESgc__3 = npzread(string(nz_path, "nz_DESgc__3.npz"))
+nz_DESgc__4 = npzread(string(nz_path, "nz_DESgc__4.npz"))
+meta, files = make_data(sacc_file, yaml_file;
+                        nz_DESgc__0=nz_DESgc__0,
+                        nz_DESgc__1=nz_DESgc__1,
+                        nz_DESgc__2=nz_DESgc__2,
+                        nz_DESgc__3=nz_DESgc__3,
+                        nz_DESgc__4=nz_DESgc__4)
 
 data = meta.data
 cov = meta.cov
@@ -64,7 +75,7 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
         tk_mode=:EisHu,
         pk_mode=:Halofit)
 
-    theory = Theory(cosmology, meta, files; Nuisances=nuisances)
+    theory := Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
 end
 
@@ -80,7 +91,7 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains/numerical/"
+folpath = "../../chains_right_nzs/numerical/"
 folname = string("DES_gcgc_dz_num_TAP_", TAP,  "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
