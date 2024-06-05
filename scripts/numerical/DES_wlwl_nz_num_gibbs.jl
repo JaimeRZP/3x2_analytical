@@ -54,7 +54,7 @@ init_params = [init_params;
     #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
     Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
-    Ωb = 0.1*Ωbb 
+    Ωb := 0.1*Ωbb 
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
@@ -64,10 +64,10 @@ init_params = [init_params;
     DESwl__2_a ~ filldist(Normal(0, 1), length(zs_k2))
     DESwl__3_a ~ filldist(Normal(0, 1), length(zs_k3))
 
-    DESwl__0_nz = nz_k0 .+ chol_k0 * DESwl__0_a
-    DESwl__1_nz = nz_k1 .+ chol_k1 * DESwl__1_a
-    DESwl__2_nz = nz_k2 .+ chol_k2 * DESwl__2_a
-    DESwl__3_nz = nz_k3 .+ chol_k3 * DESwl__3_a
+    DESwl__0_nz := nz_k0 .+ chol_k0 * DESwl__0_a
+    DESwl__1_nz := nz_k1 .+ chol_k1 * DESwl__1_a
+    DESwl__2_nz := nz_k2 .+ chol_k2 * DESwl__2_a
+    DESwl__3_nz := nz_k3 .+ chol_k3 * DESwl__3_a
 
     nuisances = Dict(
                     "DESgc__0_b" => 1.484,
@@ -95,7 +95,7 @@ init_params = [init_params;
         cosmology.settings.cosmo_type = nui_type
     end
 
-    theory = Theory(cosmology, meta, files; Nuisances=nuisances)
+    theory := Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
 end
 
