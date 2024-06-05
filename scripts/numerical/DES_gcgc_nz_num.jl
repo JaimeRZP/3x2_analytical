@@ -70,11 +70,11 @@ init_params = [init_params;
     DESgc__3_a ~ filldist(Normal(0, 1), length(zs_k3))
     DESgc__4_a ~ filldist(Normal(0, 1), length(zs_k4))
     
-    DESgc__0_nz = nz_k0 .+ chol_k0 * DESgc__0_a
-    DESgc__1_nz = nz_k1 .+ chol_k1 * DESgc__1_a
-    DESgc__2_nz = nz_k2 .+ chol_k2 * DESgc__2_a
-    DESgc__3_nz = nz_k3 .+ chol_k3 * DESgc__3_a
-    DESgc__4_nz = nz_k4 .+ chol_k4 * DESgc__4_a
+    DESgc__0_nz := nz_k0 .+ chol_k0 * DESgc__0_a
+    DESgc__1_nz := nz_k1 .+ chol_k1 * DESgc__1_a
+    DESgc__2_nz := nz_k2 .+ chol_k2 * DESgc__2_a
+    DESgc__3_nz := nz_k3 .+ chol_k3 * DESgc__3_a
+    DESgc__4_nz := nz_k4 .+ chol_k4 * DESgc__4_a
 
     nuisances = Dict("DESgc__0_b" => 1.484,
                      "DESgc__1_b" => 1.805,
@@ -102,15 +102,13 @@ init_params = [init_params;
         cosmology.settings.cosmo_type = nui_type
     end
 
-    theory = Theory(cosmology, meta, files; Nuisances=nuisances)
+    theory := Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
 end
 
 iterations = 1000
 adaptation = 500
 TAP = 0.65
-init_ϵ_1 = 0.03
-init_ϵ_2 = 0.8
 
 println("sampling settings: ")
 println("iterations ", iterations)
@@ -119,8 +117,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains/numerical/"
-folname = string("DES_gcgc_nz_num_Gibbs_TAP_", TAP)
+folpath = "../../chains_right_nzs/numerical/"
+folname = string("DES_gcgc_nz_num_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
