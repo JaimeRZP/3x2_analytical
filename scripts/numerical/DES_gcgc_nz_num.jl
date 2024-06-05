@@ -109,6 +109,8 @@ end
 iterations = 1000
 adaptation = 500
 TAP = 0.65
+init_ϵ_1 = 0.01
+init_ϵ_2 = 0.005
 
 println("sampling settings: ")
 println("iterations ", iterations)
@@ -118,7 +120,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains_right_nzs/numerical/"
-folname = string("DES_gcgc_nz_num_TAP_", TAP)
+folname = string("DES_gcgc_nz_num_TAP_", TAP, "_init_ϵ_", init_ϵ_1, "_", init_ϵ_2)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -145,9 +147,11 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 cond_model = model(data)
 sampler = Gibbs(
         NUTS(adaptation, TAP,
-        :Ωm, :Ωbb, :h, :σ8, :ns),
+        :Ωm, :Ωbb, :h, :σ8, :ns;
+        init_ϵ=init_ϵ_1),
         NUTS(adaptation, TAP,
-        :DESgc__0_a, :DESgc__1_a, :DESgc__2_a, :DESgc__3_a, :DESgc__4_a))
+        :DESgc__0_a, :DESgc__1_a, :DESgc__2_a, :DESgc__3_a, :DESgc__4_a;
+        init_ϵ=init_ϵ_2),)
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
