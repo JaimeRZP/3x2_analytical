@@ -78,8 +78,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains/nomarg/"
-folname = string("DES_wlwl_nzs_TAP_", TAP)
+folpath = "../../chains_right_nzs/nomarg/"
+folname = string("DES_wlwl_nomarg_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)

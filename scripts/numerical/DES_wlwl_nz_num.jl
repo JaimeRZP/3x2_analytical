@@ -40,7 +40,7 @@ cov = meta.cov
 iΓ = inv(Γ)
 data = iΓ * data
 
-init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
+init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 init_params = [init_params; 
     zeros(length(zs_k0));
     zeros(length(zs_k1));
@@ -53,7 +53,8 @@ init_params = [init_params;
 
     #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
-    Ωb ~ Uniform(0.028, 0.065)
+    Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
+    Ωb := 0.1*Ωbb 
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
@@ -63,12 +64,13 @@ init_params = [init_params;
     DESwl__2_a ~ filldist(Normal(0, 1), length(zs_k2))
     DESwl__3_a ~ filldist(Normal(0, 1), length(zs_k3))
 
-    DESwl__0_nz = nz_k0 .+ chol_k0 * DESwl__0_a
-    DESwl__1_nz = nz_k1 .+ chol_k1 * DESwl__1_a
-    DESwl__2_nz = nz_k2 .+ chol_k2 * DESwl__2_a
-    DESwl__3_nz = nz_k3 .+ chol_k3 * DESwl__3_a
+    DESwl__0_nz := nz_k0 .+ chol_k0 * DESwl__0_a
+    DESwl__1_nz := nz_k1 .+ chol_k1 * DESwl__1_a
+    DESwl__2_nz := nz_k2 .+ chol_k2 * DESwl__2_a
+    DESwl__3_nz := nz_k3 .+ chol_k3 * DESwl__3_a
 
-    nuisances = Dict("DESgc__0_b" => 1.484,
+    nuisances = Dict(
+                    "DESgc__0_b" => 1.484,
                     "DESgc__1_b" => 1.805,
                     "DESgc__2_b" => 1.776,
                     "DESgc__3_b" => 2.168,
@@ -84,18 +86,24 @@ init_params = [init_params;
                     "A_IA" => 0.294,
                     "alpha_IA" => 0.378)
 
-    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit)
+    
+    nui_type = eltype(valtype(DESwl__0_nz))
+    if cosmology.settings.cosmo_type == Float64 && nui_type != Float64
+        cosmology.settings.cosmo_type = nui_type
+    end
 
-    theory = Theory(cosmology, meta, files; Nuisances=nuisances)
+    theory := Theory(cosmology, meta, files; Nuisances=nuisances)
     data ~ MvNormal(iΓ * theory, I)
 end
 
-iterations = 2000
+iterations = 1000
 adaptation = 500
 TAP = 0.65
-init_ϵ = 0.03
+#init_ϵ_1 = 0.03
+#init_ϵ_2 = 0.8
 
 println("sampling settings: ")
 println("iterations ", iterations)
@@ -104,8 +112,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains/numerical/"
-folname = string("DES_wlwl_nz_num_trunc_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folpath = "../../chains/chains_right_nzs/"
+folname = string("DES_wlwl_nz_num_Gibbs_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -130,7 +138,11 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
+sampler = Gibbs(
+        NUTS(adaptation, TAP,
+        :Ωm, :Ωbb, :h, :σ8, :ns),
+        NUTS(adaptation, TAP,
+        :DESwl__0_a, :DESwl__1_a, :DESwl__2_a, :DESwl__3_a))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
