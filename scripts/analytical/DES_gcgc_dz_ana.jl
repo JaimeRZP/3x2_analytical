@@ -27,7 +27,6 @@ meta, files = make_data(sacc_file, yaml_file;
                         nz_DESgc__2=nz_DESgc__2,
                         nz_DESgc__3=nz_DESgc__3,
                         nz_DESgc__4=nz_DESgc__4)
-meta, files = make_data(sacc_file, yaml_file)
 data = meta.data
 cov = npzread(cov_path)["gcgc_AD"]
 

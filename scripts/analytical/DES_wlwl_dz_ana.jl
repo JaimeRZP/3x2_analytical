@@ -26,6 +26,8 @@ meta, files = make_data(sacc_file, yaml_file;
                         nz_DESwl__1=nz_DESwl__1,
                         nz_DESwl__2=nz_DESwl__2,
                         nz_DESwl__3=nz_DESwl__3);
+data = meta.data
+cov = npzread(cov_path)["wlwl_AD"]
 
 Γ = sqrt(cov)
 iΓ = inv(Γ)
