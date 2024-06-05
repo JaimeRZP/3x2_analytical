@@ -23,6 +23,7 @@ nz_DESgc__1 = npzread(string(nz_path, "nz_DESgc__1.npz"))
 nz_DESgc__2 = npzread(string(nz_path, "nz_DESgc__2.npz"))
 nz_DESgc__3 = npzread(string(nz_path, "nz_DESgc__3.npz"))
 nz_DESgc__4 = npzread(string(nz_path, "nz_DESgc__4.npz"))
+sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 meta, files = make_data(sacc_file, yaml_file;
                         nz_DESwl__0=nz_DESwl__0,
