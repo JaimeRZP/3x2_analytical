@@ -12,7 +12,7 @@ sacc = pyimport("sacc");
 
 sacc_path = "../../data/FD/cls_FD_covG.fits"
 yaml_path = "../../data/DESY1/wlwl.yml"
-nz_path = "../../data/DESY1/nzs"
+nz_path = "../../data/DESY1/nzs/"
 cov_path = "../../covs/dz_covs.npz"
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
