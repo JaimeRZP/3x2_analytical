@@ -16,7 +16,15 @@ nz_path = "../../data/DESY1/nzs"
 cov_path = "../../covs/nz_covs.npz"
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
-meta, files = make_data(sacc_file, yaml_file)
+nz_DESwl__0 = npzread(string(nz_path, "nz_DESwl__0.npz"))
+nz_DESwl__1 = npzread(string(nz_path, "nz_DESwl__1.npz"))
+nz_DESwl__2 = npzread(string(nz_path, "nz_DESwl__2.npz"))
+nz_DESwl__3 = npzread(string(nz_path, "nz_DESwl__3.npz"))
+meta, files = make_data(sacc_file, yaml_file;
+                        nz_DESwl__0=nz_DESwl__0,
+                        nz_DESwl__1=nz_DESwl__1,
+                        nz_DESwl__2=nz_DESwl__2,
+                        nz_DESwl__3=nz_DESwl__3);
 data = meta.data
 cov = npzread(cov_path)["wlwl_AD"]
 
@@ -24,7 +32,7 @@ cov = npzread(cov_path)["wlwl_AD"]
 iΓ = inv(Γ)
 data = iΓ * data
 
-init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
+init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 
 @model function model(data;
     meta=meta, 
@@ -32,7 +40,8 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95]
 
     #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
-    Ωb ~ Uniform(0.028, 0.065)
+    Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
+    Ωb = 0.1*Ωbb 
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
@@ -60,7 +69,6 @@ end
 iterations = 2000
 adaptation = 500
 TAP = 0.65
-init_ϵ = 0.03
 
 println("sampling settings: ")
 println("iterations ", iterations)
@@ -70,7 +78,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains/analytical/"
-folname = string("DES_wlwl_nz_ana_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folname = string("DES_wlwl_nz_ana_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -95,7 +103,7 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
+sampler = NUTS(adaptation, TAP)
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
