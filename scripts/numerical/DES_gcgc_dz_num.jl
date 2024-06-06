@@ -51,8 +51,8 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
     DESgc__0_dz ~ Truncated(Normal(0.0, 0.007), -0.2, 0.2)
     DESgc__1_dz ~ Truncated(Normal(0.0, 0.007), -0.2, 0.2)
     DESgc__2_dz ~ Truncated(Normal(0.0, 0.006), -0.2, 0.2)
-    DESgc__3_dz ~ Truncated(Normal(0.0, 0.01), -0.2, 0.2)
-    DESgc__4_dz ~ Truncated(Normal(0.0, 0.01), -0.2, 0.2)
+    DESgc__3_dz ~ Truncated(Normal(0.0, 0.01),  -0.2, 0.2)
+    DESgc__4_dz ~ Truncated(Normal(0.0, 0.01),  -0.2, 0.2)
 
     nuisances = Dict("DESgc__0_b" => 1.484,
                      "DESgc__1_b" => 1.805,
