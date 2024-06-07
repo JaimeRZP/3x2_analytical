@@ -41,7 +41,7 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
     #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
     Ωbb ~ Uniform(0.28, 0.65)
-    Ωb := 10*Ωbb 
+    Ωb := 0.1*Ωbb 
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
