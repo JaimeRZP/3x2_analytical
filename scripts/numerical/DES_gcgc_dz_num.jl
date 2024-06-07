@@ -55,11 +55,11 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
     DESgc__3_a ~ Normal(0.0, 1.0)
     DESgc__4_a ~ Normal(0.0, 1.0)
 
-    DESgc__0_dz := 0.007 * DESgc__0_dz
-    DESgc__1_dz := 0.007 * DESgc__1_dz
-    DESgc__2_dz := 0.006 * DESgc__2_dz
-    DESgc__3_dz := 0.01 * DESgc__3_dz
-    DESgc__4_dz := 0.01 * DESgc__4_dz
+    DESgc__0_dz := 0.007 * DESgc__0_a
+    DESgc__1_dz := 0.007 * DESgc__1_a
+    DESgc__2_dz := 0.006 * DESgc__2_a
+    DESgc__3_dz := 0.01  * DESgc__3_a
+    DESgc__4_dz := 0.01  * DESgc__4_a
 
     nuisances = Dict("DESgc__0_b" => 1.484,
                      "DESgc__1_b" => 1.805,
