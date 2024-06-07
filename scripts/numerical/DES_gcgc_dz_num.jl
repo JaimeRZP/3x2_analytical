@@ -49,17 +49,11 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    DESgc__0_a ~ Normal(0.0, 1.0) 
-    DESgc__1_a ~ Normal(0.0, 1.0)
-    DESgc__2_a ~ Normal(0.0, 1.0)
-    DESgc__3_a ~ Normal(0.0, 1.0)
-    DESgc__4_a ~ Normal(0.0, 1.0)
-
-    DESgc__0_dz := 0.007 * DESgc__0_a
-    DESgc__1_dz := 0.007 * DESgc__1_a
-    DESgc__2_dz := 0.006 * DESgc__2_a
-    DESgc__3_dz := 0.01  * DESgc__3_a
-    DESgc__4_dz := 0.01  * DESgc__4_a
+    DESgc__0_dz ~ Truncated(Normal(0.0, 0.007), -0.2, 0.2)
+    DESgc__1_dz ~ Truncated(Normal(0.0, 0.007), -0.2, 0.2)
+    DESgc__2_dz ~ Truncated(Normal(0.0, 0.006), -0.2, 0.2)
+    DESgc__3_dz ~ Truncated(Normal(0.0, 0.01),  -0.2, 0.2)
+    DESgc__4_dz ~ Truncated(Normal(0.0, 0.01),  -0.2, 0.2)
 
     nuisances = Dict("DESgc__0_b" => 1.484,
                      "DESgc__1_b" => 1.805,
@@ -133,7 +127,7 @@ sampler = Gibbs(
         NUTS(adaptation, TAP,
         :Ωm, :Ωbb, :h, :σ8, :ns),
         NUTS(adaptation, TAP,
-        :DESgc__0_a, :DESgc__1_a, :DESgc__2_a, :DESgc__3_a, :DESgc__4_a))
+        :DESgc__0_dz, :DESgc__1_dz, :DESgc__2_dz, :DESgc__3_dz, :DESgc__4_dz))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)

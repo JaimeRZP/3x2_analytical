@@ -46,14 +46,10 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    DESwl__0_a ~ Normal(-0.001, 1.0)
-    DESwl__1_a ~ Normal(-0.019, 1.0)
-    DESwl__2_a ~ Normal( 0.009, 1.0)
-    DESwl__3_a ~ Normal(-0.018, 1.0)
-    DESwl__0_dz := 0.016 * DESwl__0_a
-    DESwl__1_dz := 0.013 * DESwl__1_a
-    DESwl__2_dz := 0.011 * DESwl__2_a
-    DESwl__3_dz := 0.022 * DESwl__3_a  
+    DESwl__0_dz ~ Truncated(Normal(-0.001, 0.016), -0.2, 0.2)
+    DESwl__1_dz ~ Truncated(Normal(-0.019, 0.013), -0.2, 0.2)
+    DESwl__2_dz ~ Truncated(Normal(0.009, 0.011),  -0.2, 0.2)
+    DESwl__3_dz ~ Truncated(Normal(-0.018, 0.022), -0.2, 0.2)
 
     nuisances = Dict("DESgc__0_b" => 1.484,
                     "DESgc__1_b" => 1.805,
@@ -126,7 +122,7 @@ sampler = Gibbs(
         NUTS(adaptation, TAP,
         :Ωm, :Ωbb, :h, :σ8, :ns),
         NUTS(adaptation, TAP,
-        :DESwl__0_a, :DESwl__1_a, :DESwl__2_a, :DESwl__3_a))
+        :DESwl__0_dz, :DESwl__1_dz, :DESwl__2_dz, :DESwl__3_dz))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
