@@ -41,7 +41,7 @@ cov = meta.cov
 iΓ = inv(Γ)
 data = iΓ * data
 
-init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
+init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
              0.0, 0.0, 0.0, 0.0, 0.0,
 	         0.0, 0.0, 0.0, 0.0]
 
@@ -51,20 +51,31 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
 
     #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
-    Ωb ~ Uniform(0.028, 0.065) 
+    Ωbb ~ Uniform(0.28, 0.65)
+    Ωb := 10*Ωbb
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    DESgc__0_dz ~ Truncated(Normal(0.0, 0.007), -0.2, 0.2)
-    DESgc__1_dz ~ Truncated(Normal(0.0, 0.007), -0.2, 0.2)
-    DESgc__2_dz ~ Truncated(Normal(0.0, 0.006), -0.2, 0.2)
-    DESgc__3_dz ~ Truncated(Normal(0.0, 0.01),  -0.2, 0.2)
-    DESgc__4_dz ~ Truncated(Normal(0.0, 0.01),  -0.2, 0.2)
-    DESwl__0_dz ~ Truncated(Normal(-0.001, 0.016), -0.2, 0.2)
-    DESwl__1_dz ~ Truncated(Normal(-0.019, 0.013), -0.2, 0.2)
-    DESwl__2_dz ~ Truncated(Normal(0.009, 0.011),  -0.2, 0.2)
-    DESwl__3_dz ~ Truncated(Normal(-0.018, 0.022), -0.2, 0.2)
+    DESwl__0_a ~ Normal(-0.001, 1.0)
+    DESwl__1_a ~ Normal(-0.019, 1.0)
+    DESwl__2_a ~ Normal(0.009,  1.0)
+    DESwl__3_a ~ Normal(-0.018, 1.0)
+    DESgc__0_a ~ Normal(0.0, 1.0) 
+    DESgc__1_a ~ Normal(0.0, 1.0)
+    DESgc__2_a ~ Normal(0.0, 1.0)
+    DESgc__3_a ~ Normal(0.0, 1.0)
+    DESgc__4_a ~ Normal(0.0, 1.0)
+
+    DESwl__0_dz := 0.016*DESwl__0_dz
+    DESwl__1_dz := 0.013*DESwl__1_dz
+    DESwl__2_dz := 0.011*DESwl__2_dz
+    DESwl__3_dz := 0.022*DESwl__3_dz
+    DESgc__0_dz := 0.007*DESgc__0_dz
+    DESgc__1_dz := 0.007*DESgc__1_dz
+    DESgc__2_dz := 0.006*DESgc__2_dz
+    DESgc__3_dz := 0.01*DESgc__3_dz
+    DESgc__4_dz := 0.01*DESgc__4_dz
 
     nuisances = Dict("DESgc__0_b" => 1.484,
                      "DESgc__1_b" => 1.805,
@@ -133,7 +144,12 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
+sampler = Gibbs(
+        NUTS(adaptation, TAP,
+        :Ωm, :Ωbb, :h, :σ8, :ns),
+        NUTS(adaptation, TAP,
+        :DESwl__0_a, :DESwl__1_a, :DESwl__2_a, :DESwl__3_a,
+        :DESgc__0_a, :DESgc__1_a, :DESgc__2_a, :DESgc__3_a, :DESgc__4_a))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)

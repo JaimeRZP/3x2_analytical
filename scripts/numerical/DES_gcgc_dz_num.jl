@@ -34,7 +34,7 @@ cov = meta.cov
 iΓ = inv(Γ)
 data = iΓ * data
 
-init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
+init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
             0.0, 0.0, 0.0, 0.0, 0.0]
 
 @model function model(data;
@@ -43,16 +43,23 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
 
     #KiDS priors
     Ωm ~ Uniform(0.2, 0.6)
-    Ωb ~ Uniform(0.028, 0.065)
+    Ωbb ~ Uniform(0.28, 0.65)
+    Ωb := 10*Ωbb
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    DESgc__0_dz ~ Truncated(Normal(0.0, 0.007), -0.2, 0.2)
-    DESgc__1_dz ~ Truncated(Normal(0.0, 0.007), -0.2, 0.2)
-    DESgc__2_dz ~ Truncated(Normal(0.0, 0.006), -0.2, 0.2)
-    DESgc__3_dz ~ Truncated(Normal(0.0, 0.01),  -0.2, 0.2)
-    DESgc__4_dz ~ Truncated(Normal(0.0, 0.01),  -0.2, 0.2)
+    DESgc__0_a ~ Normal(0.0, 1.0) 
+    DESgc__1_a ~ Normal(0.0, 1.0)
+    DESgc__2_a ~ Normal(0.0, 1.0)
+    DESgc__3_a ~ Normal(0.0, 1.0)
+    DESgc__4_a ~ Normal(0.0, 1.0)
+
+    DESgc__0_dz := 0.007 * DESgc__0_dz
+    DESgc__1_dz := 0.007 * DESgc__1_dz
+    DESgc__2_dz := 0.006 * DESgc__2_dz
+    DESgc__3_dz := 0.01 * DESgc__3_dz
+    DESgc__4_dz := 0.01 * DESgc__4_dz
 
     nuisances = Dict("DESgc__0_b" => 1.484,
                      "DESgc__1_b" => 1.805,
@@ -71,7 +78,7 @@ init_params=[0.30, 0.05, 0.67, 0.81, 0.95,
                      "A_IA" => 0.294,
                      "alpha_IA" => 0.378)
 
-    cosmology = Cosmology(Ωm=Ωm,  Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit)
 
@@ -92,7 +99,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains_right_nzs/numerical/"
-folname = string("DES_gcgc_dz_num_TAP_", TAP,  "_init_ϵ_", init_ϵ)
+folname = string("DES_gcgc_dz_num_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -117,7 +124,11 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
+sampler = Gibbs(
+        NUTS(adaptation, TAP,
+        :Ωm, :Ωbb, :h, :σ8, :ns),
+        NUTS(adaptation, TAP,
+        :DESgc__0_a, :DESgc__1_a, :DESgc__2_a, :DESgc__3_a, :DESgc__4_a))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
