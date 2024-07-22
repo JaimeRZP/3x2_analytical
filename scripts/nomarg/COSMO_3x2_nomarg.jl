@@ -24,6 +24,19 @@ meta, files = make_data(sacc_file, yaml_file)#;
                         #nz_DESwl__1=nz_DESwl__1,
                         #nz_DESwl__2=nz_DESwl__2,
                         #nz_DESwl__3=nz_DESwl__3);
+
+meta_3x2.types = [ 
+    "galaxy_density",
+    "galaxy_density",
+    "galaxy_density",
+    "galaxy_density",
+    "galaxy_density",
+    "galaxy_shear", 
+    "galaxy_shear", 
+    "galaxy_shear",
+    "galaxy_shear",
+    "galaxy_shear"]
+
 data = meta.data
 cov = meta.cov
 
