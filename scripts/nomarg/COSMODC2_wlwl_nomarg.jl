@@ -10,6 +10,7 @@ using PythonCall
 sacc = pyimport("sacc");
 
 
+method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/wlwl.yml"
 nz_path = string("/home/jaimerz/Documents/UCL/3x2_analytical/data/CosmoDC2/image_nzs_", method, "_priors/")
