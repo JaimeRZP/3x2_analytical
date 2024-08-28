@@ -14,7 +14,7 @@ method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc.yml"
 nz_path = string("/home/jaimerz/Documents/UCL/3x2_analytical/data/CosmoDC2/image_nzs_", method, "_priors/")
-fake_data_path = string("../data/CosmoDC2/CosmoDC2_theory_photo_", method, "_best.csv")
+fake_data_path = string("../data/CosmoDC2/CosmoDC2_gcgc_theory_photo_", method, "_best.csv")
 
 fake_data = CSV.read(fake_data_path, DataFrame)
 fake_data = fake_data.theory[1:end-1]
