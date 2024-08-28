@@ -45,7 +45,7 @@ meta, files = make_data(sacc_file, yaml_file;
                         nz_source_3=nz_source_3,
                         nz_source_4=nz_source_4)
 
-meta_3x2.types = [ 
+meta.types = [ 
     "galaxy_density",
     "galaxy_density",
     "galaxy_density",
