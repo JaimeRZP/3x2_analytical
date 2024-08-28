@@ -2,6 +2,7 @@ using LinearAlgebra
 using Turing
 using LimberJack
 using CSV
+using DataFrames
 using YAML
 using JLD2
 using NPZ
@@ -12,6 +13,10 @@ sacc = pyimport("sacc");
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/wlwl.yml"
 nz_path = string("/home/jaimerz/Documents/UCL/3x2_analytical/data/CosmoDC2/image_nzs_", method, "_priors/")
+fake_data_path = string("../data/CosmoDC2/CosmoDC2_theory_photo_", method, "_best.csv")
+
+fake_data = CSV.read(fake_data_path, DataFrame)
+fake_data = fake_data.theory[1:end-1]
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
@@ -124,7 +129,7 @@ end
 CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[]), append=true)
 
 # Sample
-cond_model = model(data)
+cond_model = model(fake_data)
 sampler = NUTS(adaptation, TAP)
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
