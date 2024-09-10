@@ -44,7 +44,7 @@ meta.types = [
     "galaxy_density",
     "galaxy_density"]
 
-data = meta.data
+data = fake_data
 cov = meta.cov
 
 Γ = sqrt(cov)
@@ -130,7 +130,7 @@ end
 CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[]), append=true)
 
 # Sample
-cond_model = model(fake_data)
+cond_model = model(data)
 sampler = NUTS(adaptation, TAP)
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
