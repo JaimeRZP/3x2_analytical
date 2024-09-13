@@ -85,11 +85,11 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
     SnWs = dz_mean .+ dz_chol * alphas
     dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9]]
     wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10]]
-    source_0_zs = ((zs_k0-mu_k0)/wzs[1] + mu_k0 + dzs[1])
-    source_1_zs = ((zs_k1-mu_k1)/wzs[2] + mu_k1 + dzs[2])
-    source_2_zs = ((zs_k2-mu_k2)/wzs[3] + mu_k2 + dzs[3])
-    source_3_zs = ((zs_k3-mu_k3)/wzs[4] + mu_k3 + dzs[4])
-    source_4_zs = ((zs_k4-mu_k4)/wzs[5] + mu_k4 + dzs[5])
+    source_0_zs = @.((zs_k0-mu_k0)/wzs[1] + mu_k0 + dzs[1])
+    source_1_zs = @.((zs_k1-mu_k1)/wzs[2] + mu_k1 + dzs[2])
+    source_2_zs = @.((zs_k2-mu_k2)/wzs[3] + mu_k2 + dzs[3])
+    source_3_zs = @.((zs_k3-mu_k3)/wzs[4] + mu_k3 + dzs[4])
+    source_4_zs = @.((zs_k4-mu_k4)/wzs[5] + mu_k4 + dzs[5])
 
     nuisances = Dict{String, Float64}(
         "source_0_b"    => 0.879118,
