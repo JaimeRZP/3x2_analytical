@@ -91,7 +91,7 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
     lens_3_zs = @.((zs_k3-mu_k3)/wzs[4] + mu_k3 + dzs[4])
     lens_4_zs = @.((zs_k4-mu_k4)/wzs[5] + mu_k4 + dzs[5])
 
-    nuisances = Dict{String, Float64}(
+    nuisances = Dict(
         "lens_0_b"    => 0.879118,
         "lens_1_b"    => 1.05894,
         "lens_2_b"    => 1.22145,

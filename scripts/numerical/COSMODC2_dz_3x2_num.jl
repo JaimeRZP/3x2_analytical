@@ -121,7 +121,7 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
     source_3_zs = @.((zs_k8-mu_k8)/wzs[9] + mu_k8 + dzs[9])
     source_4_zs = @.((zs_k9-mu_k9)/wzs[10] + mu_k9 + dzs[10])
 
-    nuisances = Dict{String, Float64}(
+    nuisances = Dict(
         "lens_0_b"    => 0.879118,
         "lens_1_b"    => 1.05894,
         "lens_2_b"    => 1.22145,
