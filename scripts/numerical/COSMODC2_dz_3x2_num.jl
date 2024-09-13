@@ -106,18 +106,18 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 
     alphas ~ filldist(Normal(0, 1), 20)
     SnWs = dz_mean .+ dz_chol * alphas
-    dzs := SnWs[0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
-    wzs := SnWs[1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
-    lens_0_zs   = ((zs_k0-mu_k0)/dzs[0] + mu_k0 + wzs[0])
-    lens_1_zs   = ((zs_k1-mu_k1)/dzs[1] + mu_k1 + wzs[1])
-    lens_2_zs   = ((zs_k2-mu_k2)/dzs[2] + mu_k2 + wzs[2])
-    lens_3_zs   = ((zs_k3-mu_k3)/dzs[3] + mu_k3 + wzs[3])
-    lens_4_zs   = ((zs_k4-mu_k4)/dzs[4] + mu_k4 + wzs[4])
-    source_0_zs = ((zs_k5-mu_k5)/dzs[5] + mu_k5 + wzs[5])
-    source_1_zs = ((zs_k6-mu_k6)/dzs[6] + mu_k6 + wzs[6])
-    source_2_zs = ((zs_k7-mu_k7)/dzs[7] + mu_k7 + wzs[7])
-    source_3_zs = ((zs_k8-mu_k8)/dzs[8] + mu_k8 + wzs[8])
-    source_4_zs = ((zs_k9-mu_k9)/dzs[9] + mu_k9 + wzs[9])
+    dzs := SnWs[1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+    wzs := SnWs[2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+    lens_0_zs   = ((zs_k0-mu_k0)/wzs[1] + mu_k0 + dzs[1])
+    lens_1_zs   = ((zs_k1-mu_k1)/wzs[2] + mu_k1 + dzs[2])
+    lens_2_zs   = ((zs_k2-mu_k2)/wzs[3] + mu_k2 + dzs[3])
+    lens_3_zs   = ((zs_k3-mu_k3)/wzs[4] + mu_k3 + dzs[4])
+    lens_4_zs   = ((zs_k4-mu_k4)/wzs[5] + mu_k4 + dzs[5])
+    source_0_zs = ((zs_k5-mu_k5)/wzs[6] + mu_k5 + dzs[6])
+    source_1_zs = ((zs_k6-mu_k6)/wzs[7] + mu_k6 + dzs[7])
+    source_2_zs = ((zs_k7-mu_k7)/wzs[8] + mu_k7 + dzs[8])
+    source_3_zs = ((zs_k8-mu_k8)/wzs[9] + mu_k8 + dzs[9])
+    source_4_zs = ((zs_k9-mu_k9)/wzs[10] + mu_k9 + dzs[10])
 
     nuisances = Dict{String, Float64}(
         "lens_0_b"    => 0.879118,
