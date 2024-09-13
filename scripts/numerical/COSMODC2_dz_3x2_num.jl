@@ -106,8 +106,10 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 
     alphas ~ filldist(Normal(0, 1), 20)
     SnWs = dz_mean .+ dz_chol * alphas
-    dzs := SnWs[1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
-    wzs := SnWs[2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+    dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9],
+           SnWs[11], SnWs[13], SnWs[15], SnWs[17], SnWs[19]]
+    wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10],
+           SnWs[12], SnWs[14], SnWs[16], SnWs[18], SnWs[20]]
     lens_0_zs   = ((zs_k0-mu_k0)/wzs[1] + mu_k0 + dzs[1])
     lens_1_zs   = ((zs_k1-mu_k1)/wzs[2] + mu_k1 + dzs[2])
     lens_2_zs   = ((zs_k2-mu_k2)/wzs[3] + mu_k2 + dzs[3])
