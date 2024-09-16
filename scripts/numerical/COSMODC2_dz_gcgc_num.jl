@@ -81,7 +81,7 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    alphas ~ filldist(TruncatedNormal(0.0, 1.0, -2.0, 2.0), 10)
+    alphas ~ filldist(truncated(Normal(0, 1), -2, 2), 10)
     SnWs = dz_mean .+ dz_chol * alphas
     dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9]]
     wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10]]
