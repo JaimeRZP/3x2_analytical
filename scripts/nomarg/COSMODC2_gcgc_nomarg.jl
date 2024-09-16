@@ -35,8 +35,6 @@ meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_3=nz_lens_3,
                         nz_lens_4=nz_lens_4)
 
-meta, files = make_data(sacc_file, yaml_file)
-
 meta.types = [ 
     "galaxy_density",
     "galaxy_density",
@@ -86,6 +84,7 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
     "source_2_dz" => -0.000356315,
     "source_3_dz" => 0.00175369,
     "source_4_dz" => 0.00379481)
+
     cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit)
