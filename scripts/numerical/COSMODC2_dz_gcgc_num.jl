@@ -15,6 +15,7 @@ method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc.yml"
 nz_path = string("../../data/CosmoDC2/image_nzs_", method, "_priors/")
+dz_path = string("../../data/CosmoDC2/image_dz_", method, "_priors/dz_prior.npz")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
@@ -34,6 +35,12 @@ mu_k1 = sum(zs_k1 .* nz_k1) / sum(nz_k1)
 mu_k2 = sum(zs_k2 .* nz_k2) / sum(nz_k2)
 mu_k3 = sum(zs_k3 .* nz_k3) / sum(nz_k3)
 mu_k4 = sum(zs_k4 .* nz_k4) / sum(nz_k4)
+
+dz_prior = npzread(dz_path)
+dz_mean, dz_cov = dz_prior["mean"], dz_prior["cov"]
+dz_mean = dz_mean[10:]
+dz_cov = dz_cov[10:, 10:]
+dz_chol = cholesky(dz_cov).U'
 
 meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_0=nz_lens_0,
