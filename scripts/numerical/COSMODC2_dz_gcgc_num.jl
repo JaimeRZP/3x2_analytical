@@ -1,7 +1,3 @@
-using Pkg
-Pkg.activate("..")
-Pkg.instantiate()
-
 using LinearAlgebra
 using Turing
 using LimberJack
