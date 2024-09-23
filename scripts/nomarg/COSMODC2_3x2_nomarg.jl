@@ -14,10 +14,6 @@ method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
 nz_path = string("../../data/CosmoDC2/image_nzs_", method, "_priors/")
-fake_data_path = string("../../data/CosmoDC2/CosmoDC2_3x2_theory_photo_", method, "_best.csv")
-
-fake_data = CSV.read(fake_data_path, DataFrame)
-fake_data = fake_data.theory[1:end-1]
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
@@ -57,28 +53,15 @@ meta.types = [
     "galaxy_shear",
     "galaxy_shear"]
 
-data = fake_data
 cov = meta.cov
-
 Γ = sqrt(cov)
 iΓ = inv(Γ)
-data = iΓ * data
 
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 
-@model function model(data;
-    meta=meta, 
-    files=files)
-
-    #KiDS priors
-    Ωm ~ Uniform(0.2, 0.6)
-    Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
-    Ωb := 0.1*Ωbb 
-    h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
-    σ8 ~ Uniform(0.4, 1.2)
-    ns ~ Uniform(0.84, 1.1)
-
-    nuisances = Dict{String, Float64}(
+function make_theory(;Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
+    meta=meta, files=files)
+    nuisances = Dict(
         "lens_0_b"    => 0.879118,
         "lens_1_b"    => 1.05894,
         "lens_2_b"    => 1.22145,
@@ -89,13 +72,31 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
         "source_2_m"  => 0.00434908,
         "source_3_m"  => -0.00278755,
         "source_4_m"  => 0.000101118)
-        
-    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
-            tk_mode=:EisHu,
-            pk_mode=:Halofit)
+       
+   cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+           tk_mode=:EisHu,
+           pk_mode=:Halofit)
 
-    theory := Theory(cosmology, meta, files; Nuisances=nuisances)
-    data ~ MvNormal(iΓ * theory, I)
+   return Theory(cosmology, meta, files; Nuisances=nuisances)
+end
+
+fake_data = make_theory();
+fake_data = iΓ * fake_data
+data = fake_data
+
+@model function model(data)
+    Ωm ~ Uniform(0.2, 0.6)
+    Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
+    Ωb := 0.1*Ωbb 
+    h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
+    σ8 ~ Uniform(0.4, 1.2)
+    ns ~ Uniform(0.84, 1.1)
+        
+    theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
+    ttheory = iΓ * theory
+    d = fake_data - ttheory
+    Xi2 := dot(d, d)
+    data ~ MvNormal(ttheory, I)
 end
 
 iterations = 2000
@@ -110,7 +111,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains_right_nzs/nomarg/"
-folname = string("CosmoDC2_3x2_nomarg_TAP_", TAP)
+folname = string("CosmoDC2_3x2_fake_nomarg_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
