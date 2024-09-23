@@ -38,8 +38,8 @@ mu_k4 = sum(zs_k4 .* nz_k4) / sum(nz_k4)
 
 dz_prior = npzread(dz_path)
 dz_mean, dz_cov = dz_prior["mean"], dz_prior["cov"]
-dz_mean = dz_mean[10:]
-dz_cov = dz_cov[10:, 10:]
+dz_mean = dz_mean[11:end]
+dz_cov = dz_cov[11:end, 11:end]
 dz_chol = cholesky(dz_cov).U'
 
 meta, files = make_data(sacc_file, yaml_file;
