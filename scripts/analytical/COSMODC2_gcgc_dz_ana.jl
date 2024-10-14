@@ -80,7 +80,7 @@ data = fake_data
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 2000
+iterations = 500
 adaptation = 500
 TAP = 0.65
 
@@ -92,7 +92,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains_right_nzs/analytical/"
-folname = string("CosmoDC2_gcgc_fake_ana_TAP_", TAP)
+folname = string("CosmoDC2_gcgc_nogcx_fake_ana_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
