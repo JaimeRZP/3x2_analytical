@@ -54,7 +54,6 @@ meta.types = [
     "galaxy_shear",
     "galaxy_shear"]
 
-data = fake_data
 cov = npzread(cov_path)["3x2_AD"]
 
 Γ = sqrt(cov)
