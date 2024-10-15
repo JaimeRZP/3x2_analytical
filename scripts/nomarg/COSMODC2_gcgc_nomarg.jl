@@ -92,7 +92,8 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains_right_nzs/nomarg/"
-folname = string("CosmoDC2_gcgc_nogcx_fake_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
+#folname = string("CosmoDC2_gcgc_nogcx_fake_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folname = string("CosmoDC2_gcgc_nogcx_fake_nomarg_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -117,7 +118,8 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
+#sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
+sampler = NUTS(adaptation, TAP)
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
