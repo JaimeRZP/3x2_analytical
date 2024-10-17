@@ -48,17 +48,25 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 function make_theory(;Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
     meta=meta, files=files)
     nuisances = Dict(
-       "lens_0_b"    => 0.879118,
-       "lens_1_b"    => 1.05894,
-       "lens_2_b"    => 1.22145,
-       "lens_3_b"    => 1.35065,
-       "lens_4_b"    => 1.58909)
+        "lens_0_b"    => 0.879118,
+        "lens_1_b"    => 1.05894,
+        "lens_2_b"    => 1.22145,
+        "lens_3_b"    => 1.35065,
+        "lens_4_b"    => 1.58909,
+        "source_0_m"  => -0.00733846,
+        "source_1_m"  => -0.00434667,
+        "source_2_m"  => 0.00434908,
+        "source_3_m"  => -0.00278755,
+        "source_4_m"  => 0.000101118)
        
-   cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
-           tk_mode=:EisHu,
-           pk_mode=:Halofit)
+       cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+       tk_mode=:EisHu,
+       pk_mode=:Halofit,
+       nk=5000)
 
-   return Theory(cosmology, meta, files; Nuisances=nuisances)
+return Theory(cosmology, meta, files; 
+            Nuisances=nuisances,
+            int_gc="cubic", res_gc=1000)
 end
 
 fake_data = make_theory();
@@ -80,9 +88,10 @@ data = fake_data
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 500
+iterations = 100
 adaptation = 500
 TAP = 0.65
+init_ϵ = 0.01
 
 println("sampling settings: ")
 println("iterations ", iterations)
@@ -91,8 +100,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains_right_nzs/analytical/"
-folname = string("CosmoDC2_gcgc_nogcx_fake_ana_TAP_", TAP)
+folpath = "../../fake_chains/nomarg/"
+folname = string("CosmoDC2_gcgc_ana_TAP_", TAP, "_init_ϵ_", init_ϵ) 
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -117,7 +126,7 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP)
+sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
