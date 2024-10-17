@@ -607,8 +607,8 @@ version = "2.40.1+0"
 
 [[deps.LimberJack]]
 deps = ["Artifacts", "Interpolations", "LinearAlgebra", "NPZ", "NumericalIntegration", "PythonCall", "QuadGK", "Statistics"]
-git-tree-sha1 = "39596155152a29c142a8c77d8b93447b6eef78fc"
-repo-rev = "main"
+git-tree-sha1 = "d47bee708901f5cc5958d43a9200a64c0b791b61"
+repo-rev = "cubic"
 repo-url = "https://github.com/JaimeRZP/LimberJack.jl.git"
 uuid = "6b86205d-155a-4b14-b82d-b6a149ea78f2"
 version = "0.1.5"

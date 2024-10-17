@@ -75,9 +75,12 @@ function make_theory(;Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99
        
    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
            tk_mode=:EisHu,
-           pk_mode=:Halofit)
+           pk_mode=:Halofit,
+           nz=5000)
 
-   return Theory(cosmology, meta, files; Nuisances=nuisances)
+   return Theory(cosmology, meta, files; 
+                 Nuisances=nuisances,
+                 int_gc="cubic", res_gc=1000)
 end
 
 fake_data = make_theory();
@@ -100,9 +103,9 @@ data = fake_data
 end
 
 iterations = 500
-adaptation = 500
+adaptation = 100
 TAP = 0.65
-init_ϵ = 0.0015
+init_ϵ = 0.03
 
 println("sampling settings: ")
 println("iterations ", iterations)
@@ -111,9 +114,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains_right_nzs/nomarg/"
-#folname = string("CosmoDC2_3x2_nogcx_fake_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
-folname = string("CosmoDC2_3x2_nogcx_fake_nomarg_TAP_", TAP)
+folpath = "../../fake_chains/nomarg/"
+folname = string("CosmoDC2_3x2_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -138,8 +140,7 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-#sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
-sampler = NUTS(adaptation, TAP)
+sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
