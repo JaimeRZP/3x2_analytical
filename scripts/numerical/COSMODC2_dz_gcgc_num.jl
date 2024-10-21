@@ -60,10 +60,9 @@ cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
 
-init_dzs = zeros(5)
-init_wzs = ones(5)
+init_alphas = zeros(10)
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
-init_params = [init_params; init_dzs; init_wzs]
+init_params = [init_params; init_alphas]
 
 function make_theory(dzs, wzs; 
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
@@ -119,9 +118,10 @@ data = fake_data
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 2000
-adaptation = 500
+iterations = 500
+adaptation = 100
 TAP = 0.65
+init_ϵ = 0.01
 
 println("sampling settings: ")
 println("iterations ", iterations)
@@ -130,8 +130,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains_right_nzs/numerical/"
-folname = string("CosmoDC2_gcgc_fake_dz_num_TAP_", TAP)
+folpath = "../../fake_chains/numerical/"
+folname = string("CosmoDC2_gcgc_dz_num_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)

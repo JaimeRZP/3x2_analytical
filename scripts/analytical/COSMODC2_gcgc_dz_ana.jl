@@ -64,7 +64,7 @@ function make_theory(;Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99
        pk_mode=:Halofit,
        nk=5000)
 
-return Theory(cosmology, meta, files; 
+    return Theory(cosmology, meta, files; 
             Nuisances=nuisances,
             int_gc="cubic", res_gc=1000)
 end

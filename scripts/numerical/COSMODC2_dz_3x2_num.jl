@@ -84,32 +84,17 @@ meta.types = [
     "galaxy_shear"]
 
 data = fake_data
-cov = meta.cov
-
 Γ = sqrt(cov)
 iΓ = inv(Γ)
-data = iΓ * data
 
+init_alphas = zeros(20)
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
+init_params = [init_params; init_alphas]
 
-@model function model(data;
-    meta=meta, 
-    files=files)
+function make_theory(dzs, wzs; 
+    Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
+    meta=meta, files=files)
 
-    #KiDS priors
-    Ωm ~ Uniform(0.2, 0.6)
-    Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
-    Ωb := 0.1*Ωbb 
-    h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
-    σ8 ~ Uniform(0.4, 1.2)
-    ns ~ Uniform(0.84, 1.1)
-
-    alphas ~ filldist(truncated(Normal(0, 1), -3, 3), 20)
-    SnWs = dz_mean .+ dz_chol * alphas
-    dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9],
-           SnWs[11], SnWs[13], SnWs[15], SnWs[17], SnWs[19]]
-    wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10],
-           SnWs[12], SnWs[14], SnWs[16], SnWs[18], SnWs[20]]
     lens_0_zs   = @.((zs_k0-mu_k0)/wzs[1] + mu_k0 + dzs[1])
     lens_1_zs   = @.((zs_k1-mu_k1)/wzs[2] + mu_k1 + dzs[2])
     lens_2_zs   = @.((zs_k2-mu_k2)/wzs[3] + mu_k2 + dzs[3])
@@ -142,18 +127,45 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
         "source_2_zs" => source_2_zs,
         "source_3_zs" => source_3_zs,
         "source_4_zs" => source_4_zs)
-        
-    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
-            tk_mode=:EisHu,
-            pk_mode=:Halofit)
+       
+   cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+           tk_mode=:EisHu,
+           pk_mode=:Halofit)
 
-    theory := Theory(cosmology, meta, files; Nuisances=nuisances)
-    data ~ MvNormal(iΓ * theory, I)
+    return Theory(cosmology, meta, files; Nuisances=nuisances)
 end
 
-iterations = 2000
-adaptation = 500
+fake_data = make_theory(init_dzs, init_wzs);
+fake_data = iΓ * fake_data
+data = fake_data
+
+@model function model(data)
+    Ωm ~ Uniform(0.2, 0.6)
+    Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
+    Ωb := 0.1*Ωbb 
+    h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
+    σ8 ~ Uniform(0.4, 1.2)
+    ns ~ Uniform(0.84, 1.1)
+
+    alphas ~ filldist(truncated(Normal(0, 1), -3, 3), 20)
+    SnWs = dz_mean .+ dz_chol * alphas
+    dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9],
+           SnWs[11], SnWs[13], SnWs[15], SnWs[17], SnWs[19]]
+    wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10],
+           SnWs[12], SnWs[14], SnWs[16], SnWs[18], SnWs[20]]
+
+    theory := make_theory(dzs, wzs;
+           Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
+    ttheory = iΓ * theory
+    d = fake_data - ttheory
+    Xi2 := dot(d, d)
+    data ~ MvNormal(ttheory, I)
+end
+
+iterations = 500
+adaptation = 100
 TAP = 0.65
+init_ϵ = 0.01
 
 println("sampling settings: ")
 println("iterations ", iterations)
@@ -162,8 +174,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains_right_nzs/numerical/"
-folname = string("CosmoDC2_3x2_dz_num_TAP_", TAP)
+folpath = "../../fake_chains/numerical/"
+folname = string("CosmoDC2_3x2_dz_num_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
