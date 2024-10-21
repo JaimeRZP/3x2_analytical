@@ -115,7 +115,7 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains_right_nzs/analytical/"
+folpath = "../../fake_chains/analytical/"
 folname = string("CosmoDC2_3x2_ana_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
