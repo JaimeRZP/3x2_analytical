@@ -83,7 +83,7 @@ meta.types = [
     "galaxy_shear",
     "galaxy_shear"]
 
-data = fake_data
+cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
 

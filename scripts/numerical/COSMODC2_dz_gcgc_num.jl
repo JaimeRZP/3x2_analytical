@@ -93,6 +93,8 @@ function make_theory(dzs, wzs;
     return Theory(cosmology, meta, files; Nuisances=nuisances)
 end
 
+init_dzs = zeros(5)
+init_wzs = ones(5)
 fake_data = make_theory(init_dzs, init_wzs);
 fake_data = iΓ * fake_data
 data = fake_data
