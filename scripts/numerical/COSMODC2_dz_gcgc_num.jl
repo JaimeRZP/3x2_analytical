@@ -106,7 +106,7 @@ function make_theory(dzs, wzs;
 
     return Theory(cosmology, meta, files; 
              Nuisances=nuisances,
-             int_gc="cubic", res_gc=1000)
+             int_gc="none")
 end
 
 init_dzs = zeros(5)
