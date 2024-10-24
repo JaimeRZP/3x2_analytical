@@ -86,11 +86,14 @@ function make_theory(dzs, wzs;
         "lens_3_zs"   => lens_3_zs,
         "lens_4_zs"   => lens_4_zs)
        
-   cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
-           tk_mode=:EisHu,
-           pk_mode=:Halofit)
+    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+        tk_mode=:EisHu,
+        pk_mode=:Halofit,
+        nk=5000)
 
-    return Theory(cosmology, meta, files; Nuisances=nuisances)
+    return Theory(cosmology, meta, files; 
+             Nuisances=nuisances,
+             int_gc="cubic", res_gc=1000)
 end
 
 init_dzs = zeros(5)

@@ -89,7 +89,7 @@ end
 
 iterations = 500
 adaptation = 100
-TAP = 0.65
+TAP = 0.95
 init_ϵ = 0.01
 
 println("sampling settings: ")
