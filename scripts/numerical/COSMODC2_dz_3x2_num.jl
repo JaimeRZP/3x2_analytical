@@ -128,11 +128,14 @@ function make_theory(dzs, wzs;
         "source_3_zs" => source_3_zs,
         "source_4_zs" => source_4_zs)
        
-   cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
-           tk_mode=:EisHu,
-           pk_mode=:Halofit)
+    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+        tk_mode=:EisHu,
+        pk_mode=:Halofit,
+        nk=5000)
 
-    return Theory(cosmology, meta, files; Nuisances=nuisances)
+    return Theory(cosmology, meta, files; 
+             Nuisances=nuisances,
+             int_gc="cubic", res_gc=1000)
 end
 
 init_dzs = zeros(10)
@@ -167,7 +170,7 @@ end
 iterations = 500
 adaptation = 100
 TAP = 0.65
-init_ϵ = 0.01
+init_ϵ = 0.03
 
 println("sampling settings: ")
 println("iterations ", iterations)
