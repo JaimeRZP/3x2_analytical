@@ -69,11 +69,11 @@ function make_theory(dzs, wzs;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
     meta=meta, files=files)
 
-    source_0_zs = @.((zs_k5-mu_k5)/wzs[6] + mu_k5 + dzs[6])
-    source_1_zs = @.((zs_k6-mu_k6)/wzs[7] + mu_k6 + dzs[7])
-    source_2_zs = @.((zs_k7-mu_k7)/wzs[8] + mu_k7 + dzs[8])
-    source_3_zs = @.((zs_k8-mu_k8)/wzs[9] + mu_k8 + dzs[9])
-    source_4_zs = @.((zs_k9-mu_k9)/wzs[10] + mu_k9 + dzs[10])
+    source_0_zs = @.((zs_k0-mu_k0)/wzs[1] + mu_k0 + dzs[1])
+    source_1_zs = @.((zs_k1-mu_k1)/wzs[2] + mu_k1 + dzs[2])
+    source_2_zs = @.((zs_k2-mu_k2)/wzs[3] + mu_k2 + dzs[3])
+    source_3_zs = @.((zs_k3-mu_k3)/wzs[4] + mu_k3 + dzs[4])
+    source_4_zs = @.((zs_k4-mu_k4)/wzs[5] + mu_k4 + dzs[5])
 
     nuisances = Dict(
         "source_0_m"  => -0.00733846,
@@ -101,11 +101,7 @@ fake_data = make_theory(init_dzs, init_wzs);
 fake_data = iΓ * fake_data
 data = fake_data
 
-@model function model(data;
-    meta=meta, 
-    files=files)
-
-    #KiDS priors
+@model function model(data)
     Ωm ~ Uniform(0.2, 0.6)
     Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
     Ωb := 0.1*Ωbb 
@@ -117,18 +113,8 @@ data = fake_data
     SnWs = dz_mean .+ dz_chol * alphas
     dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9]]
     wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10]]
-    source_0_zs = @.((zs_k0-mu_k0)/wzs[1] + mu_k0 + dzs[1])
-    source_1_zs = @.((zs_k1-mu_k1)/wzs[2] + mu_k1 + dzs[2])
-    source_2_zs = @.((zs_k2-mu_k2)/wzs[3] + mu_k2 + dzs[3])
-    source_3_zs = @.((zs_k3-mu_k3)/wzs[4] + mu_k3 + dzs[4])
-    source_4_zs = @.((zs_k4-mu_k4)/wzs[5] + mu_k4 + dzs[5])
 
     nuisances = Dict(
-        "source_0_b"    => 0.879118,
-        "source_1_b"    => 1.05894,
-        "source_2_b"    => 1.22145,
-        "source_3_b"    => 1.35065,
-        "source_4_b"    => 1.58909,
         "source_0_zs"   => source_0_zs,
         "source_1_zs"   => source_1_zs,
         "source_2_zs"   => source_2_zs,
@@ -140,12 +126,12 @@ data = fake_data
         "source_3_m"  => -0.00278755,
         "source_4_m"  => 0.000101118)
         
-    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
-            tk_mode=:EisHu,
-            pk_mode=:Halofit)
-
-    theory := Theory(cosmology, meta, files; Nuisances=nuisances)
-    data ~ MvNormal(iΓ * theory, I)
+    theory := make_theory(dzs, wzs;
+        Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
+    ttheory = iΓ * theory
+    d = fake_data - ttheory
+    Xi2 := dot(d, d)
+    data ~ MvNormal(ttheory, I)
 end
 
 iterations = 2000
