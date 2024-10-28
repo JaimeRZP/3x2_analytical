@@ -113,18 +113,6 @@ data = fake_data
     SnWs = dz_mean .+ dz_chol * alphas
     dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9]]
     wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10]]
-
-    nuisances = Dict(
-        "source_0_zs"   => source_0_zs,
-        "source_1_zs"   => source_1_zs,
-        "source_2_zs"   => source_2_zs,
-        "source_3_zs"   => source_3_zs,
-        "source_4_zs"   => source_4_zs,
-        "source_0_m"  => -0.00733846,
-        "source_1_m"  => -0.00434667,
-        "source_2_m"  => 0.00434908,
-        "source_3_m"  => -0.00278755,
-        "source_4_m"  => 0.000101118)
         
     theory := make_theory(dzs, wzs;
         Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
