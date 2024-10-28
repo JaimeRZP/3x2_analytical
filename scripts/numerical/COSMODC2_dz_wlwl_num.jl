@@ -16,10 +16,6 @@ sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/wlwl.yml"
 nz_path = string("../../data/CosmoDC2/image_nzs_", method, "_priors/")
 dz_path = string("../../data/CosmoDC2/image_dz_", method, "_priors/dz_prior.npz")
-fake_data_path = string("../../data/CosmoDC2/CosmoDC2_wlwl_theory_photo_", method, "_best.csv")
-
-fake_data = CSV.read(fake_data_path, DataFrame)
-fake_data = fake_data.theory[1:end-1]
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
@@ -60,14 +56,50 @@ meta.types = [
     "galaxy_shear",
     "galaxy_shear"]
 
-data = fake_data
-cov = meta.cov
 
+cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
-data = iΓ * data
 
+init_alphas = zeros(10)
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
+init_params = [init_params; init_alphas]
+
+function make_theory(dzs, wzs; 
+    Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
+    meta=meta, files=files)
+
+    source_0_zs = @.((zs_k5-mu_k5)/wzs[6] + mu_k5 + dzs[6])
+    source_1_zs = @.((zs_k6-mu_k6)/wzs[7] + mu_k6 + dzs[7])
+    source_2_zs = @.((zs_k7-mu_k7)/wzs[8] + mu_k7 + dzs[8])
+    source_3_zs = @.((zs_k8-mu_k8)/wzs[9] + mu_k8 + dzs[9])
+    source_4_zs = @.((zs_k9-mu_k9)/wzs[10] + mu_k9 + dzs[10])
+
+    nuisances = Dict(
+        "source_0_m"  => -0.00733846,
+        "source_1_m"  => -0.00434667,
+        "source_2_m"  => 0.00434908,
+        "source_3_m"  => -0.00278755,
+        "source_4_m"  => 0.000101118,
+        "source_0_zs" => source_0_zs,
+        "source_1_zs" => source_1_zs,
+        "source_2_zs" => source_2_zs,
+        "source_3_zs" => source_3_zs,
+        "source_4_zs" => source_4_zs)
+       
+    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+        tk_mode=:EisHu,
+        pk_mode=:Halofit)
+
+    return Theory(cosmology, meta, files; 
+             Nuisances=nuisances)
+end
+
+init_dzs = zeros(5)
+init_wzs = ones(5)
+fake_data = make_theory(init_dzs, init_wzs);
+fake_data = iΓ * fake_data
+data = fake_data
 
 @model function model(data;
     meta=meta, 
@@ -127,7 +159,7 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../chains_right_nzs/numerical/"
+folpath = "../../fake_chains/numerical/"
 folname = string("CosmoDC2_wlwl_dz_num_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
