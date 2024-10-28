@@ -104,7 +104,7 @@ data = fake_data
 @model function model(data)
     Ωm ~ Uniform(0.2, 0.6)
     Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
-    Ωb := 0.1*Ωbb 
+    Ωb := 0.1*Ωbb
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
