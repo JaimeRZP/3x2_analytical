@@ -102,11 +102,12 @@ function make_theory(dzs, wzs;
     cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit,
-        nk=5000)
+        nk=3000)
 
     return Theory(cosmology, meta, files; 
              Nuisances=nuisances,
-             int_gc="none")
+             int_gc="none",
+             smooth_gc=3)
 end
 
 init_dzs = zeros(5)
@@ -152,7 +153,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../fake_chains/numerical/"
-folname = string("CosmoDC2_gcgc_dz_num_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folname = string("CosmoDC2_gcgc_bp_dz_num_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)

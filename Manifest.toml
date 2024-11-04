@@ -2,7 +2,7 @@
 
 julia_version = "1.11.0"
 manifest_format = "2.0"
-project_hash = "104e28eaa25ca0ed38ab42b6d5616ef427acfe6d"
+project_hash = "76a09fa3910f13160f2dd8e96716a31f5075e338"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra", "Requires"]
@@ -607,8 +607,8 @@ version = "2.40.1+0"
 
 [[deps.LimberJack]]
 deps = ["Artifacts", "Interpolations", "LinearAlgebra", "NPZ", "NumericalIntegration", "PythonCall", "QuadGK", "Statistics"]
-git-tree-sha1 = "d47bee708901f5cc5958d43a9200a64c0b791b61"
-repo-rev = "cubic"
+git-tree-sha1 = "21860e91e6a239f515cd617a61bfa7827b1cae95"
+repo-rev = "bandpowers"
 repo-url = "https://github.com/JaimeRZP/LimberJack.jl.git"
 uuid = "6b86205d-155a-4b14-b82d-b6a149ea78f2"
 version = "0.1.5"

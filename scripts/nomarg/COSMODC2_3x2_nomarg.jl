@@ -29,6 +29,39 @@ nz_source_2 = npzread(string(nz_path, "nz_source_2.npz"))
 nz_source_3 = npzread(string(nz_path, "nz_source_3.npz"))
 nz_source_4 = npzread(string(nz_path, "nz_source_4.npz"))
 
+zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["dndz"]
+zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["dndz"]
+zs_k2, nz_k2 = nz_lens_2["z"], nz_lens_2["dndz"]
+zs_k3, nz_k3 = nz_lens_3["z"], nz_lens_3["dndz"]
+zs_k4, nz_k4 = nz_lens_4["z"], nz_lens_4["dndz"]
+zs_k5, nz_k5 = nz_source_0["z"], nz_source_0["dndz"]
+zs_k6, nz_k6 = nz_source_1["z"], nz_source_1["dndz"]
+zs_k7, nz_k7 = nz_source_2["z"], nz_source_2["dndz"]
+zs_k8, nz_k8 = nz_source_3["z"], nz_source_3["dndz"]
+zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["dndz"]
+
+zs_k0, nz_k0 = LimberJack.nz_interpolate(zs_k0, nz_k0, 1000; mode="cubic")
+zs_k1, nz_k1 = LimberJack.nz_interpolate(zs_k1, nz_k1, 1000; mode="cubic")
+zs_k2, nz_k2 = LimberJack.nz_interpolate(zs_k2, nz_k2, 1000; mode="cubic")
+zs_k3, nz_k3 = LimberJack.nz_interpolate(zs_k3, nz_k3, 1000; mode="cubic")
+zs_k4, nz_k4 = LimberJack.nz_interpolate(zs_k4, nz_k4, 1000; mode="cubic")
+#zs_k5, nz_k5 = LimberJack.nz_interpolate(zs_k5, nz_k5, 1000; mode="cubic")
+#zs_k6, nz_k6 = LimberJack.nz_interpolate(zs_k6, nz_k6, 1000; mode="cubic")
+#zs_k7, nz_k7 = LimberJack.nz_interpolate(zs_k7, nz_k7, 1000; mode="cubic")
+#zs_k8, nz_k8 = LimberJack.nz_interpolate(zs_k8, nz_k8, 1000; mode="cubic")
+#zs_k9, nz_k9 = LimberJack.nz_interpolate(zs_k9, nz_k9, 1000; mode="cubic")
+
+nz_lens_0 = Dict("z"=>zs_k0, "dndz"=>nz_k0)
+nz_lens_1 = Dict("z"=>zs_k1, "dndz"=>nz_k1)
+nz_lens_2 = Dict("z"=>zs_k2, "dndz"=>nz_k2)
+nz_lens_3 = Dict("z"=>zs_k3, "dndz"=>nz_k3)
+nz_lens_4 = Dict("z"=>zs_k4, "dndz"=>nz_k4)
+#nz_source_0 = Dict("z"=>zs_k5, "dndz"=>nz_k5)
+#nz_source_1 = Dict("z"=>zs_k6, "dndz"=>nz_k6)
+#nz_source_2 = Dict("z"=>zs_k7, "dndz"=>nz_k7)
+#nz_source_3 = Dict("z"=>zs_k8, "dndz"=>nz_k8)
+#nz_source_4 = Dict("z"=>zs_k9, "dndz"=>nz_k9)
+
 meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_0=nz_lens_0,
                         nz_lens_1=nz_lens_1,
@@ -76,11 +109,12 @@ function make_theory(;Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99
    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
            tk_mode=:EisHu,
            pk_mode=:Halofit,
-           nz=5000)
+           nz=3000)
 
    return Theory(cosmology, meta, files; 
                  Nuisances=nuisances,
-                 int_gc="cubic", res_gc=1000)
+                 int_gc="none",
+                 smooth_gc=3)
 end
 
 fake_data = make_theory();
@@ -118,7 +152,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../fake_chains/nomarg/"
-folname = string("CosmoDC2_3x2_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folname = string("CosmoDC2_3x2_bp_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
