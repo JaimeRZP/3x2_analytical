@@ -141,6 +141,7 @@ iterations = 500
 adaptation = 100
 TAP = 0.65
 init_ϵ = 0.03
+max_depth = 8
 
 println("sampling settings: ")
 println("iterations ", iterations)
@@ -175,7 +176,7 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ)
+sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ, max_depth=max_depth)
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
