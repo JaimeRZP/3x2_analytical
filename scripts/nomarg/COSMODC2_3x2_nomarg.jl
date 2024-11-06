@@ -109,7 +109,7 @@ function make_theory(;Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99
    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
            tk_mode=:EisHu,
            pk_mode=:Halofit,
-           nz=3000)
+           nk=3000)
 
    return Theory(cosmology, meta, files; 
                  Nuisances=nuisances,
