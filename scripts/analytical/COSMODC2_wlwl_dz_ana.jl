@@ -105,7 +105,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../fake_chains/analytical/"
-folname = string("CosmoDC2_wlwl_ana_TAP_", TAP)
+folname = string("CosmoDC2_wlwl_dz_ana_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
