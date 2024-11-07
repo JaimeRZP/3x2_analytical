@@ -107,7 +107,7 @@ end
 
 iterations = 500
 adaptation = 100
-TAP = 0.95
+TAP = 0.65
 init_ϵ = 0.01
 max_depth = 8
 
