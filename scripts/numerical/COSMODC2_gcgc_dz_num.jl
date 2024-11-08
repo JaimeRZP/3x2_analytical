@@ -73,14 +73,15 @@ cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
 
-init_alphas = zeros(10)
+init_alphas = zeros(5)
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 init_params = [init_params; init_alphas]
 
-function make_theory(dzs, wzs; 
+function make_theory(dzs; 
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
     meta=meta, files=files)
 
+    wzs = ones(5)
     lens_0_zs = @.((zs_k0-mu_k0)/wzs[1] + mu_k0 + dzs[1])
     lens_1_zs = @.((zs_k1-mu_k1)/wzs[2] + mu_k1 + dzs[2])
     lens_2_zs = @.((zs_k2-mu_k2)/wzs[3] + mu_k2 + dzs[3])
@@ -101,13 +102,11 @@ function make_theory(dzs, wzs;
        
     cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
-        pk_mode=:Halofit,
-        nk=3000)
+        pk_mode=:Halofit)
 
     return Theory(cosmology, meta, files; 
              Nuisances=nuisances,
-             int_gc="none",
-             smooth_gc=3)
+             int_gc="none")
 end
 
 init_dzs = zeros(5)
@@ -125,11 +124,9 @@ data = fake_data
     ns ~ Uniform(0.84, 1.1)
 
     alphas ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    SnWs = dz_mean .+ dz_chol * alphas
-    dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9]]
-    wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10]]
+    dzs = dz_mean .+ dz_chol * alphas
 
-    theory := make_theory(dzs, wzs;
+    theory := make_theory(dzs;
         Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
     ttheory = iΓ * theory
     d = fake_data - ttheory

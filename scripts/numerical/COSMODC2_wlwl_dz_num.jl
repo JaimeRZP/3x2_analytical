@@ -61,14 +61,15 @@ cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
 
-init_alphas = zeros(10)
+init_alphas = zeros(5)
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 init_params = [init_params; init_alphas]
 
-function make_theory(dzs, wzs; 
+function make_theory(dzs; 
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
     meta=meta, files=files)
 
+    wzs = ones(5)
     source_0_zs = @.((zs_k0-mu_k0)/wzs[1] + mu_k0 + dzs[1])
     source_1_zs = @.((zs_k1-mu_k1)/wzs[2] + mu_k1 + dzs[2])
     source_2_zs = @.((zs_k2-mu_k2)/wzs[3] + mu_k2 + dzs[3])
@@ -96,8 +97,7 @@ function make_theory(dzs, wzs;
 end
 
 init_dzs = zeros(5)
-init_wzs = ones(5)
-fake_data = make_theory(init_dzs, init_wzs);
+fake_data = make_theory(init_dzs);
 fake_data = iΓ * fake_data
 data = fake_data
 

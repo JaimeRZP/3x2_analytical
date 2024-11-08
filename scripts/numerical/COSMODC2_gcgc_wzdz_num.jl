@@ -101,13 +101,11 @@ function make_theory(dzs, wzs;
        
     cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
-        pk_mode=:Halofit,
-        nk=3000)
+        pk_mode=:Halofit)
 
     return Theory(cosmology, meta, files; 
              Nuisances=nuisances,
-             int_gc="none",
-             smooth_gc=3)
+             int_gc="none")
 end
 
 init_dzs = zeros(5)
