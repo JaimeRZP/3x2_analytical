@@ -108,13 +108,11 @@ function make_theory(;Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99
        
    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
            tk_mode=:EisHu,
-           pk_mode=:Halofit,
-           nk=3000)
+           pk_mode=:Halofit)
 
    return Theory(cosmology, meta, files; 
                  Nuisances=nuisances,
-                 int_gc="none",
-                 smooth_gc=3)
+                 int_gc="none")
 end
 
 fake_data = make_theory();
