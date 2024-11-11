@@ -110,11 +110,9 @@ data = fake_data
     ns ~ Uniform(0.84, 1.1)
 
     alphas ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    SnWs = dz_mean .+ dz_chol * alphas
-    dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9]]
-    wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10]]
+    dzs := dz_mean .+ dz_chol * alphas
         
-    theory := make_theory(dzs, wzs;
+    theory := make_theory(dzs;
         Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
     ttheory = iΓ * theory
     d = fake_data - ttheory

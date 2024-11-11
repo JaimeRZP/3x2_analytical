@@ -176,9 +176,7 @@ data = fake_data
     ns ~ Uniform(0.84, 1.1)
 
     alphas ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    dzs = dz_mean .+ dz_chol * alphas
-    dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9],
-           SnWs[11], SnWs[13], SnWs[15], SnWs[17], SnWs[19]]
+    dzs := dz_mean .+ dz_chol * alphas
 
     theory := make_theory(dzs;
            Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
