@@ -39,15 +39,11 @@ meta.types = [
     "galaxy_shear",
     "galaxy_shear"]
 
-data = fake_data
 cov = npzread(cov_path)["wlwl_AD"]
-
 Γ = sqrt(cov)
 iΓ = inv(Γ)
-data = iΓ * data
 
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
-init_params = [init_params; init_alphas]
 
 function make_theory(; 
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
