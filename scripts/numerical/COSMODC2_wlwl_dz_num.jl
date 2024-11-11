@@ -109,7 +109,7 @@ data = fake_data
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    alphas ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
+    alphas ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
     dzs := dz_mean .+ dz_chol * alphas
         
     theory := make_theory(dzs;
