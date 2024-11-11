@@ -51,8 +51,8 @@ mu_k4 = sum(zs_k4 .* nz_k4) / sum(nz_k4)
 
 dz_prior = npzread(dz_path)
 dz_mean, dz_cov = dz_prior["mean"], dz_prior["cov"]
-dz_mean = dz_mean[11:end]
-dz_cov = dz_cov[11:end, 11:end]
+dz_mean = dz_mean[6:end]
+dz_cov = dz_cov[6:end, 6:end]
 dz_chol = cholesky(dz_cov).U'
 
 meta, files = make_data(sacc_file, yaml_file;
@@ -110,8 +110,7 @@ function make_theory(dzs;
 end
 
 init_dzs = zeros(5)
-init_wzs = ones(5)
-fake_data = make_theory(init_dzs, init_wzs);
+fake_data = make_theory(init_dzs);
 fake_data = iΓ * fake_data
 data = fake_data
 
