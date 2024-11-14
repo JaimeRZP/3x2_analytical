@@ -55,9 +55,11 @@ meta.types = [
     "galaxy_density",
     "galaxy_density"]
 
+data = meta.data
 cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
+data = iΓ * data
 
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 
@@ -83,10 +85,6 @@ function make_theory(;Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99
                 Nuisances=nuisances,
                 int_gc="none")
 end
-
-fake_data = make_theory();
-fake_data = iΓ * fake_data
-data = fake_data
 
 @model function model(data)
     Ωm ~ Uniform(0.2, 0.6)
@@ -118,7 +116,7 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../fake_chains/nomarg/"
+folpath = "../../chains/nomarg/"
 folname = string("CosmoDC2_gcgc_bp_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 

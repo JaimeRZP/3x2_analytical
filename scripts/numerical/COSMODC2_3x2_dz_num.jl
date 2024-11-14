@@ -175,8 +175,11 @@ data = fake_data
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    alphas ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    dzs := dz_mean .+ dz_chol * alphas
+    alphas_lens ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    alphas_source ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    dzs_lens = dz_mean[1:5] .+ dz_chol[1:5, 1:5] * alphas_lens
+    dzs_source = dz_mean[6:10] .+ dz_chol[6:end, 6:end] * alphas_source
+    dzs := [dzs_source; dzs_lens]
 
     theory := make_theory(dzs;
            Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
@@ -202,7 +205,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../fake_chains/numerical/"
-folname = string("CosmoDC2_3x2_bp_dz_num_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folname = string("CosmoDC2_3x2_bp_Gibbs_dz_num_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -227,8 +230,13 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP; 
-    init_ϵ=init_ϵ, max_depth=max_depth)
+sampler = Gibbs(
+    NUTS(adaptation, TAP,
+    :Ωm, :Ωbb, :h, :σ8, :ns;
+    init_ϵ=init_ϵ, max_depth=max_depth),
+    NUTS(adaptation, TAP,
+    :alphas_lens, :alphas_source;
+    max_depth=max_depth))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
