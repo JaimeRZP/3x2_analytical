@@ -110,12 +110,12 @@ data = fake_data
     ns ~ Uniform(0.84, 1.1)
 
     alphas ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
-    dzs := dz_mean .+ dz_chol * alphas
+    dzs_source := dz_mean .+ dz_chol * alphas
         
-    theory := make_theory(dzs;
+    theory := make_theory(dzs_source;
         Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
     ttheory = iΓ * theory
-    d = fake_data - ttheory
+    d = data - ttheory
     Xi2 := dot(d, d)
     data ~ MvNormal(ttheory, I)
 end

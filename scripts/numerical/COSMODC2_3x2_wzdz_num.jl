@@ -115,20 +115,21 @@ init_alphas = zeros(20)
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 init_params = [init_params; init_alphas]
 
-function make_theory(dzs, wzs; 
+function make_theory(dzs_lens, wzs_lens,
+                    dzs_source, wzs_source; 
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
     meta=meta, files=files)
 
-    lens_0_zs   = @.((zs_k0-mu_k0)/wzs[1] + mu_k0 + dzs[1])
-    lens_1_zs   = @.((zs_k1-mu_k1)/wzs[2] + mu_k1 + dzs[2])
-    lens_2_zs   = @.((zs_k2-mu_k2)/wzs[3] + mu_k2 + dzs[3])
-    lens_3_zs   = @.((zs_k3-mu_k3)/wzs[4] + mu_k3 + dzs[4])
-    lens_4_zs   = @.((zs_k4-mu_k4)/wzs[5] + mu_k4 + dzs[5])
-    source_0_zs = @.((zs_k5-mu_k5)/wzs[6] + mu_k5 + dzs[6])
-    source_1_zs = @.((zs_k6-mu_k6)/wzs[7] + mu_k6 + dzs[7])
-    source_2_zs = @.((zs_k7-mu_k7)/wzs[8] + mu_k7 + dzs[8])
-    source_3_zs = @.((zs_k8-mu_k8)/wzs[9] + mu_k8 + dzs[9])
-    source_4_zs = @.((zs_k9-mu_k9)/wzs[10] + mu_k9 + dzs[10])
+    lens_0_zs   = @.((zs_k0-mu_k0)/wzs_lens[1] + mu_k0 + dzs_lens[1])
+    lens_1_zs   = @.((zs_k1-mu_k1)/wzs_lens[2] + mu_k1 + dzs_lens[2])
+    lens_2_zs   = @.((zs_k2-mu_k2)/wzs_lens[3] + mu_k2 + dzs_lens[3])
+    lens_3_zs   = @.((zs_k3-mu_k3)/wzs_lens[4] + mu_k3 + dzs_lens[4])
+    lens_4_zs   = @.((zs_k4-mu_k4)/wzs_lens[5] + mu_k4 + dzs_lens[5])
+    source_0_zs = @.((zs_k5-mu_k5)/wzs_source[1] + mu_k5 + dzs_source[1])
+    source_1_zs = @.((zs_k6-mu_k6)/wzs_source[2] + mu_k6 + dzs_source[2])
+    source_2_zs = @.((zs_k7-mu_k7)/wzs_source[3] + mu_k7 + dzs_source[3])
+    source_3_zs = @.((zs_k8-mu_k8)/wzs_source[4] + mu_k8 + dzs_source[4])
+    source_4_zs = @.((zs_k9-mu_k9)/wzs_source[5] + mu_k9 + dzs_source[5])
 
     nuisances = Dict(
         "lens_0_b"    => 0.879118,
@@ -161,9 +162,10 @@ function make_theory(dzs, wzs;
              int_gc="none")
 end
 
-init_dzs = zeros(10)
-init_wzs = ones(10)
-fake_data = make_theory(init_dzs, init_wzs);
+init_dzs = zeros(5)
+init_wzs = ones(5)
+fake_data = make_theory(init_dzs, init_wzs,
+                        init_dzs, init_wzs);
 fake_data = iΓ * fake_data
 data = fake_data
 
@@ -177,18 +179,17 @@ data = fake_data
 
     alphas_lens ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
     alphas_source ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    SnWs_lens = dz_mean[1:10] .+ dz_chol[1:10, 1:10] * alphas_lens
-    SnWs_source = dz_mean[11:20] .+ dz_chol[11:20, 11:20] * alphas_source
-    Snws = [SnWs_lens; SnWs_source]
-    dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9],
-           SnWs[11], SnWs[13], SnWs[15], SnWs[17], SnWs[19]]
-    wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10],
-           SnWs[12], SnWs[14], SnWs[16], SnWs[18], SnWs[20]]
+    SnWs_lens := dz_mean[1:10] .+ dz_chol[1:10, 1:10] * alphas_lens
+    SnWs_source := dz_mean[11:20] .+ dz_chol[11:20, 11:20] * alphas_source
+    dzs_lens := [SnWs_lens[1], SnWs_lens[3], SnWs_lens[5], SnWs_lens[7], SnWs_lens[9]]
+    wzs_lens := [SnWs_lens[2], SnWs_lens[4], SnWs_lens[6], SnWs_lens[8], SnWs_lens[10]]
+    dzs_source := [SnWs_source[1], SnWs_source[3], SnWs_source[5], SnWs_source[7], SnWs_source[9]]
+    wzs_source := [SnWs_source[2], SnWs_source[4], SnWs_source[6], SnWs_source[8], SnWs_source[10]]
 
-    theory := make_theory(dzs, wzs;
+    theory := make_theory(dzs_lens, wzs_lens, dzs_source, wzs_source;
            Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
     ttheory = iΓ * theory
-    d = fake_data - ttheory
+    d = data - ttheory
     Xi2 := dot(d, d)
     data ~ MvNormal(ttheory, I)
 end

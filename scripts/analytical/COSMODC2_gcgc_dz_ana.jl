@@ -100,7 +100,7 @@ data = fake_data
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
     ttheory = iΓ * theory
-    d = fake_data - ttheory
+    d = data - ttheory
     Xi2 := dot(d, d)
     data ~ MvNormal(ttheory, I)
 end

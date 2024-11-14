@@ -124,13 +124,13 @@ data = fake_data
 
     alphas ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
     SnWs = dz_mean .+ dz_chol * alphas
-    dzs := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9]]
-    wzs := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10]]
+    dzs_lens := [SnWs[1], SnWs[3], SnWs[5], SnWs[7], SnWs[9]]
+    wzs_lens := [SnWs[2], SnWs[4], SnWs[6], SnWs[8], SnWs[10]]
 
-    theory := make_theory(dzs, wzs;
+    theory := make_theory(dzs_lens, wzs_lens;
         Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
     ttheory = iΓ * theory
-    d = fake_data - ttheory
+    d = data - ttheory
     Xi2 := dot(d, d)
     data ~ MvNormal(ttheory, I)
 end
