@@ -205,7 +205,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../fake_chains/numerical/"
-folname = string("CosmoDC2_3x2_bp_Gibbs_dz_num_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folname = string("CosmoDC2_3x2_bp_indep_dz_num_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -230,13 +230,15 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = Gibbs(
-    NUTS(adaptation, TAP,
-    :Ωm, :Ωbb, :h, :σ8, :ns;
-    init_ϵ=init_ϵ, max_depth=max_depth),
-    NUTS(adaptation, TAP,
-    :alphas_lens, :alphas_source;
-    max_depth=max_depth))
+sampler = NUTS(adaptation, TAP;
+    init_ϵ=init_ϵ, max_depth=max_depth)
+#sampler = Gibbs(
+#    NUTS(adaptation, TAP,
+#    :Ωm, :Ωbb, :h, :σ8, :ns;
+#    init_ϵ=init_ϵ, max_depth=max_depth),
+#    NUTS(adaptation, TAP,
+#    :alphas_lens, :alphas_source;
+#    max_depth=max_depth))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
