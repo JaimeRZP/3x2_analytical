@@ -95,18 +95,16 @@ data = iΓ * data
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 
 function make_theory(;Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
+    lens_1_b=0.879118, lens_2_b=1.05894, lens_3_b=1.22145, lens_4_b=1.35065, lens_5_b=1.58909,
+    A_IA=0.0,
     meta=meta, files=files)
     nuisances = Dict(
-        "lens_0_b"    => 0.879118,
-        "lens_1_b"    => 1.05894,
-        "lens_2_b"    => 1.22145,
-        "lens_3_b"    => 1.35065,
-        "lens_4_b"    => 1.58909,
-        "source_0_m"  => -0.00733846,
-        "source_1_m"  => -0.00434667,
-        "source_2_m"  => 0.00434908,
-        "source_3_m"  => -0.00278755,
-        "source_4_m"  => 0.000101118)
+        "lens_1_b"    => lens_1_b,
+        "lens_2_b"    => lens_2_b,
+        "lens_3_b"    => lens_3_b,
+        "lens_4_b"    => lens_4_b,
+        "lens_5_b"    => lens_5_b,
+        "A_IA"        => A_IA)
        
    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
            tk_mode=:EisHu,
@@ -125,7 +123,18 @@ end
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
         
-    theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns)
+    lens_1_b ~ Uniform(0.5, 2.5)
+    lens_2_b ~ Uniform(0.5, 2.5)
+    lens_3_b ~ Uniform(0.5, 2.5)
+    lens_4_b ~ Uniform(0.5, 2.5)
+    lens_5_b ~ Uniform(0.5, 2.5)
+    A_IA ~ Uniform(0.0, 1.0)
+
+    theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
+                          lens_1_b=lens_1_b, lens_2_b=lens_2_b,
+                          lens_3_b=lens_3_b, lens_4_b=lens_4_b,
+                          lens_5_b=lens_5_b, A_IA=A_IA)
+
     ttheory = iΓ * theory
     d = data - ttheory
     Xi2 := dot(d, d)
@@ -148,7 +157,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../chains/nomarg/"
-folname = string("CosmoDC2_3x2_bp_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folname = string("CosmoDC2_3x2_nuisances_bp_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
