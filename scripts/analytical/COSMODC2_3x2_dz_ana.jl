@@ -148,8 +148,7 @@ function make_theory(;
         pk_mode=:Halofit)
 
  return Theory(cosmology, meta, files; 
-             Nuisances=nuisances,
-             int_gc="none")
+             Nuisances=nuisances)
 end
 
 fake_data = make_theory();
