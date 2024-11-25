@@ -94,7 +94,7 @@ iΓ = inv(Γ)
 data = iΓ * data
 
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
-            0.0]
+            0.25]
 
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
@@ -163,8 +163,8 @@ data = fake_data
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 500
-adaptation = 100
+iterations = 10
+adaptation = 10
 TAP = 0.65
 init_ϵ = 0.03
 max_depth = 8
