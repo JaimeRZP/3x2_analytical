@@ -167,7 +167,8 @@ data = fake_data
     A_IA ~ Uniform(-1.0, 1.0)
         
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
-                        dzs_source=dz_source, A_IA=A_IA)
+                        dzs_source=dzs_source,
+                        A_IA=A_IA)
     ttheory = iΓ * theory
     d = data - ttheory
     Xi2 := dot(d, d)
@@ -188,7 +189,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../nuisance_fake_chains/numerical/"
-folname = string("CosmoDC2_wlwl_dz_num_TAP_", TAP)
+folname = string("CosmoDC2_wlwl_dz_num_TAP_", TAP,  "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)

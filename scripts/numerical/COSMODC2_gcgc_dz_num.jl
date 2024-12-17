@@ -170,7 +170,7 @@ data = fake_data
     lens_5_b ~ Uniform(0.5, 2.5)
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
-    dzs_lens=dz_lens,
+    dzs_lens=dzs_lens,
     lens_1_b=lens_1_b, lens_2_b=lens_2_b,
     lens_3_b=lens_3_b, lens_4_b=lens_4_b,
     lens_5_b=lens_5_b)

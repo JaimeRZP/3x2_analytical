@@ -187,7 +187,7 @@ data = fake_data
     A_IA ~ Uniform(-1.0, 1.0)
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
-                    dzs_lens=dz_lens, dzs_source=dz_source,
+                    dzs_lens=dzs_lens, dzs_source=dzs_source,
                     wzs_lens=wzs_lens, wzs_source=wzs_source,
                     lens_1_b=lens_1_b, lens_2_b=lens_2_b,
                     lens_3_b=lens_3_b, lens_4_b=lens_4_b,

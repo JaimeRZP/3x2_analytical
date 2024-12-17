@@ -169,7 +169,7 @@ data = fake_data
     A_IA ~ Uniform(-1.0, 1.0)
         
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
-                        dzs_source=dz_source, wzs_source=wzs_source,
+                        dzs_source=dzs_source, wzs_source=wzs_source,
                         A_IA=A_IA)
     ttheory = iΓ * theory
     d = data - ttheory
