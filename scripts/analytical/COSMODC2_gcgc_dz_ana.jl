@@ -218,8 +218,8 @@ data = fake_data
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 100
-adaptation = 500
+iterations = 500
+adaptation = 100
 TAP = 0.65
 init_ϵ = 0.01
 max_depth = 8
