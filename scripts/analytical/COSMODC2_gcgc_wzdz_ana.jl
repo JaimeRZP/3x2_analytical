@@ -144,27 +144,49 @@ iΓ = inv(Γ)
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
             1.0, 1.0, 1.0, 1.0, 1.0]
 
-function make_theory(;Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
+function make_theory(;
+    Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
+    lens_1_b=0.879118, lens_2_b=1.05894, lens_3_b=1.22145, lens_4_b=1.35065, lens_5_b=1.58909,
+    dzs_lens=zeros(5), dzs_source=zeros(5), 
+    wzs_lens=ones(5), wzs_source=ones(5),
+    A_IA=0.25179439,
     meta=meta, files=files)
-    nuisances = Dict(
-        "lens_0_b"    => 0.879118,
-        "lens_1_b"    => 1.05894,
-        "lens_2_b"    => 1.22145,
-        "lens_3_b"    => 1.35065,
-        "lens_4_b"    => 1.58909,
-        "source_0_m"  => -0.00733846,
-        "source_1_m"  => -0.00434667,
-        "source_2_m"  => 0.00434908,
-        "source_3_m"  => -0.00278755,
-        "source_4_m"  => 0.000101118)
-       
-       cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
-       tk_mode=:EisHu,
-       pk_mode=:Halofit)
 
-    return Theory(cosmology, meta, files; 
-            Nuisances=nuisances,
-            int_gc="none")
+    lens_0_zs   = @.((zs_k0-mu_k0)/wzs_lens[1] + mu_k0 + dzs_lens[1])
+    lens_1_zs   = @.((zs_k1-mu_k1)/wzs_lens[2] + mu_k1 + dzs_lens[2])
+    lens_2_zs   = @.((zs_k2-mu_k2)/wzs_lens[3] + mu_k2 + dzs_lens[3])
+    lens_3_zs   = @.((zs_k3-mu_k3)/wzs_lens[4] + mu_k3 + dzs_lens[4])
+    lens_4_zs   = @.((zs_k4-mu_k4)/wzs_lens[5] + mu_k4 + dzs_lens[5])
+    source_0_zs = @.((zs_k5-mu_k5)/wzs_source[1] + mu_k5 + dzs_source[1])
+    source_1_zs = @.((zs_k6-mu_k6)/wzs_source[2] + mu_k6 + dzs_source[2])
+    source_2_zs = @.((zs_k7-mu_k7)/wzs_source[3] + mu_k7 + dzs_source[3])
+    source_3_zs = @.((zs_k8-mu_k8)/wzs_source[4] + mu_k8 + dzs_source[4])
+    source_4_zs = @.((zs_k9-mu_k9)/wzs_source[5] + mu_k9 + dzs_source[5])
+
+    nuisances = Dict(
+    "lens_1_b"    => lens_1_b,
+    "lens_2_b"    => lens_2_b,
+    "lens_3_b"    => lens_3_b,
+    "lens_4_b"    => lens_4_b,
+    "lens_5_b"    => lens_5_b,
+    "lens_0_zs"   => lens_0_zs,
+    "lens_1_zs"   => lens_1_zs,
+    "lens_2_zs"   => lens_2_zs,
+    "lens_3_zs"   => lens_3_zs,
+    "lens_4_zs"   => lens_4_zs,
+    "source_0_zs" => source_0_zs,
+    "source_1_zs" => source_1_zs,
+    "source_2_zs" => source_2_zs,
+    "source_3_zs" => source_3_zs,
+    "source_4_zs" => source_4_zs,
+    "A_IA"        => A_IA)
+
+    cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
+        tk_mode=:EisHu,
+        pk_mode=:Halofit)
+
+return Theory(cosmology, meta, files; 
+        Nuisances=nuisances)
 end
 
 fake_data = make_theory();
@@ -210,7 +232,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../nuisance_fake_chains/analytical/"
-folname = string("CosmoDC2_gcgc_bp_wzdz_ana_TAP_", TAP, "_init_ϵ_", init_ϵ) 
+folname = string("CosmoDC2_gcgc_wzdz_ana_TAP_", TAP, "_init_ϵ_", init_ϵ) 
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
