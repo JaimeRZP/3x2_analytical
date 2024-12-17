@@ -16,6 +16,9 @@ yaml_path = "../../data/CosmoDC2/wlwl.yml"
 nz_path = string("../../data/CosmoDC2/image_nzs_", method, "_priors/")
 cov_path = "../../covs/COSMODC2/wzdz_covs.npz"
 
+sacc_file = sacc.Sacc().load_fits(sacc_path)
+yaml_file = YAML.load_file(yaml_path)
+
 nz_lens_0 = npzread(string(nz_path, "nz_lens_0.npz"))
 nz_lens_1 = npzread(string(nz_path, "nz_lens_1.npz"))
 nz_lens_2 = npzread(string(nz_path, "nz_lens_2.npz"))
