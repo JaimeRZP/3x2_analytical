@@ -104,7 +104,7 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 init_params = [init_params; init_alphas;
             [1.0, 1.0, 1.0, 1.0, 1.0]]
 
-function make_theory(d;
+function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
     lens_1_b=0.879118, lens_2_b=1.05894, lens_3_b=1.22145, lens_4_b=1.35065, lens_5_b=1.58909,
     dzs_lens=zeros(5), dzs_source=zeros(5), 
