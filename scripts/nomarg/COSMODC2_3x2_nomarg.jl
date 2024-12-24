@@ -115,16 +115,16 @@ function make_theory(;
     A_IA=0.25179439,
     meta=meta, files=files)
 
-    lens_0_zs   = @.((zs_k0-mu_k0)/wzs_lens[1] + mu_k0 + dzs_lens[1])
-    lens_1_zs   = @.((zs_k1-mu_k1)/wzs_lens[2] + mu_k1 + dzs_lens[2])
-    lens_2_zs   = @.((zs_k2-mu_k2)/wzs_lens[3] + mu_k2 + dzs_lens[3])
-    lens_3_zs   = @.((zs_k3-mu_k3)/wzs_lens[4] + mu_k3 + dzs_lens[4])
-    lens_4_zs   = @.((zs_k4-mu_k4)/wzs_lens[5] + mu_k4 + dzs_lens[5])
-    source_0_zs = @.((zs_k5-mu_k5)/wzs_source[1] + mu_k5 + dzs_source[1])
-    source_1_zs = @.((zs_k6-mu_k6)/wzs_source[2] + mu_k6 + dzs_source[2])
-    source_2_zs = @.((zs_k7-mu_k7)/wzs_source[3] + mu_k7 + dzs_source[3])
-    source_3_zs = @.((zs_k8-mu_k8)/wzs_source[4] + mu_k8 + dzs_source[4])
-    source_4_zs = @.((zs_k9-mu_k9)/wzs_source[5] + mu_k9 + dzs_source[5])
+    lens_0_zs   = @.((zs_k0-mu_k0)/wzs_lens[1] + dzs_lens[1]/wzs_lens[1] + mu_k0)
+    lens_1_zs   = @.((zs_k1-mu_k1)/wzs_lens[2] + dzs_lens[2]/wzs_lens[2] + mu_k1)
+    lens_2_zs   = @.((zs_k2-mu_k2)/wzs_lens[3] + dzs_lens[3]/wzs_lens[3] + mu_k2)
+    lens_3_zs   = @.((zs_k3-mu_k3)/wzs_lens[4] + dzs_lens[4]/wzs_lens[4] + mu_k3)
+    lens_4_zs   = @.((zs_k4-mu_k4)/wzs_lens[5] + dzs_lens[5]/wzs_lens[5] + mu_k4)
+    source_0_zs = @.((zs_k5-mu_k5)/wzs_source[1] + dzs_source[1]/wzs_source[1] + mu_k5)
+    source_1_zs = @.((zs_k6-mu_k6)/wzs_source[2] + dzs_source[2]/wzs_source[2] + mu_k6)
+    source_2_zs = @.((zs_k7-mu_k7)/wzs_source[3] + dzs_source[3]/wzs_source[3] + mu_k7)
+    source_3_zs = @.((zs_k8-mu_k8)/wzs_source[4] + dzs_source[4]/wzs_source[4] + mu_k8)
+    source_4_zs = @.((zs_k9-mu_k9)/wzs_source[5] + dzs_source[5]/wzs_source[5] + mu_k9)
 
     nuisances = Dict(
     "lens_1_b"    => lens_1_b,
