@@ -232,4 +232,4 @@ chain = sample(cond_model, sampler, iterations;
 @save joinpath(folname, string("chain_", last_n+1,".jls")) chain
 CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), chain)
 CSV.write(joinpath(folname, string("summary_", last_n+1,".csv")), describe(chain)[1])
-npzwrite(joinpath(folname, string("data_", last_n+1,".npz")), data=data)
+npzwrite(joinpath(folname, string("data_", last_n+1,".npz")), data=make_theory())

@@ -238,7 +238,8 @@ sampler = NUTS(adaptation, TAP;
     init_ϵ=init_ϵ, max_depth=max_depth)
 #sampler = Gibbs(
 #    NUTS(adaptation, TAP,
-#    :Ωm, :Ωbb, :h, :σ8, :ns;
+#    :Ωm, :Ωbb, :h, :σ8, :ns,
+#    :lens_1_b, :lens_2_b, :lens_3_b, :lens_4_b, :lens_5_b, :A_IA;
 #    init_ϵ=init_ϵ, max_depth=max_depth),
 #    NUTS(adaptation, TAP,
 #    :alphas_lens, :alphas_source;
@@ -251,4 +252,4 @@ chain = sample(cond_model, sampler, iterations;
 @save joinpath(folname, string("chain_", last_n+1,".jls")) chain
 CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), chain)
 CSV.write(joinpath(folname, string("summary_", last_n+1,".csv")), describe(chain)[1])
-npzwrite(joinpath(folname, string("data_", last_n+1,".npz")), data=data)
+npzwrite(joinpath(folname, string("data_", last_n+1,".npz")), data=make_theory())
