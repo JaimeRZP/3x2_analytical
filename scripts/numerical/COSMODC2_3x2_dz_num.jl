@@ -210,7 +210,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../nuisance_fake_chains/numerical/"
-folname = string("CosmoDC2_3x2_Gibbs_indep_dz_num_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folname = string("CosmoDC2_3x2_Gibbs_indep_dz_num_TAP_", TAP)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
