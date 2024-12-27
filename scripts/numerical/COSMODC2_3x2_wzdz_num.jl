@@ -198,10 +198,11 @@ data = fake_data
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 500
+iterations = 100
 adaptation = 100
 TAP = 0.65
-init_ϵ = 0.03
+init_ϵ1 = 0.03
+init_ϵ2 = 0.06
 max_depth = 8
 
 println("sampling settings: ")
@@ -245,10 +246,10 @@ sampler = Gibbs(
     NUTS(adaptation, TAP,
     :Ωm, :Ωbb, :h, :σ8, :ns,
     :lens_1_b, :lens_2_b, :lens_3_b, :lens_4_b, :lens_5_b;
-    init_ϵ=init_ϵ, max_depth=max_depth),
+    init_ϵ=init_ϵ1, max_depth=max_depth),
     NUTS(adaptation, TAP,
     :A_IA, :alphas_lens, :alphas_source;
-    max_depth=max_depth))
+    init_ϵ=init_ϵ2, max_depth=max_depth))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
