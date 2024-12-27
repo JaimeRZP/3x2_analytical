@@ -187,6 +187,8 @@ max_depth = 8
 println("sampling settings: ")
 println("iterations ", iterations)
 println("TAP ", TAP)
+println("init_ϵ1 ", init_ϵ1)
+println("init_ϵ2 ", init_ϵ2)
 println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
