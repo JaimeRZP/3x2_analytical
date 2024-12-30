@@ -181,7 +181,7 @@ iterations = 500
 adaptation = 100
 TAP = 0.65
 init_ϵ1 = 0.03
-init_ϵ2 = 0.06
+init_ϵ2 = 0.1
 max_depth = 8
 
 println("sampling settings: ")
@@ -194,7 +194,11 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../nuisance_fake_chains/numerical/"
-folname = string("CosmoDC2_wlwl_Gibbs_wzdz_num_TAP_", TAP)
+folname = string("CosmoDC2_3x2_Gibbs_indep_wzdz_num",
+    "_TAP_", TAP,
+    "_init_ϵ1_", init_ϵ1, 
+    "_init_ϵ2_", init_ϵ2,
+)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
