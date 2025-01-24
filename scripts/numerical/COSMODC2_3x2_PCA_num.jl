@@ -16,7 +16,7 @@ method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
 nz_path = string("../../data/CosmoDC2/image_nzs_", method, "_priors/")
-PCA_path = string("../data/CosmoDC2/image_PCA_", method, "_priors/")
+PCA_path = string("../../data/CosmoDC2/image_PCA_", method, "_priors/")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
@@ -119,6 +119,16 @@ PCA_cov_lens_1 = PCA_lens_1["cov"]
 PCA_cov_lens_2 = PCA_lens_2["cov"]
 PCA_cov_lens_3 = PCA_lens_3["cov"]
 PCA_cov_lens_4 = PCA_lens_4["cov"]
+PCA_chol_source_0 = cholesky(PCA_cov_source_0).U'
+PCA_chol_source_1 = cholesky(PCA_cov_source_1).U'
+PCA_chol_source_2 = cholesky(PCA_cov_source_2).U'
+PCA_chol_source_3 = cholesky(PCA_cov_source_3).U'
+PCA_chol_source_4 = cholesky(PCA_cov_source_4).U'
+PCA_chol_lens_0 = cholesky(PCA_cov_lens_0).U'
+PCA_chol_lens_1 = cholesky(PCA_cov_lens_1).U'
+PCA_chol_lens_2 = cholesky(PCA_cov_lens_2).U'
+PCA_chol_lens_3 = cholesky(PCA_cov_lens_3).U'
+PCA_chol_lens_4 = cholesky(PCA_cov_lens_4).U'
 
 meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_0=nz_lens_0,
