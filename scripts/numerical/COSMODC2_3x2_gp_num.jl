@@ -345,7 +345,7 @@ sampler = Gibbs(
     :alphas_lens_1,
     :alphas_lens_2,
     :alphas_lens_3,
-    :alphas_lens_4;
+    :alphas_lens_4,
     :alphas_source_0,
     :alphas_source_1,
     :alphas_source_2,
