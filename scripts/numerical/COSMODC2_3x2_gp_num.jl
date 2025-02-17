@@ -43,16 +43,16 @@ zs_k7, nz_k7 = nz_source_2["z"], nz_source_2["dndz"]
 zs_k8, nz_k8 = nz_source_3["z"], nz_source_3["dndz"]
 zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["dndz"]
 
-zs_k0, nz_k0 = LimberJack.nz_interpolate(zs_k0, nz_k0, 100; mode="cubic")
-zs_k1, nz_k1 = LimberJack.nz_interpolate(zs_k1, nz_k1, 100; mode="cubic")
-zs_k2, nz_k2 = LimberJack.nz_interpolate(zs_k2, nz_k2, 100; mode="cubic")
-zs_k3, nz_k3 = LimberJack.nz_interpolate(zs_k3, nz_k3, 100; mode="cubic")
-zs_k4, nz_k4 = LimberJack.nz_interpolate(zs_k4, nz_k4, 100; mode="cubic")
-zs_k5, nz_k5 = LimberJack.nz_interpolate(zs_k5, nz_k5, 100; mode="cubic")
-zs_k6, nz_k6 = LimberJack.nz_interpolate(zs_k6, nz_k6, 100; mode="cubic")
-zs_k7, nz_k7 = LimberJack.nz_interpolate(zs_k7, nz_k7, 100; mode="cubic")
-zs_k8, nz_k8 = LimberJack.nz_interpolate(zs_k8, nz_k8, 100; mode="cubic")
-zs_k9, nz_k9 = LimberJack.nz_interpolate(zs_k9, nz_k9, 100; mode="cubic")
+zs_k0, nz_k0 = LimberJack.nz_interpolate(zs_k0, nz_k0, 1000; mode="cubic")
+zs_k1, nz_k1 = LimberJack.nz_interpolate(zs_k1, nz_k1, 1000; mode="cubic")
+zs_k2, nz_k2 = LimberJack.nz_interpolate(zs_k2, nz_k2, 1000; mode="cubic")
+zs_k3, nz_k3 = LimberJack.nz_interpolate(zs_k3, nz_k3, 1000; mode="cubic")
+zs_k4, nz_k4 = LimberJack.nz_interpolate(zs_k4, nz_k4, 1000; mode="cubic")
+zs_k5, nz_k5 = LimberJack.nz_interpolate(zs_k5, nz_k5, 1000; mode="cubic")
+zs_k6, nz_k6 = LimberJack.nz_interpolate(zs_k6, nz_k6, 1000; mode="cubic")
+zs_k7, nz_k7 = LimberJack.nz_interpolate(zs_k7, nz_k7, 1000; mode="cubic")
+zs_k8, nz_k8 = LimberJack.nz_interpolate(zs_k8, nz_k8, 1000; mode="cubic")
+zs_k9, nz_k9 = LimberJack.nz_interpolate(zs_k9, nz_k9, 1000; mode="cubic")
 
 nz_lens_0 = Dict("z"=>zs_k0, "dndz"=>nz_k0)
 nz_lens_1 = Dict("z"=>zs_k1, "dndz"=>nz_k1)
@@ -164,6 +164,28 @@ init_params = [init_params; init_alphas;
                 [1.0, 1.0, 1.0, 1.0, 1.0,
                 0.0]]
 
+_nz_source_0 = zeros(Real, 10)
+_nz_source_1 = zeros(Real, 10)
+_nz_source_2 = zeros(Real, 10)
+_nz_source_3 = zeros(Real, 10)
+_nz_source_4 = zeros(Real, 10)
+_nz_lens_0 = zeros(Real, 10)
+_nz_lens_1 = zeros(Real, 10)
+_nz_lens_2 = zeros(Real, 10)
+_nz_lens_3 = zeros(Real, 10)
+_nz_lens_4 = zeros(Real, 10)
+
+nz_source_0 = zeros(Real, 1000)
+nz_source_1 = zeros(Real, 1000)
+nz_source_2 = zeros(Real, 1000)
+nz_source_3 = zeros(Real, 1000)
+nz_source_4 = zeros(Real, 1000)
+nz_lens_0 = zeros(Real, 1000)
+nz_lens_1 = zeros(Real, 1000)
+nz_lens_2 = zeros(Real, 1000)
+nz_lens_3 = zeros(Real, 1000)
+nz_lens_4 = zeros(Real, 1000)
+
 function nz_itp(q, nq, z)
     dq = mean(q[2:end] - q[1:end-1])
     q_range = q[1]:dq:q[end]
@@ -188,27 +210,27 @@ function make_theory(;
     A_IA=0.25179439,
     meta=meta, files=files)
 
-    nz_sorce_0 = gp_mean_source_0 .+ gp_chol_source_0 * alphas_source_0
-    nz_sorce_1 = gp_mean_source_1 .+ gp_chol_source_1 * alphas_source_1
-    nz_sorce_2 = gp_mean_source_2 .+ gp_chol_source_2 * alphas_source_2
-    nz_sorce_3 = gp_mean_source_3 .+ gp_chol_source_3 * alphas_source_3
-    nz_sorce_4 = gp_mean_source_4 .+ gp_chol_source_4 * alphas_source_4
-    nz_lens_0 = gp_mean_lens_0 .+ gp_chol_lens_0 * alphas_lens_0
-    nz_lens_1 = gp_mean_lens_1 .+ gp_chol_lens_1 * alphas_lens_1
-    nz_lens_2 = gp_mean_lens_2 .+ gp_chol_lens_2 * alphas_lens_2
-    nz_lens_3 = gp_mean_lens_3 .+ gp_chol_lens_3 * alphas_lens_3
-    nz_lens_4 = gp_mean_lens_4 .+ gp_chol_lens_4 * alphas_lens_4
+    _nz_sorce_0 .= gp_mean_source_0 .+ gp_chol_source_0 * alphas_source_0
+    _nz_sorce_1 .= gp_mean_source_1 .+ gp_chol_source_1 * alphas_source_1
+    _nz_sorce_2 .= gp_mean_source_2 .+ gp_chol_source_2 * alphas_source_2
+    _nz_sorce_3 .= gp_mean_source_3 .+ gp_chol_source_3 * alphas_source_3
+    _nz_sorce_4 .= gp_mean_source_4 .+ gp_chol_source_4 * alphas_source_4
+    _nz_lens_0 .= gp_mean_lens_0 .+ gp_chol_lens_0 * alphas_lens_0
+    _nz_lens_1 .= gp_mean_lens_1 .+ gp_chol_lens_1 * alphas_lens_1
+    _nz_lens_2 .= gp_mean_lens_2 .+ gp_chol_lens_2 * alphas_lens_2
+    _nz_lens_3 .= gp_mean_lens_3 .+ gp_chol_lens_3 * alphas_lens_3
+    _nz_lens_4 .= gp_mean_lens_4 .+ gp_chol_lens_4 * alphas_lens_4
 
-    nz_source_0 = nz_itp(gp_zs_source_0, nz_sorce_0, zs_k5)
-    nz_source_1 = nz_itp(gp_zs_source_1, nz_sorce_1, zs_k6)
-    nz_source_2 = nz_itp(gp_zs_source_2, nz_sorce_2, zs_k7)
-    nz_source_3 = nz_itp(gp_zs_source_3, nz_sorce_3, zs_k8)
-    nz_source_4 = nz_itp(gp_zs_source_4, nz_sorce_4, zs_k9)
-    nz_lens_0 = nz_itp(gp_zs_lens_0, nz_lens_0, zs_k0)
-    nz_lens_1 = nz_itp(gp_zs_lens_1, nz_lens_1, zs_k1)
-    nz_lens_2 = nz_itp(gp_zs_lens_2, nz_lens_2, zs_k2)
-    nz_lens_3 = nz_itp(gp_zs_lens_3, nz_lens_3, zs_k3)
-    nz_lens_4 = nz_itp(gp_zs_lens_4, nz_lens_4, zs_k4)
+    nz_source_0 .= nz_itp(gp_zs_source_0, _nz_sorce_0, zs_k5)
+    nz_source_1 .= nz_itp(gp_zs_source_1, _nz_sorce_1, zs_k6)
+    nz_source_2 .= nz_itp(gp_zs_source_2, _nz_sorce_2, zs_k7)
+    nz_source_3 .= nz_itp(gp_zs_source_3, _nz_sorce_3, zs_k8)
+    nz_source_4 .= nz_itp(gp_zs_source_4, _nz_sorce_4, zs_k9)
+    nz_lens_0 .= nz_itp(gp_zs_lens_0, _nz_lens_0, zs_k0)
+    nz_lens_1 .= nz_itp(gp_zs_lens_1, _nz_lens_1, zs_k1)
+    nz_lens_2 .= nz_itp(gp_zs_lens_2, _nz_lens_2, zs_k2)
+    nz_lens_3 .= nz_itp(gp_zs_lens_3, _nz_lens_3, zs_k3)
+    nz_lens_4 .= nz_itp(gp_zs_lens_4, _nz_lens_4, zs_k4)
 
     nuisances = Dict(
         "lens_1_b"    => lens_1_b,
