@@ -210,22 +210,22 @@ function make_theory(;
     A_IA=0.25179439,
     meta=meta, files=files)
 
-    _nz_sorce_0 .= gp_mean_source_0 .+ gp_chol_source_0 * alphas_source_0
-    _nz_sorce_1 .= gp_mean_source_1 .+ gp_chol_source_1 * alphas_source_1
-    _nz_sorce_2 .= gp_mean_source_2 .+ gp_chol_source_2 * alphas_source_2
-    _nz_sorce_3 .= gp_mean_source_3 .+ gp_chol_source_3 * alphas_source_3
-    _nz_sorce_4 .= gp_mean_source_4 .+ gp_chol_source_4 * alphas_source_4
+    _nz_source_0 .= gp_mean_source_0 .+ gp_chol_source_0 * alphas_source_0
+    _nz_source_1 .= gp_mean_source_1 .+ gp_chol_source_1 * alphas_source_1
+    _nz_source_2 .= gp_mean_source_2 .+ gp_chol_source_2 * alphas_source_2
+    _nz_source_3 .= gp_mean_source_3 .+ gp_chol_source_3 * alphas_source_3
+    _nz_source_4 .= gp_mean_source_4 .+ gp_chol_source_4 * alphas_source_4
     _nz_lens_0 .= gp_mean_lens_0 .+ gp_chol_lens_0 * alphas_lens_0
     _nz_lens_1 .= gp_mean_lens_1 .+ gp_chol_lens_1 * alphas_lens_1
     _nz_lens_2 .= gp_mean_lens_2 .+ gp_chol_lens_2 * alphas_lens_2
     _nz_lens_3 .= gp_mean_lens_3 .+ gp_chol_lens_3 * alphas_lens_3
     _nz_lens_4 .= gp_mean_lens_4 .+ gp_chol_lens_4 * alphas_lens_4
 
-    nz_source_0 .= nz_itp(gp_zs_source_0, _nz_sorce_0, zs_k5)
-    nz_source_1 .= nz_itp(gp_zs_source_1, _nz_sorce_1, zs_k6)
-    nz_source_2 .= nz_itp(gp_zs_source_2, _nz_sorce_2, zs_k7)
-    nz_source_3 .= nz_itp(gp_zs_source_3, _nz_sorce_3, zs_k8)
-    nz_source_4 .= nz_itp(gp_zs_source_4, _nz_sorce_4, zs_k9)
+    nz_source_0 .= nz_itp(gp_zs_source_0, _nz_source_0, zs_k5)
+    nz_source_1 .= nz_itp(gp_zs_source_1, _nz_source_1, zs_k6)
+    nz_source_2 .= nz_itp(gp_zs_source_2, _nz_source_2, zs_k7)
+    nz_source_3 .= nz_itp(gp_zs_source_3, _nz_source_3, zs_k8)
+    nz_source_4 .= nz_itp(gp_zs_source_4, _nz_source_4, zs_k9)
     nz_lens_0 .= nz_itp(gp_zs_lens_0, _nz_lens_0, zs_k0)
     nz_lens_1 .= nz_itp(gp_zs_lens_1, _nz_lens_1, zs_k1)
     nz_lens_2 .= nz_itp(gp_zs_lens_2, _nz_lens_2, zs_k2)
