@@ -109,16 +109,6 @@ PCA_mean_lens_2 = PCA_lens_2["mean"]
 PCA_mean_lens_3 = PCA_lens_3["mean"]
 PCA_mean_lens_4 = PCA_lens_4["mean"]
 
-PCA_cov_source_0 = PCA_source_0["cov"]
-PCA_cov_source_1 = PCA_source_1["cov"]
-PCA_cov_source_2 = PCA_source_2["cov"]
-PCA_cov_source_3 = PCA_source_3["cov"]
-PCA_cov_source_4 = PCA_source_4["cov"]
-PCA_cov_lens_0 = PCA_lens_0["cov"]
-PCA_cov_lens_1 = PCA_lens_1["cov"]
-PCA_cov_lens_2 = PCA_lens_2["cov"]
-PCA_cov_lens_3 = PCA_lens_3["cov"]
-PCA_cov_lens_4 = PCA_lens_4["cov"]
 PCA_chol_source_0 = PCA_source_0["chol"]
 PCA_chol_source_1 = PCA_source_1["chol"]
 PCA_chol_source_2 = PCA_source_2["chol"]
@@ -191,16 +181,16 @@ function make_theory(;
     Ws_lens_3 = PCA_mean_lens_3 .+ PCA_chol_lens_3 * alphas_lens_3
     Ws_lens_4 = PCA_mean_lens_4 .+ PCA_chol_lens_4 * alphas_lens_4
 
-    nz_source_0 = nz_k5 .+ transpose(transpose(Ws_source_0) * PCA_eigvec_source_0)
-    nz_source_1 = nz_k6 .+ transpose(transpose(Ws_source_1) * PCA_eigvec_source_1)
-    nz_source_2 = nz_k7 .+ transpose(transpose(Ws_source_2) * PCA_eigvec_source_2)
-    nz_source_3 = nz_k8 .+ transpose(transpose(Ws_source_3) * PCA_eigvec_source_3)
-    nz_source_4 = nz_k9 .+ transpose(transpose(Ws_source_4) * PCA_eigvec_source_4)
-    nz_lens_0 = nz_k0 .+ transpose(transpose(Ws_lens_0) * PCA_eigvec_lens_0)
-    nz_lens_1 = nz_k1 .+ transpose(transpose(Ws_lens_1) * PCA_eigvec_lens_1)
-    nz_lens_2 = nz_k2 .+ transpose(transpose(Ws_lens_2) * PCA_eigvec_lens_2)
-    nz_lens_3 = nz_k3 .+ transpose(transpose(Ws_lens_3) * PCA_eigvec_lens_3)
-    nz_lens_4 = nz_k4 .+ transpose(transpose(Ws_lens_4) * PCA_eigvec_lens_4)
+    nz_source_0 = nz_k5 .+ (Ws_source_0' * PCA_eigvec_source_0)'
+    nz_source_1 = nz_k6 .+ (Ws_source_1' * PCA_eigvec_source_1)'
+    nz_source_2 = nz_k7 .+ (Ws_source_2' * PCA_eigvec_source_2)'
+    nz_source_3 = nz_k8 .+ (Ws_source_3' * PCA_eigvec_source_3)'
+    nz_source_4 = nz_k9 .+ (Ws_source_4' * PCA_eigvec_source_4)'
+    nz_lens_0 = nz_k0 .+ (Ws_lens_0' * PCA_eigvec_lens_0)'
+    nz_lens_1 = nz_k1 .+ (Ws_lens_1' * PCA_eigvec_lens_1)'
+    nz_lens_2 = nz_k2 .+ (Ws_lens_2' * PCA_eigvec_lens_2)'
+    nz_lens_3 = nz_k3 .+ (Ws_lens_3' * PCA_eigvec_lens_3)'
+    nz_lens_4 = nz_k4 .+ (Ws_lens_4' * PCA_eigvec_lens_4)'
 
     nuisances = Dict(
         "lens_1_b"    => lens_1_b,
