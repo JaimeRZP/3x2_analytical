@@ -259,6 +259,7 @@ function make_theory(;
 end
 
 fake_data = make_theory();
+println("Theory created!")
 fake_data = iΓ * fake_data
 data = fake_data
 
