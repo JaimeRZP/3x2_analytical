@@ -13,7 +13,7 @@ sacc = pyimport("sacc");
 method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
-nz_path = string("../data/CosmoDC2/image_gp_", method, "_priors/")
+nz_path = string("../../data/CosmoDC2/image_gp_", method, "_priors/")
 cov_path = "../../covs/COSMODC2/gp_covs.npz"
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
