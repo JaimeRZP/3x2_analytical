@@ -19,16 +19,16 @@ cov_path = "../../covs/COSMODC2/gp_covs.npz"
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 
-nz_lens_0 = npzread(string(nz_path, "nz_lens_0.npz"))
-nz_lens_1 = npzread(string(nz_path, "nz_lens_1.npz"))
-nz_lens_2 = npzread(string(nz_path, "nz_lens_2.npz"))
-nz_lens_3 = npzread(string(nz_path, "nz_lens_3.npz"))
-nz_lens_4 = npzread(string(nz_path, "nz_lens_4.npz"))
-nz_source_0 = npzread(string(nz_path, "nz_source_0.npz"))
-nz_source_1 = npzread(string(nz_path, "nz_source_1.npz"))
-nz_source_2 = npzread(string(nz_path, "nz_source_2.npz"))
-nz_source_3 = npzread(string(nz_path, "nz_source_3.npz"))
-nz_source_4 = npzread(string(nz_path, "nz_source_4.npz"))
+nz_lens_0 = npzread(string(nz_path, "gp_lens_0.npz"))
+nz_lens_1 = npzread(string(nz_path, "gp_lens_1.npz"))
+nz_lens_2 = npzread(string(nz_path, "gp_lens_2.npz"))
+nz_lens_3 = npzread(string(nz_path, "gp_lens_3.npz"))
+nz_lens_4 = npzread(string(nz_path, "gp_lens_4.npz"))
+nz_source_0 = npzread(string(nz_path, "gp_source_0.npz"))
+nz_source_1 = npzread(string(nz_path, "gp_source_1.npz"))
+nz_source_2 = npzread(string(nz_path, "gp_source_2.npz"))
+nz_source_3 = npzread(string(nz_path, "gp_source_3.npz"))
+nz_source_4 = npzread(string(nz_path, "gp_source_4.npz"))
 
 zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["dndz"]
 zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["dndz"]
