@@ -164,12 +164,12 @@ data = fake_data
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    alphas_lens_0 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    alphas_lens_1 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    alphas_lens_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    alphas_lens_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    alphas_lens_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    alphas_source_0 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
+    alphas_lens_0 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    alphas_lens_1 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    alphas_lens_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    alphas_lens_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    alphas_lens_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    alphas_source_0 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
     alphas_source_1 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
     alphas_source_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
     alphas_source_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
@@ -219,7 +219,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../nuisance_fake_chains/numerical/"
-folname = string("CosmoDC2_3x2_Gibbs_indep_gp_fixed_num",
+folname = string("CosmoDC2_3x2_Gibbs_gp_5_num",
     "_TAP_", TAP,
     "_init_ϵ1_", init_ϵ1, 
     "_init_ϵ2_", init_ϵ2,
