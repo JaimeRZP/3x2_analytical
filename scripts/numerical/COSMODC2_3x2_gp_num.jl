@@ -170,10 +170,10 @@ data = fake_data
     alphas_lens_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
     alphas_lens_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
     alphas_source_0 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
-    alphas_source_1 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    alphas_source_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    alphas_source_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
-    alphas_source_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 10)
+    alphas_source_1 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    alphas_source_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    alphas_source_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    alphas_source_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
     lens_1_b ~ Uniform(0.5, 2.5)
     lens_2_b ~ Uniform(0.5, 2.5)
     lens_3_b ~ Uniform(0.5, 2.5)
@@ -205,7 +205,7 @@ iterations = 200
 adaptation = 100
 TAP = 0.65
 init_ϵ1 = 0.03
-init_ϵ2 = 0.03
+init_ϵ2 = 0.1
 max_depth = 8
 
 println("sampling settings: ")
