@@ -12,9 +12,9 @@ sacc = pyimport("sacc");
 
 method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
-yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
+yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl_aggresive.yml"
 nz_path = string("../../data/CosmoDC2/image_gp_", method, "_priors/")
-cov_path = "../../covs/COSMODC2/gp_covs.npz"
+cov_path = "../../covs/COSMODC2/gp_covs_agro.npz"
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
@@ -138,7 +138,7 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../nuisance_fake_chains/analytical/"
+folpath = "../../aggresive_fake_chains/analytical/"
 folname = string("CosmoDC2_3x2_gp_5_ana",
     "_TAP_", TAP,
     "_init_ϵ_", init_ϵ)
