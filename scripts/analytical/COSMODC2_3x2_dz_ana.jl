@@ -41,17 +41,6 @@ zs_k7, nz_k7 = nz_source_2["z"], nz_source_2["dndz"]
 zs_k8, nz_k8 = nz_source_3["z"], nz_source_3["dndz"]
 zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["dndz"]
 
-mu_k0 = sum(zs_k0 .* nz_k0) / sum(nz_k0)
-mu_k1 = sum(zs_k1 .* nz_k1) / sum(nz_k1)
-mu_k2 = sum(zs_k2 .* nz_k2) / sum(nz_k2)
-mu_k3 = sum(zs_k3 .* nz_k3) / sum(nz_k3)
-mu_k4 = sum(zs_k4 .* nz_k4) / sum(nz_k4)
-mu_k5 = sum(zs_k5 .* nz_k5) / sum(nz_k5)
-mu_k6 = sum(zs_k6 .* nz_k6) / sum(nz_k6)
-mu_k7 = sum(zs_k7 .* nz_k7) / sum(nz_k7)
-mu_k8 = sum(zs_k8 .* nz_k8) / sum(nz_k8)
-mu_k9 = sum(zs_k9 .* nz_k9) / sum(nz_k9)
-
 meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_0=nz_lens_0,
                         nz_lens_1=nz_lens_1,
