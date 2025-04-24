@@ -100,7 +100,11 @@ nz_lens_4 = zeros(Real, 100)
 
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
-    lens_1_b=0.879118, lens_2_b=1.05894, lens_3_b=1.22145, lens_4_b=1.35065, lens_5_b=1.58909,
+    lens_0_b=0.879118, 
+    lens_1_b=1.05894, 
+    lens_2_b=1.22145, 
+    lens_3_b=1.35065, 
+    lens_4_b=1.58909,
     alphas_source_0=zeros(5), 
     alphas_source_1=zeros(5), 
     alphas_source_2=zeros(5), 
@@ -126,11 +130,11 @@ function make_theory(;
     nz_source_4 .= nz_k9 + W_source_4 * alphas_source_4
 
     nuisances = Dict(
+        "lens_0_b"    => lens_0_b,
         "lens_1_b"    => lens_1_b,
         "lens_2_b"    => lens_2_b,
         "lens_3_b"    => lens_3_b,
         "lens_4_b"    => lens_4_b,
-        "lens_5_b"    => lens_5_b,
         "lens_0_nz"   => nz_lens_0,
         "lens_1_nz"   => nz_lens_1,
         "lens_2_nz"   => nz_lens_2,
@@ -173,11 +177,11 @@ data = fake_data
     alphas_source_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
     alphas_source_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
     alphas_source_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
+    lens_0_b ~ Uniform(0.5, 2.5)
     lens_1_b ~ Uniform(0.5, 2.5)
     lens_2_b ~ Uniform(0.5, 2.5)
     lens_3_b ~ Uniform(0.5, 2.5)
     lens_4_b ~ Uniform(0.5, 2.5)
-    lens_5_b ~ Uniform(0.5, 2.5)
     A_IA ~ Uniform(-1.0, 1.0)
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
@@ -191,9 +195,12 @@ data = fake_data
                           alphas_lens_2=alphas_lens_2,
                           alphas_lens_3=alphas_lens_3,
                           alphas_lens_4=alphas_lens_4,
-                          lens_1_b=lens_1_b, lens_2_b=lens_2_b,
-                          lens_3_b=lens_3_b, lens_4_b=lens_4_b,
-                          lens_5_b=lens_5_b, A_IA=A_IA)
+                          lens_0_b=lens_0_b, 
+                          lens_1_b=lens_1_b,
+                          lens_2_b=lens_2_b, 
+                          lens_3_b=lens_3_b,
+                          lens_4_b=lens_4_b, 
+                          A_IA=A_IA)
     ttheory = iΓ * theory
     d = data - ttheory
     Xi2 := dot(d, d)

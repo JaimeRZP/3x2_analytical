@@ -15,22 +15,21 @@ sacc = pyimport("sacc");
 method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl_aggresive.yml"
-nz_path = string("../../data/CosmoDC2/image_gp_", method, "_priors/")
-dz_path = string("../../data/CosmoDC2/image_dz_", method, "_priors/dz_prior.npz")
+nz_path = string("../../data/CosmoDC2/image_dz_", method, "_priors/")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 
-nz_lens_0 = npzread(string(nz_path, "gp_lens_0.npz"))
-nz_lens_1 = npzread(string(nz_path, "gp_lens_1.npz"))
-nz_lens_2 = npzread(string(nz_path, "gp_lens_2.npz"))
-nz_lens_3 = npzread(string(nz_path, "gp_lens_3.npz"))
-nz_lens_4 = npzread(string(nz_path, "gp_lens_4.npz"))
-nz_source_0 = npzread(string(nz_path, "gp_source_0.npz"))
-nz_source_1 = npzread(string(nz_path, "gp_source_1.npz"))
-nz_source_2 = npzread(string(nz_path, "gp_source_2.npz"))
-nz_source_3 = npzread(string(nz_path, "gp_source_3.npz"))
-nz_source_4 = npzread(string(nz_path, "gp_source_4.npz"))
+nz_lens_0 = npzread(string(nz_path, "dz_lens_0.npz"))
+nz_lens_1 = npzread(string(nz_path, "dz_lens_1.npz"))
+nz_lens_2 = npzread(string(nz_path, "dz_lens_2.npz"))
+nz_lens_3 = npzread(string(nz_path, "dz_lens_3.npz"))
+nz_lens_4 = npzread(string(nz_path, "dz_lens_4.npz"))
+nz_source_0 = npzread(string(nz_path, "dz_source_0.npz"))
+nz_source_1 = npzread(string(nz_path, "dz_source_1.npz"))
+nz_source_2 = npzread(string(nz_path, "dz_source_2.npz"))
+nz_source_3 = npzread(string(nz_path, "dz_source_3.npz"))
+nz_source_4 = npzread(string(nz_path, "dz_source_4.npz"))
 
 zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["dndz"]
 zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["dndz"]
@@ -54,9 +53,16 @@ mu_k7 = sum(zs_k7 .* nz_k7) / sum(nz_k7)
 mu_k8 = sum(zs_k8 .* nz_k8) / sum(nz_k8)
 mu_k9 = sum(zs_k9 .* nz_k9) / sum(nz_k9)
 
-dz_prior = npzread(dz_path)
-dz_mean, dz_cov = dz_prior["mean"], dz_prior["cov"]
-dz_chol = cholesky(dz_cov).U'
+chol_source_0 = nz_source_0["chol"]
+chol_source_1 = nz_source_1["chol"]
+chol_source_2 = nz_source_2["chol"]
+chol_source_3 = nz_source_3["chol"]
+chol_source_4 = nz_source_4["chol"]
+chol_lens_0 = nz_lens_0["chol"]
+chol_lens_1 = nz_lens_1["chol"]
+chol_lens_2 = nz_lens_2["chol"]
+chol_lens_3 = nz_lens_3["chol"]
+chol_lens_4 = nz_lens_4["chol"]
 
 meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_0=nz_lens_0,
@@ -92,31 +98,65 @@ init_params = [init_params; init_alphas;
                 [1.0, 1.0, 1.0, 1.0, 1.0,
                 0.0]]
 
+zs_source_0 = zeros(Real, 100)
+zs_source_1 = zeros(Real, 100)
+zs_source_2 = zeros(Real, 100)
+zs_source_3 = zeros(Real, 100)
+zs_source_4 = zeros(Real, 100)
+zs_lens_0 = zeros(Real, 100)
+zs_lens_1 = zeros(Real, 100)
+zs_lens_2 = zeros(Real, 100)
+zs_lens_3 = zeros(Real, 100)
+zs_lens_4 = zeros(Real, 100)
+
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
-    lens_1_b=0.879118, lens_2_b=1.05894, lens_3_b=1.22145, lens_4_b=1.35065, lens_5_b=1.58909,
-    dzs_lens=zeros(5), dzs_source=zeros(5), 
-    wzs_lens=ones(5), wzs_source=ones(5),
+    lens_0_b=0.879118, 
+    lens_1_b=1.05894, 
+    lens_2_b=1.22145, 
+    lens_3_b=1.35065, 
+    lens_4_b=1.58909,
+    alphas_source_0=zeros(1), 
+    alphas_source_1=zeros(1), 
+    alphas_source_2=zeros(1), 
+    alphas_source_3=zeros(1),
+    alphas_source_4=zeros(1),
+    alphas_lens_0=zeros(1),
+    alphas_lens_1=zeros(1),
+    alphas_lens_2=zeros(1),
+    alphas_lens_3=zeros(1),
+    alphas_lens_4=zeros(1),
     A_IA=0.25179439,
     meta=meta, files=files)
 
-    lens_0_zs   = @.((zs_k0-mu_k0)/wzs_lens[1] + dzs_lens[1]/wzs_lens[1] + mu_k0)
-    lens_1_zs   = @.((zs_k1-mu_k1)/wzs_lens[2] + dzs_lens[2]/wzs_lens[2] + mu_k1)
-    lens_2_zs   = @.((zs_k2-mu_k2)/wzs_lens[3] + dzs_lens[3]/wzs_lens[3] + mu_k2)
-    lens_3_zs   = @.((zs_k3-mu_k3)/wzs_lens[4] + dzs_lens[4]/wzs_lens[4] + mu_k3)
-    lens_4_zs   = @.((zs_k4-mu_k4)/wzs_lens[5] + dzs_lens[5]/wzs_lens[5] + mu_k4)
-    source_0_zs = @.((zs_k5-mu_k5)/wzs_source[1] + dzs_source[1]/wzs_source[1] + mu_k5)
-    source_1_zs = @.((zs_k6-mu_k6)/wzs_source[2] + dzs_source[2]/wzs_source[2] + mu_k6)
-    source_2_zs = @.((zs_k7-mu_k7)/wzs_source[3] + dzs_source[3]/wzs_source[3] + mu_k7)
-    source_3_zs = @.((zs_k8-mu_k8)/wzs_source[4] + dzs_source[4]/wzs_source[4] + mu_k8)
-    source_4_zs = @.((zs_k9-mu_k9)/wzs_source[5] + dzs_source[5]/wzs_source[5] + mu_k9)
+    dz_lens_0 := chol_lens_0 * alphas_lens_0
+    dz_lens_1 := chol_lens_1 * alphas_lens_1
+    dz_lens_2 := chol_lens_2 * alphas_lens_2
+    dz_lens_3 := chol_lens_3 * alphas_lens_3
+    dz_lens_4 := chol_lens_4 * alphas_lens_4
+    dz_source_0 := chol_source_0 * alphas_source_0
+    dz_source_1 := chol_source_1 * alphas_source_1
+    dz_source_2 := chol_source_2 * alphas_source_2
+    dz_source_3 := chol_source_3 * alphas_source_3
+    dz_source_4 := chol_source_4 * alphas_source_4
+
+    lens_0_zs   = @.(zs_k0 + dz_lens_0)
+    lens_1_zs   = @.(zs_k1 + dz_lens_1)
+    lens_2_zs   = @.(zs_k2 + dz_lens_2)
+    lens_3_zs   = @.(zs_k3 + dz_lens_3)
+    lens_4_zs   = @.(zs_k4 + dz_lens_4)
+    source_0_zs = @.(zs_k5 + dz_source_0)
+    source_1_zs = @.(zs_k6 + dz_source_1)
+    source_2_zs = @.(zs_k7 + dz_source_2)
+    source_3_zs = @.(zs_k8 + dz_source_3)
+    source_4_zs = @.(zs_k9 + dz_source_4)
 
     nuisances = Dict(
+    "lens_0_b"    => lens_0_b,
     "lens_1_b"    => lens_1_b,
     "lens_2_b"    => lens_2_b,
     "lens_3_b"    => lens_3_b,
     "lens_4_b"    => lens_4_b,
-    "lens_5_b"    => lens_5_b,
     "lens_0_zs"   => lens_0_zs,
     "lens_1_zs"   => lens_1_zs,
     "lens_2_zs"   => lens_2_zs,
@@ -149,10 +189,16 @@ data = fake_data
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
 
-    alphas_lens ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
-    alphas_source ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
-    dzs_lens := dz_mean[1:5] .+ dz_chol[1:5, 1:5] * alphas_lens
-    dzs_source := dz_mean[6:10] .+ dz_chol[6:end, 6:end] * alphas_source
+    alphas_lens_0 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_lens_1 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_lens_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_lens_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_lens_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_source_0 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_source_1 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_source_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_source_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_source_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
     lens_1_b ~ Uniform(0.5, 2.5)
     lens_2_b ~ Uniform(0.5, 2.5)
     lens_3_b ~ Uniform(0.5, 2.5)
@@ -161,10 +207,22 @@ data = fake_data
     A_IA ~ Uniform(-1.0, 1.0)
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
-                          dzs_lens=dzs_lens, dzs_source=dzs_source,
-                          lens_1_b=lens_1_b, lens_2_b=lens_2_b,
-                          lens_3_b=lens_3_b, lens_4_b=lens_4_b,
-                          lens_5_b=lens_5_b, A_IA=A_IA)
+                          alphas_source_0=alphas_source_0,
+                          alphas_source_1=alphas_source_1,
+                          alphas_source_2=alphas_source_2,
+                          alphas_source_3=alphas_source_3,
+                          alphas_source_4=alphas_source_4,
+                          alphas_lens_0=alphas_lens_0,
+                          alphas_lens_1=alphas_lens_1,
+                          alphas_lens_2=alphas_lens_2,
+                          alphas_lens_3=alphas_lens_3,
+                          alphas_lens_4=alphas_lens_4,
+                          lens_0_b=lens_0_b, 
+                          lens_1_b=lens_1_b,
+                          lens_2_b=lens_2_b, 
+                          lens_3_b=lens_3_b,
+                          lens_4_b=lens_4_b, 
+                          A_IA=A_IA)
     ttheory = iΓ * theory
     d = data - ttheory
     Xi2 := dot(d, d)
