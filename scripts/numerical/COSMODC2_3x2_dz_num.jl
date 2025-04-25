@@ -98,16 +98,16 @@ init_params = [init_params; init_alphas;
                 [1.0, 1.0, 1.0, 1.0, 1.0,
                 0.0]]
 
-zs_source_0 = zeros(Real, 100)
-zs_source_1 = zeros(Real, 100)
-zs_source_2 = zeros(Real, 100)
-zs_source_3 = zeros(Real, 100)
-zs_source_4 = zeros(Real, 100)
-zs_lens_0 = zeros(Real, 100)
-zs_lens_1 = zeros(Real, 100)
-zs_lens_2 = zeros(Real, 100)
-zs_lens_3 = zeros(Real, 100)
-zs_lens_4 = zeros(Real, 100)
+lens_0_zs = zeros(Real, 100)
+lens_1_zs = zeros(Real, 100)
+lens_2_zs = zeros(Real, 100)
+lens_3_zs = zeros(Real, 100)
+lens_4_zs = zeros(Real, 100)
+source_0_zs = zeros(Real, 100)
+source_1_zs = zeros(Real, 100)
+source_2_zs = zeros(Real, 100)
+source_3_zs = zeros(Real, 100)
+source_4_zs = zeros(Real, 100)
 
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
@@ -212,11 +212,6 @@ data = fake_data
                             dz_lens_2=dz_lens_2,
                             dz_lens_3=dz_lens_3,
                             dz_lens_4=dz_lens_4,
-                            alphas_source_0=alphas_source_0,
-                            alphas_source_1=alphas_source_1,
-                            alphas_source_2=alphas_source_2,
-                            alphas_source_3=alphas_source_3,
-                            alphas_source_4=alphas_source_4,
                             lens_0_b=lens_0_b, 
                             lens_1_b=lens_1_b,
                             lens_2_b=lens_2_b, 
