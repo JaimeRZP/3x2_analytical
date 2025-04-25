@@ -188,11 +188,11 @@ data = fake_data
     alphas_source_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
     alphas_source_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
     alphas_source_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    lens_0_b ~ Uniform(0.5, 2.5)
     lens_1_b ~ Uniform(0.5, 2.5)
     lens_2_b ~ Uniform(0.5, 2.5)
     lens_3_b ~ Uniform(0.5, 2.5)
     lens_4_b ~ Uniform(0.5, 2.5)
-    lens_5_b ~ Uniform(0.5, 2.5)
     A_IA ~ Uniform(-1.0, 1.0)
 
     dz_lens_0 := chol_lens_0 * alphas_lens_0
