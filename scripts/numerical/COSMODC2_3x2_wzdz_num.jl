@@ -116,58 +116,18 @@ function make_theory(;
     lens_2_b=1.22145, 
     lens_3_b=1.35065, 
     lens_4_b=1.58909,
-    alphas_source_0=zeros(2), 
-    alphas_source_1=zeros(2), 
-    alphas_source_2=zeros(2), 
-    alphas_source_3=zeros(2),
-    alphas_source_4=zeros(2),
-    alphas_lens_0=zeros(2),
-    alphas_lens_1=zeros(2),
-    alphas_lens_2=zeros(2),
-    alphas_lens_3=zeros(2),
-    alphas_lens_4=zeros(2),
+    dz_lens_0=0.0, wz_lens_0=1.0,
+    dz_lens_1=0.0, wz_lens_1=1.0,
+    dz_lens_2=0.0, wz_lens_2=1.0,
+    dz_lens_3=0.0, wz_lens_3=1.0,
+    dz_lens_4=0.0, wz_lens_4=1.0,
+    dz_source_0=0.0, wz_source_0=1.0,
+    dz_source_1=0.0, wz_source_1=1.0,
+    dz_source_2=0.0, wz_source_2=1.0,
+    dz_source_3=0.0, wz_source_3=1.0,
+    dz_source_4=0.0, wz_source_4=1.0,
     A_IA=0.25179439,
     meta=meta, files=files)
-
-    snw_lens_0 = chol_lens_0 * alphas_lens_0
-    dz_lens_0 := snw_lens_0[1]
-    wz_lens_0 := 1 + snw_lens_0[2]
-
-    snw_lens_1 = chol_lens_1 * alphas_lens_1
-    dz_lens_1 := snw_lens_1[1]
-    wz_lens_1 := 1 + snw_lens_1[2]
-
-    snw_lens_2 = chol_lens_2 * alphas_lens_2
-    dz_lens_2 := snw_lens_2[1]
-    wz_lens_2 := 1 + snw_lens_2[2]
-
-    snw_lens_3 = chol_lens_3 * alphas_lens_3
-    dz_lens_3 := snw_lens_3[1]
-    wz_lens_3 := 1 + snw_lens_3[2]
-
-    snw_lens_4 = chol_lens_4 * alphas_lens_4
-    dz_lens_4 := snw_lens_4[1]
-    wz_lens_4 := 1 + snw_lens_4[2]
-
-    snw_source_0 = chol_source_0 * alphas_source_0
-    dz_source_0 := snw_source_0[1]
-    wz_source_0 := 1 + snw_source_0[2]
-
-    snw_source_1 = chol_source_1 * alphas_source_1
-    dz_source_1 := snw_source_1[1]
-    wz_source_1 := 1 + snw_source_1[2]
-
-    snw_source_2 = chol_source_2 * alphas_source_2
-    dz_source_2 := snw_source_2[1]
-    wz_source_2 := 1 + snw_source_2[2]
-
-    snw_source_3 = chol_source_3 * alphas_source_3
-    dz_source_3 := snw_source_3[1]
-    wz_source_3 := 1 + snw_source_3[2]
-
-    snw_source_4 = chol_source_4 * alphas_source_4
-    dz_source_4 := snw_source_4[1]
-    wz_source_4 := 1 + snw_source_4[2]
 
     lens_0_zs   .= @.((zs_k0-mu_k0)/wz_lens_0 + dz_lens_0/wz_lens_0 + mu_k0)
     lens_1_zs   .= @.((zs_k1-mu_k1)/wz_lens_1 + dz_lens_1/wz_lens_1 + mu_k1)
@@ -235,23 +195,63 @@ data = fake_data
     lens_4_b ~ Uniform(0.5, 2.5)
     A_IA ~ Uniform(-1.0, 1.0)
 
+    snw_lens_0 = chol_lens_0 * alphas_lens_0
+    dz_lens_0 := snw_lens_0[1]
+    wz_lens_0 := 1 + snw_lens_0[2]
+
+    snw_lens_1 = chol_lens_1 * alphas_lens_1
+    dz_lens_1 := snw_lens_1[1]
+    wz_lens_1 := 1 + snw_lens_1[2]
+
+    snw_lens_2 = chol_lens_2 * alphas_lens_2
+    dz_lens_2 := snw_lens_2[1]
+    wz_lens_2 := 1 + snw_lens_2[2]
+
+    snw_lens_3 = chol_lens_3 * alphas_lens_3
+    dz_lens_3 := snw_lens_3[1]
+    wz_lens_3 := 1 + snw_lens_3[2]
+
+    snw_lens_4 = chol_lens_4 * alphas_lens_4
+    dz_lens_4 := snw_lens_4[1]
+    wz_lens_4 := 1 + snw_lens_4[2]
+
+    snw_source_0 = chol_source_0 * alphas_source_0
+    dz_source_0 := snw_source_0[1]
+    wz_source_0 := 1 + snw_source_0[2]
+
+    snw_source_1 = chol_source_1 * alphas_source_1
+    dz_source_1 := snw_source_1[1]
+    wz_source_1 := 1 + snw_source_1[2]
+
+    snw_source_2 = chol_source_2 * alphas_source_2
+    dz_source_2 := snw_source_2[1]
+    wz_source_2 := 1 + snw_source_2[2]
+
+    snw_source_3 = chol_source_3 * alphas_source_3
+    dz_source_3 := snw_source_3[1]
+    wz_source_3 := 1 + snw_source_3[2]
+
+    snw_source_4 = chol_source_4 * alphas_source_4
+    dz_source_4 := snw_source_4[1]
+    wz_source_4 := 1 + snw_source_4[2]
+
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
-                          alphas_source_0=alphas_source_0,
-                          alphas_source_1=alphas_source_1,
-                          alphas_source_2=alphas_source_2,
-                          alphas_source_3=alphas_source_3,
-                          alphas_source_4=alphas_source_4,
-                          alphas_lens_0=alphas_lens_0,
-                          alphas_lens_1=alphas_lens_1,
-                          alphas_lens_2=alphas_lens_2,
-                          alphas_lens_3=alphas_lens_3,
-                          alphas_lens_4=alphas_lens_4,
-                          lens_0_b=lens_0_b, 
-                          lens_1_b=lens_1_b,
-                          lens_2_b=lens_2_b, 
-                          lens_3_b=lens_3_b,
-                          lens_4_b=lens_4_b, 
-                          A_IA=A_IA)
+                        dz_lens_0=dz_lens_0, wz_lens_0=wz_lens_0,
+                        dz_lens_1=dz_lens_1, wz_lens_1=wz_lens_1,
+                        dz_lens_2=dz_lens_2, wz_lens_2=wz_lens_2,
+                        dz_lens_3=dz_lens_3, wz_lens_3=wz_lens_3,
+                        dz_lens_4=dz_lens_4, wz_lens_4=wz_lens_4,
+                        dz_source_0=dz_source_0, wz_source_0=wz_source_0,
+                        dz_source_1=dz_source_1, wz_source_1=wz_source_1,
+                        dz_source_2=dz_source_2, wz_source_2=wz_source_2,
+                        dz_source_3=dz_source_3, wz_source_3=wz_source_3,
+                        dz_source_4=dz_source_4, wz_source_4=wz_source_4,
+                        lens_0_b=lens_0_b, 
+                        lens_1_b=lens_1_b,
+                        lens_2_b=lens_2_b, 
+                        lens_3_b=lens_3_b,
+                        lens_4_b=lens_4_b, 
+                        A_IA=A_IA)
     ttheory = iΓ * theory
     d = data - ttheory
     Xi2 := dot(d, d)
