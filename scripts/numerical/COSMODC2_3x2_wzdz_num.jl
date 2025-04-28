@@ -313,7 +313,17 @@ sampler = Gibbs(
     :lens_1_b, :lens_2_b, :lens_3_b, :lens_4_b, :lens_5_b;
     init_ϵ=init_ϵ1, max_depth=max_depth),
     NUTS(adaptation, TAP,
-    :A_IA, :alphas_lens, :alphas_source;
+    :A_IA, 
+    :alphas_lens_0,
+    :alphas_lens_1,
+    :alphas_lens_2,
+    :alphas_lens_3,
+    :alphas_lens_4,
+    :alphas_source_0,
+    :alphas_source_1,
+    :alphas_source_2,
+    :alphas_source_3,
+    :alphas_source_4;
     init_ϵ=init_ϵ2, max_depth=max_depth))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
