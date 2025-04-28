@@ -276,7 +276,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../aggresive_fake_chains/numerical/"
-folname = string("CosmoDC2_3x2_Gibbs_indep_wzdz_num",
+folname = string("CosmoDC2_3x2_Gibbs_wzdz_num",
     "_TAP_", TAP,
     "_init_ϵ1_", init_ϵ1, 
     "_init_ϵ2_", init_ϵ2,
