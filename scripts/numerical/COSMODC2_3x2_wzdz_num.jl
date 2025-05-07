@@ -261,8 +261,8 @@ end
 iterations = 300
 adaptation = 100
 TAP = 0.65
-init_ϵ1 = 0.01
-init_ϵ2 = 0.03
+init_ϵ1 = 0.03
+init_ϵ2 = 0.06
 max_depth = 8
 
 println("sampling settings: ")
@@ -310,7 +310,11 @@ cond_model = model(data)
 sampler = Gibbs(
     NUTS(adaptation, TAP,
     :Ωm, :Ωbb, :h, :σ8, :ns,
-    :lens_0_b, :lens_1_b, :lens_2_b, :lens_3_b, :lens_4_b,
+    :lens_0_b,
+    :lens_1_b,
+    :lens_2_b,
+    :lens_3_b,
+    :lens_4_b,
     :A_IA;
     init_ϵ=init_ϵ1, max_depth=max_depth),
     NUTS(adaptation, TAP,
