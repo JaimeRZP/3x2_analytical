@@ -111,11 +111,11 @@ data = fake_data
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
         
+    lens_0_b ~ Uniform(0.5, 2.5)
     lens_1_b ~ Uniform(0.5, 2.5)
     lens_2_b ~ Uniform(0.5, 2.5)
     lens_3_b ~ Uniform(0.5, 2.5)
     lens_4_b ~ Uniform(0.5, 2.5)
-    lens_5_b ~ Uniform(0.5, 2.5)
     A_IA ~ Uniform(-1.0, 1.0)
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
