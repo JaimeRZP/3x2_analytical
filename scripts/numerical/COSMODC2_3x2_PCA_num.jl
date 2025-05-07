@@ -225,7 +225,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../aggresive_fake_chains/numerical/"
-folname = string("CosmoDC2_3x2_Gibbs_indep_fixed_PCA_num",
+folname = string("CosmoDC2_3x2_Gibbs_PCA_num",
     "_TAP_", TAP,
     "_init_ϵ1_", init_ϵ1, 
     "_init_ϵ2_", init_ϵ2,
@@ -259,10 +259,10 @@ cond_model = model(data)
 sampler = Gibbs(
     NUTS(adaptation, TAP,
     :Ωm, :Ωbb, :h, :σ8, :ns,
-    :lens_1_b, :lens_2_b, :lens_3_b, :lens_4_b, :lens_5_b;
+    :lens_0_b, :lens_1_b, :lens_2_b, :lens_3_b, :lens_4_b,
+    :A_IA;
     init_ϵ=init_ϵ1, max_depth=max_depth),
     NUTS(adaptation, TAP,
-    :A_IA, 
     :alphas_lens_0,
     :alphas_lens_1,
     :alphas_lens_2,

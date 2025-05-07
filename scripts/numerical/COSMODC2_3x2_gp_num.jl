@@ -258,10 +258,10 @@ cond_model = model(data)
 sampler = Gibbs(
     NUTS(adaptation, TAP,
     :Ωm, :Ωbb, :h, :σ8, :ns,
-    :lens_1_b, :lens_2_b, :lens_3_b, :lens_4_b, :lens_5_b;
+    :lens_0_b, :lens_1_b, :lens_2_b, :lens_3_b, :lens_4_b,
+    :A_IA;
     init_ϵ=init_ϵ1, max_depth=max_depth),
     NUTS(adaptation, TAP,
-    :A_IA, 
     :alphas_lens_0,
     :alphas_lens_1,
     :alphas_lens_2,

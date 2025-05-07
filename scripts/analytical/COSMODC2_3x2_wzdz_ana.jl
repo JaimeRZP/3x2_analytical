@@ -13,22 +13,22 @@ sacc = pyimport("sacc");
 method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl_aggresive.yml"
-nz_path = string("../../data/CosmoDC2/image_gp_", method, "_priors/")
+nz_path = string("../../data/CosmoDC2/image_wzdz_", method, "_priors/")
 cov_path = "../../covs/COSMODC2/comp_covs_agro.npz"
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 
-nz_lens_0 = npzread(string(nz_path, "gp_lens_0.npz"))
-nz_lens_1 = npzread(string(nz_path, "gp_lens_1.npz"))
-nz_lens_2 = npzread(string(nz_path, "gp_lens_2.npz"))
-nz_lens_3 = npzread(string(nz_path, "gp_lens_3.npz"))
-nz_lens_4 = npzread(string(nz_path, "gp_lens_4.npz"))
-nz_source_0 = npzread(string(nz_path, "gp_source_0.npz"))
-nz_source_1 = npzread(string(nz_path, "gp_source_1.npz"))
-nz_source_2 = npzread(string(nz_path, "gp_source_2.npz"))
-nz_source_3 = npzread(string(nz_path, "gp_source_3.npz"))
-nz_source_4 = npzread(string(nz_path, "gp_source_4.npz"))
+nz_lens_0 = npzread(string(nz_path, "wzdz_lens_0.npz"))
+nz_lens_1 = npzread(string(nz_path, "wzdz_lens_1.npz"))
+nz_lens_2 = npzread(string(nz_path, "wzdz_lens_2.npz"))
+nz_lens_3 = npzread(string(nz_path, "wzdz_lens_3.npz"))
+nz_lens_4 = npzread(string(nz_path, "wzdz_lens_4.npz"))
+nz_source_0 = npzread(string(nz_path, "wzdz_source_0.npz"))
+nz_source_1 = npzread(string(nz_path, "wzdz_source_1.npz"))
+nz_source_2 = npzread(string(nz_path, "wzdz_source_2.npz"))
+nz_source_3 = npzread(string(nz_path, "wzdz_source_3.npz"))
+nz_source_4 = npzread(string(nz_path, "wzdz_source_4.npz"))
 
 zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["dndz"]
 zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["dndz"]
@@ -75,16 +75,20 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
 
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
-    lens_1_b=0.879118, lens_2_b=1.05894, lens_3_b=1.22145, lens_4_b=1.35065, lens_5_b=1.58909,
+    lens_0_b=0.879118, 
+    lens_1_b=1.05894, 
+    lens_2_b=1.22145, 
+    lens_3_b=1.35065, 
+    lens_4_b=1.58909,
     A_IA=0.25179439,
     meta=meta, files=files)
 
     nuisances = Dict(
+    "lens_0_b"    => lens_0_b,
     "lens_1_b"    => lens_1_b,
     "lens_2_b"    => lens_2_b,
     "lens_3_b"    => lens_3_b,
     "lens_4_b"    => lens_4_b,
-    "lens_5_b"    => lens_5_b,
     "A_IA"        => A_IA)
 
     cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
@@ -115,9 +119,12 @@ data = fake_data
     A_IA ~ Uniform(-1.0, 1.0)
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
-                          lens_1_b=lens_1_b, lens_2_b=lens_2_b,
-                          lens_3_b=lens_3_b, lens_4_b=lens_4_b,
-                          lens_5_b=lens_5_b, A_IA=A_IA)
+                            lens_0_b=lens_0_b, 
+                            lens_1_b=lens_1_b,
+                            lens_2_b=lens_2_b, 
+                            lens_3_b=lens_3_b,
+                            lens_4_b=lens_4_b, 
+                            A_IA=A_IA)
 
     ttheory = iΓ * theory
     d = data - ttheory

@@ -86,16 +86,20 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
 
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
-    lens_1_b=0.879118, lens_2_b=1.05894, lens_3_b=1.22145, lens_4_b=1.35065, lens_5_b=1.58909,
+    lens_0_b=0.879118, 
+    lens_1_b=1.05894, 
+    lens_2_b=1.22145, 
+    lens_3_b=1.35065, 
+    lens_4_b=1.58909,
     A_IA=0.25179439,
     meta=meta, files=files)
 
     nuisances = Dict(
+    "lens_0_b"    => lens_0_b,
     "lens_1_b"    => lens_1_b,
     "lens_2_b"    => lens_2_b,
     "lens_3_b"    => lens_3_b,
     "lens_4_b"    => lens_4_b,
-    "lens_5_b"    => lens_5_b,
     "A_IA"        => A_IA)
 
     cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
@@ -118,17 +122,22 @@ data = fake_data
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
         
+    lens_0_b ~ Uniform(0.5, 2.5)
     lens_1_b ~ Uniform(0.5, 2.5)
     lens_2_b ~ Uniform(0.5, 2.5)
     lens_3_b ~ Uniform(0.5, 2.5)
     lens_4_b ~ Uniform(0.5, 2.5)
-    lens_5_b ~ Uniform(0.5, 2.5)
     A_IA ~ Uniform(-1.0, 1.0)
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
-                          lens_1_b=lens_1_b, lens_2_b=lens_2_b,
-                          lens_3_b=lens_3_b, lens_4_b=lens_4_b,
-                          lens_5_b=lens_5_b, A_IA=A_IA)
+                            lens_0_b=lens_0_b, 
+                            lens_1_b=lens_1_b,
+                            lens_2_b=lens_2_b, 
+                            lens_3_b=lens_3_b,
+                            lens_4_b=lens_4_b, 
+                            A_IA=A_IA)
+
+
 
     ttheory = iΓ * theory
     d = data - ttheory
