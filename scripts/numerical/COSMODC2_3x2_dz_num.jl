@@ -98,16 +98,16 @@ init_params = [init_params; init_alphas;
                 [1.0, 1.0, 1.0, 1.0, 1.0,
                 0.0]]
 
-lens_0_zs = zeros(Real, 100)
-lens_1_zs = zeros(Real, 100)
-lens_2_zs = zeros(Real, 100)
-lens_3_zs = zeros(Real, 100)
-lens_4_zs = zeros(Real, 100)
-source_0_zs = zeros(Real, 100)
-source_1_zs = zeros(Real, 100)
-source_2_zs = zeros(Real, 100)
-source_3_zs = zeros(Real, 100)
-source_4_zs = zeros(Real, 100)
+#lens_0_zs = zeros(Real, 100)
+#lens_1_zs = zeros(Real, 100)
+#lens_2_zs = zeros(Real, 100)
+#lens_3_zs = zeros(Real, 100)
+#lens_4_zs = zeros(Real, 100)
+#source_0_zs = zeros(Real, 100)
+#source_1_zs = zeros(Real, 100)
+#source_2_zs = zeros(Real, 100)
+#source_3_zs = zeros(Real, 100)
+#source_4_zs = zeros(Real, 100)
 
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
@@ -227,8 +227,8 @@ end
 iterations = 300
 adaptation = 100
 TAP = 0.65
-init_ϵ1 = 0.03
-init_ϵ2 = 0.1
+init_ϵ1 = 0.01
+init_ϵ2 = 0.05
 max_depth = 8
 
 println("sampling settings: ")

@@ -98,16 +98,16 @@ init_params = [init_params; init_alphas;
                 [1.0, 1.0, 1.0, 1.0, 1.0,
                 0.0]]
 
-lens_0_zs = zeros(Real, 100)
-lens_1_zs = zeros(Real, 100)
-lens_2_zs = zeros(Real, 100)
-lens_3_zs = zeros(Real, 100)
-lens_4_zs = zeros(Real, 100)
-source_0_zs = zeros(Real, 100)
-source_1_zs = zeros(Real, 100)
-source_2_zs = zeros(Real, 100)
-source_3_zs = zeros(Real, 100)
-source_4_zs = zeros(Real, 100)
+#lens_0_zs = zeros(Real, 100)
+#lens_1_zs = zeros(Real, 100)
+#lens_2_zs = zeros(Real, 100)
+#lens_3_zs = zeros(Real, 100)
+#lens_4_zs = zeros(Real, 100)
+#source_0_zs = zeros(Real, 100)
+#source_1_zs = zeros(Real, 100)
+#source_2_zs = zeros(Real, 100)
+#source_3_zs = zeros(Real, 100)
+#source_4_zs = zeros(Real, 100)
 
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
@@ -129,16 +129,16 @@ function make_theory(;
     A_IA=0.25179439,
     meta=meta, files=files)
 
-    lens_0_zs   .= @.((zs_k0-mu_k0)/wz_lens_0 + dz_lens_0/wz_lens_0 + mu_k0)
-    lens_1_zs   .= @.((zs_k1-mu_k1)/wz_lens_1 + dz_lens_1/wz_lens_1 + mu_k1)
-    lens_2_zs   .= @.((zs_k2-mu_k2)/wz_lens_2 + dz_lens_2/wz_lens_2 + mu_k2)
-    lens_3_zs   .= @.((zs_k3-mu_k3)/wz_lens_3 + dz_lens_3/wz_lens_3 + mu_k3)
-    lens_4_zs   .= @.((zs_k4-mu_k4)/wz_lens_4 + dz_lens_4/wz_lens_4 + mu_k4)
-    source_0_zs .= @.((zs_k5-mu_k5)/wz_source_0 + dz_source_0/wz_source_0 + mu_k5)
-    source_1_zs .= @.((zs_k6-mu_k6)/wz_source_1 + dz_source_1/wz_source_1 + mu_k6)
-    source_2_zs .= @.((zs_k7-mu_k7)/wz_source_2 + dz_source_2/wz_source_2 + mu_k7)
-    source_3_zs .= @.((zs_k8-mu_k8)/wz_source_3 + dz_source_3/wz_source_3 + mu_k8)
-    source_4_zs .= @.((zs_k9-mu_k9)/wz_source_4 + dz_source_4/wz_source_4 + mu_k9)
+    lens_0_zs   = @.((zs_k0-mu_k0)/wz_lens_0 + dz_lens_0/wz_lens_0 + mu_k0)
+    lens_1_zs   = @.((zs_k1-mu_k1)/wz_lens_1 + dz_lens_1/wz_lens_1 + mu_k1)
+    lens_2_zs   = @.((zs_k2-mu_k2)/wz_lens_2 + dz_lens_2/wz_lens_2 + mu_k2)
+    lens_3_zs   = @.((zs_k3-mu_k3)/wz_lens_3 + dz_lens_3/wz_lens_3 + mu_k3)
+    lens_4_zs   = @.((zs_k4-mu_k4)/wz_lens_4 + dz_lens_4/wz_lens_4 + mu_k4)
+    source_0_zs = @.((zs_k5-mu_k5)/wz_source_0 + dz_source_0/wz_source_0 + mu_k5)
+    source_1_zs = @.((zs_k6-mu_k6)/wz_source_1 + dz_source_1/wz_source_1 + mu_k6)
+    source_2_zs = @.((zs_k7-mu_k7)/wz_source_2 + dz_source_2/wz_source_2 + mu_k7)
+    source_3_zs = @.((zs_k8-mu_k8)/wz_source_3 + dz_source_3/wz_source_3 + mu_k8)
+    source_4_zs = @.((zs_k9-mu_k9)/wz_source_4 + dz_source_4/wz_source_4 + mu_k9)
 
     nuisances = Dict(
     "lens_0_b"    => lens_0_b,
@@ -261,8 +261,8 @@ end
 iterations = 300
 adaptation = 100
 TAP = 0.65
-init_ϵ1 = 0.03
-init_ϵ2 = 0.06
+init_ϵ1 = 0.01
+init_ϵ2 = 0.03
 max_depth = 8
 
 println("sampling settings: ")
