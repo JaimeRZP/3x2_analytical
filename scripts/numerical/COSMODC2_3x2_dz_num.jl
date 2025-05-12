@@ -195,16 +195,16 @@ data = fake_data
     lens_4_b ~ Uniform(0.5, 2.5)
     A_IA ~ Uniform(-1.0, 1.0)
 
-    dz_lens_0 := chol_lens_0 * alphas_lens_0
-    dz_lens_1 := chol_lens_1 * alphas_lens_1
-    dz_lens_2 := chol_lens_2 * alphas_lens_2
-    dz_lens_3 := chol_lens_3 * alphas_lens_3
-    dz_lens_4 := chol_lens_4 * alphas_lens_4
-    dz_source_0 := chol_source_0 * alphas_source_0
-    dz_source_1 := chol_source_1 * alphas_source_1
-    dz_source_2 := chol_source_2 * alphas_source_2
-    dz_source_3 := chol_source_3 * alphas_source_3
-    dz_source_4 := chol_source_4 * alphas_source_4
+    dz_lens_0 := (chol_lens_0 * alphas_lens_0)[0]
+    dz_lens_1 := (chol_lens_1 * alphas_lens_1)[0]
+    dz_lens_2 := (chol_lens_2 * alphas_lens_2)[0]
+    dz_lens_3 := (chol_lens_3 * alphas_lens_3)[0]
+    dz_lens_4 := (chol_lens_4 * alphas_lens_4)[0]
+    dz_source_0 := (chol_source_0 * alphas_source_0)[0]
+    dz_source_1 := (chol_source_1 * alphas_source_1)[0]
+    dz_source_2 := (chol_source_2 * alphas_source_2)[0]
+    dz_source_3 := (chol_source_3 * alphas_source_3)[0]
+    dz_source_4 := (chol_source_4 * alphas_source_4)[0]
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
                             dz_lens_0=dz_lens_0,
@@ -212,6 +212,11 @@ data = fake_data
                             dz_lens_2=dz_lens_2,
                             dz_lens_3=dz_lens_3,
                             dz_lens_4=dz_lens_4,
+                            dz_source_0=dz_source_0,
+                            dz_source_1=dz_source_1,
+                            dz_source_2=dz_source_2,
+                            dz_source_3=dz_source_3,
+                            dz_source_4=dz_source_4,
                             lens_0_b=lens_0_b, 
                             lens_1_b=lens_1_b,
                             lens_2_b=lens_2_b, 
