@@ -42,17 +42,6 @@ zs_k7, nz_k7 = nz_source_2["z"], nz_source_2["dndz"]
 zs_k8, nz_k8 = nz_source_3["z"], nz_source_3["dndz"]
 zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["dndz"]
 
-mu_k0 = sum(zs_k0 .* nz_k0) / sum(nz_k0)
-mu_k1 = sum(zs_k1 .* nz_k1) / sum(nz_k1)
-mu_k2 = sum(zs_k2 .* nz_k2) / sum(nz_k2)
-mu_k3 = sum(zs_k3 .* nz_k3) / sum(nz_k3)
-mu_k4 = sum(zs_k4 .* nz_k4) / sum(nz_k4)
-mu_k5 = sum(zs_k5 .* nz_k5) / sum(nz_k5)
-mu_k6 = sum(zs_k6 .* nz_k6) / sum(nz_k6)
-mu_k7 = sum(zs_k7 .* nz_k7) / sum(nz_k7)
-mu_k8 = sum(zs_k8 .* nz_k8) / sum(nz_k8)
-mu_k9 = sum(zs_k9 .* nz_k9) / sum(nz_k9)
-
 chol_source_0 = nz_source_0["chol"]
 chol_source_1 = nz_source_1["chol"]
 chol_source_2 = nz_source_2["chol"]
@@ -97,17 +86,6 @@ init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
 init_params = [init_params; init_alphas;
                 [1.0, 1.0, 1.0, 1.0, 1.0,
                 0.0]]
-
-#lens_0_zs = zeros(Real, 100)
-#lens_1_zs = zeros(Real, 100)
-#lens_2_zs = zeros(Real, 100)
-#lens_3_zs = zeros(Real, 100)
-#lens_4_zs = zeros(Real, 100)
-#source_0_zs = zeros(Real, 100)
-#source_1_zs = zeros(Real, 100)
-#source_2_zs = zeros(Real, 100)
-#source_3_zs = zeros(Real, 100)
-#source_4_zs = zeros(Real, 100)
 
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
@@ -195,16 +173,16 @@ data = fake_data
     lens_4_b ~ Uniform(0.5, 2.5)
     A_IA ~ Uniform(-1.0, 1.0)
 
-    dz_lens_0 := (chol_lens_0 * alphas_lens_0)[0]
-    dz_lens_1 := (chol_lens_1 * alphas_lens_1)[0]
-    dz_lens_2 := (chol_lens_2 * alphas_lens_2)[0]
-    dz_lens_3 := (chol_lens_3 * alphas_lens_3)[0]
-    dz_lens_4 := (chol_lens_4 * alphas_lens_4)[0]
-    dz_source_0 := (chol_source_0 * alphas_source_0)[0]
-    dz_source_1 := (chol_source_1 * alphas_source_1)[0]
-    dz_source_2 := (chol_source_2 * alphas_source_2)[0]
-    dz_source_3 := (chol_source_3 * alphas_source_3)[0]
-    dz_source_4 := (chol_source_4 * alphas_source_4)[0]
+    dz_lens_0 := (chol_lens_0 * alphas_lens_0)[1]
+    dz_lens_1 := (chol_lens_1 * alphas_lens_1)[1]
+    dz_lens_2 := (chol_lens_2 * alphas_lens_2)[1]
+    dz_lens_3 := (chol_lens_3 * alphas_lens_3)[1]
+    dz_lens_4 := (chol_lens_4 * alphas_lens_4)[1]
+    dz_source_0 := (chol_source_0 * alphas_source_0)[1]
+    dz_source_1 := (chol_source_1 * alphas_source_1)[1]
+    dz_source_2 := (chol_source_2 * alphas_source_2)[1]
+    dz_source_3 := (chol_source_3 * alphas_source_3)[1]
+    dz_source_4 := (chol_source_4 * alphas_source_4)[1]
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
                             dz_lens_0=dz_lens_0,
