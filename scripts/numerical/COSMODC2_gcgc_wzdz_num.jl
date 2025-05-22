@@ -150,26 +150,6 @@ data = fake_data
     dz_lens_4 := snw_lens_4[1]
     wz_lens_4 := 1 + snw_lens_4[2]
 
-    snw_source_0 = chol_source_0 * alphas_source_0
-    dz_source_0 := snw_source_0[1]
-    wz_source_0 := 1 + snw_source_0[2]
-
-    snw_source_1 = chol_source_1 * alphas_source_1
-    dz_source_1 := snw_source_1[1]
-    wz_source_1 := 1 + snw_source_1[2]
-
-    snw_source_2 = chol_source_2 * alphas_source_2
-    dz_source_2 := snw_source_2[1]
-    wz_source_2 := 1 + snw_source_2[2]
-
-    snw_source_3 = chol_source_3 * alphas_source_3
-    dz_source_3 := snw_source_3[1]
-    wz_source_3 := 1 + snw_source_3[2]
-
-    snw_source_4 = chol_source_4 * alphas_source_4
-    dz_source_4 := snw_source_4[1]
-    wz_source_4 := 1 + snw_source_4[2]
-
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
                         dz_lens_0=dz_lens_0, wz_lens_0=wz_lens_0,
                         dz_lens_1=dz_lens_1, wz_lens_1=wz_lens_1,
