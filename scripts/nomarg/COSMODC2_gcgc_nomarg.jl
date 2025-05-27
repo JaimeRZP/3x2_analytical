@@ -77,10 +77,6 @@ function make_theory(;
                  Nuisances=nuisances)
 end
 
-fake_data = make_theory();
-fake_data = iΓ * fake_data
-data = fake_data
-
 @model function model(data)
     Ωm ~ Uniform(0.2, 0.6)
     Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
@@ -123,7 +119,7 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../fixed_fake_chains/nomarg/"
+folpath = "../../real_chains/nomarg/"
 folname = string("CosmoDC2_gcgc_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 

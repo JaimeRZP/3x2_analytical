@@ -64,11 +64,9 @@ meta.types = [
     "galaxy_shear",
     "galaxy_shear"]
 
-data = meta.data
 cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
-data = iΓ * data
 
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
             1.0, 1.0, 1.0, 1.0, 1.0,

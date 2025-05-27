@@ -52,10 +52,10 @@ meta.types = [
     "galaxy_density",
     "galaxy_density"]
 
-data = meta.data
 cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
+data = iΓ * meta.data
 
 init_alphas = zeros(5)
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
