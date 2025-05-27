@@ -15,16 +15,16 @@ sacc = pyimport("sacc");
 method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc.yml"
-nz_path = string("../../data/CosmoDC2/image_gp_", method, "_priors/")
+nz_path = string("../../data/CosmoDC2/image_PCA_", method, "_priors/")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 
-nz_lens_0 = npzread(string(nz_path, "gp_lens_0.npz"))
-nz_lens_1 = npzread(string(nz_path, "gp_lens_1.npz"))
-nz_lens_2 = npzread(string(nz_path, "gp_lens_2.npz"))
-nz_lens_3 = npzread(string(nz_path, "gp_lens_3.npz"))
-nz_lens_4 = npzread(string(nz_path, "gp_lens_4.npz"))
+nz_lens_0 = npzread(string(nz_path, "PCA_lens_0.npz"))
+nz_lens_1 = npzread(string(nz_path, "PCA_lens_1.npz"))
+nz_lens_2 = npzread(string(nz_path, "PCA_lens_2.npz"))
+nz_lens_3 = npzread(string(nz_path, "PCA_lens_3.npz"))
+nz_lens_4 = npzread(string(nz_path, "PCA_lens_4.npz"))
 
 zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["dndz"]
 zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["dndz"]
@@ -52,7 +52,6 @@ meta.types = [
     "galaxy_density",
     "galaxy_density"]
 
-data = meta.data
 cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
@@ -108,6 +107,10 @@ function make_theory(;
              Nuisances=nuisances)
 end
 
+fake_data = make_theory();
+fake_data = iΓ * fake_data
+data = fake_data
+
 @model function model(data)
     Ωm ~ Uniform(0.2, 0.6)
     Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
@@ -126,6 +129,7 @@ end
     lens_2_b ~ Uniform(0.5, 2.5)
     lens_3_b ~ Uniform(0.5, 2.5)
     lens_4_b ~ Uniform(0.5, 2.5)
+
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
                           alphas_lens_0=alphas_lens_0,
                           alphas_lens_1=alphas_lens_1,
@@ -160,8 +164,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../real_chains/numerical/"
-folname = string("CosmoDC2_gcgc_Gibbs_gp_num",
+folpath = "../../fixed_fake_chains/numerical/"
+folname = string("CosmoDC2_gcgc_Gibbs_PCA_num",
     "_TAP_", TAP,
     "_init_ϵ1_", init_ϵ1, 
     "_init_ϵ2_", init_ϵ2,
