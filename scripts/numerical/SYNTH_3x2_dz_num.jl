@@ -7,6 +7,8 @@ using YAML
 using NPZ
 using JLD2
 using PythonCall
+using Statistics
+using Interpolations
 sacc = pyimport("sacc");
 
 
@@ -14,7 +16,6 @@ method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
 nz_path = string("../../data/CosmoDC2/image_dz_", method, "_priors/")
-cov_path = "../../covs/COSMODC2/comp_covs.npz"
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
@@ -41,6 +42,17 @@ zs_k7, nz_k7 = nz_source_2["z"], nz_source_2["dndz"]
 zs_k8, nz_k8 = nz_source_3["z"], nz_source_3["dndz"]
 zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["dndz"]
 
+chol_source_0 = nz_source_0["chol"]
+chol_source_1 = nz_source_1["chol"]
+chol_source_2 = nz_source_2["chol"]
+chol_source_3 = nz_source_3["chol"]
+chol_source_4 = nz_source_4["chol"]
+chol_lens_0 = nz_lens_0["chol"]
+chol_lens_1 = nz_lens_1["chol"]
+chol_lens_2 = nz_lens_2["chol"]
+chol_lens_3 = nz_lens_3["chol"]
+chol_lens_4 = nz_lens_4["chol"]
+
 meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_0=nz_lens_0,
                         nz_lens_1=nz_lens_1,
@@ -65,14 +77,15 @@ meta.types = [
     "galaxy_shear",
     "galaxy_shear"]
 
-cov = npzread(cov_path)["TT_dz"]
+cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
-data = iΓ * meta.data
 
-init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
-            1.0, 1.0, 1.0, 1.0, 1.0,
-            0.0]
+init_alphas = zeros(10)
+init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
+init_params = [init_params; init_alphas;
+                [1.0, 1.0, 1.0, 1.0, 1.0,
+                0.0]]
 
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
@@ -81,8 +94,29 @@ function make_theory(;
     lens_2_b=1.22145, 
     lens_3_b=1.35065, 
     lens_4_b=1.58909,
+    dz_lens_0=0.0,
+    dz_lens_1=0.0,
+    dz_lens_2=0.0,
+    dz_lens_3=0.0,
+    dz_lens_4=0.0,
+    dz_source_0=0.0,
+    dz_source_1=0.0,
+    dz_source_2=0.0,
+    dz_source_3=0.0,
+    dz_source_4=0.0,
     A_IA=0.25179439,
     meta=meta, files=files)
+
+    lens_0_zs   = @.(zs_k0 + dz_lens_0)
+    lens_1_zs   = @.(zs_k1 + dz_lens_1)
+    lens_2_zs   = @.(zs_k2 + dz_lens_2)
+    lens_3_zs   = @.(zs_k3 + dz_lens_3)
+    lens_4_zs   = @.(zs_k4 + dz_lens_4)
+    source_0_zs = @.(zs_k5 + dz_source_0)
+    source_1_zs = @.(zs_k6 + dz_source_1)
+    source_2_zs = @.(zs_k7 + dz_source_2)
+    source_3_zs = @.(zs_k8 + dz_source_3)
+    source_4_zs = @.(zs_k9 + dz_source_4)
 
     nuisances = Dict(
     "lens_0_b"    => lens_0_b,
@@ -90,15 +124,29 @@ function make_theory(;
     "lens_2_b"    => lens_2_b,
     "lens_3_b"    => lens_3_b,
     "lens_4_b"    => lens_4_b,
+    "lens_0_zs"   => lens_0_zs,
+    "lens_1_zs"   => lens_1_zs,
+    "lens_2_zs"   => lens_2_zs,
+    "lens_3_zs"   => lens_3_zs,
+    "lens_4_zs"   => lens_4_zs,
+    "source_0_zs" => source_0_zs,
+    "source_1_zs" => source_1_zs,
+    "source_2_zs" => source_2_zs,
+    "source_3_zs" => source_3_zs,
+    "source_4_zs" => source_4_zs,
     "A_IA"        => A_IA)
-
+       
     cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
         tk_mode=:EisHu,
         pk_mode=:Halofit)
 
- return Theory(cosmology, meta, files; 
+    return Theory(cosmology, meta, files; 
              Nuisances=nuisances)
 end
+
+fake_data = make_theory();
+fake_data = iΓ * fake_data
+data = fake_data
 
 @model function model(data)
     Ωm ~ Uniform(0.2, 0.6)
@@ -107,7 +155,17 @@ end
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
     σ8 ~ Uniform(0.4, 1.2)
     ns ~ Uniform(0.84, 1.1)
-        
+
+    alphas_lens_0 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_lens_1 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_lens_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_lens_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_lens_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_source_0 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_source_1 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_source_2 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_source_3 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
+    alphas_source_4 ~ filldist(truncated(Normal(0, 1), -3, 3), 1)
     lens_0_b ~ Uniform(0.5, 2.5)
     lens_1_b ~ Uniform(0.5, 2.5)
     lens_2_b ~ Uniform(0.5, 2.5)
@@ -115,35 +173,63 @@ end
     lens_4_b ~ Uniform(0.5, 2.5)
     A_IA ~ Uniform(-1.0, 1.0)
 
+    dz_lens_0 := (chol_lens_0 * alphas_lens_0)[1]
+    dz_lens_1 := (chol_lens_1 * alphas_lens_1)[1]
+    dz_lens_2 := (chol_lens_2 * alphas_lens_2)[1]
+    dz_lens_3 := (chol_lens_3 * alphas_lens_3)[1]
+    dz_lens_4 := (chol_lens_4 * alphas_lens_4)[1]
+    dz_source_0 := (chol_source_0 * alphas_source_0)[1]
+    dz_source_1 := (chol_source_1 * alphas_source_1)[1]
+    dz_source_2 := (chol_source_2 * alphas_source_2)[1]
+    dz_source_3 := (chol_source_3 * alphas_source_3)[1]
+    dz_source_4 := (chol_source_4 * alphas_source_4)[1]
+
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
+                            dz_lens_0=dz_lens_0,
+                            dz_lens_1=dz_lens_1,
+                            dz_lens_2=dz_lens_2,
+                            dz_lens_3=dz_lens_3,
+                            dz_lens_4=dz_lens_4,
+                            dz_source_0=dz_source_0,
+                            dz_source_1=dz_source_1,
+                            dz_source_2=dz_source_2,
+                            dz_source_3=dz_source_3,
+                            dz_source_4=dz_source_4,
                             lens_0_b=lens_0_b, 
                             lens_1_b=lens_1_b,
                             lens_2_b=lens_2_b, 
                             lens_3_b=lens_3_b,
                             lens_4_b=lens_4_b, 
                             A_IA=A_IA)
-
     ttheory = iΓ * theory
     d = data - ttheory
     Xi2 := dot(d, d)
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 500
+iterations = 300
 adaptation = 100
 TAP = 0.65
-init_ϵ = 0.03
+init_ϵ1 = 0.01
+init_ϵ2 = 0.05
 max_depth = 8
 
 println("sampling settings: ")
 println("iterations ", iterations)
 println("TAP ", TAP)
+println("init_ϵ1 ", init_ϵ1)
+println("init_ϵ2 ", init_ϵ2)
+println("max_depth ", max_depth)
 println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../real_chains/analytical/"
-folname = string("CosmoDC2_3x2_dz_ana_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folpath = "../../fixed_fake_chains/numerical/"
+folname = string("CosmoDC2_3x2_Gibbs_dz_num",
+    "_TAP_", TAP,
+    "_init_ϵ1_", init_ϵ1, 
+    "_init_ϵ2_", init_ϵ2,
+)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -168,8 +254,30 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP; 
-    init_ϵ=init_ϵ, max_depth=max_depth)
+#sampler = NUTS(adaptation, TAP;
+#    init_ϵ=init_ϵ, max_depth=max_depth)
+sampler = Gibbs(
+    NUTS(adaptation, TAP,
+    :Ωm, :Ωbb, :h, :σ8, :ns,
+    :lens_0_b, 
+    :lens_1_b, 
+    :lens_2_b, 
+    :lens_3_b, 
+    :lens_4_b,
+    :A_IA;
+    init_ϵ=init_ϵ1, max_depth=max_depth),
+    NUTS(adaptation, TAP,
+    :alphas_lens_0,
+    :alphas_lens_1,
+    :alphas_lens_2,
+    :alphas_lens_3,
+    :alphas_lens_4,
+    :alphas_source_0,
+    :alphas_source_1,
+    :alphas_source_2,
+    :alphas_source_3,
+    :alphas_source_4;
+    init_ϵ=init_ϵ2, max_depth=max_depth))
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)

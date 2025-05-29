@@ -91,6 +91,7 @@ meta.types = [
 cov = meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
+data = iΓ * meta.data
 
 init_alphas = zeros(20)
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
@@ -165,10 +166,6 @@ function make_theory(;
     return Theory(cosmology, meta, files; 
              Nuisances=nuisances)
 end
-
-fake_data = make_theory();
-fake_data = iΓ * fake_data
-data = fake_data
 
 @model function model(data)
     Ωm ~ Uniform(0.2, 0.6)
@@ -275,7 +272,7 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../fixed_fake_chains/numerical/"
+folpath = "../../real_chains/numerical/"
 folname = string("CosmoDC2_3x2_Gibbs_wzdz_num",
     "_TAP_", TAP,
     "_init_ϵ1_", init_ϵ1, 

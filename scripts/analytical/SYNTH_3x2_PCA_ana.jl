@@ -13,22 +13,22 @@ sacc = pyimport("sacc");
 method = "bpz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
-nz_path = string("../../data/CosmoDC2/image_dz_", method, "_priors/")
+nz_path = string("../../data/CosmoDC2/image_PCA_", method, "_priors/")
 cov_path = "../../covs/COSMODC2/comp_covs.npz"
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 
-nz_lens_0 = npzread(string(nz_path, "dz_lens_0.npz"))
-nz_lens_1 = npzread(string(nz_path, "dz_lens_1.npz"))
-nz_lens_2 = npzread(string(nz_path, "dz_lens_2.npz"))
-nz_lens_3 = npzread(string(nz_path, "dz_lens_3.npz"))
-nz_lens_4 = npzread(string(nz_path, "dz_lens_4.npz"))
-nz_source_0 = npzread(string(nz_path, "dz_source_0.npz"))
-nz_source_1 = npzread(string(nz_path, "dz_source_1.npz"))
-nz_source_2 = npzread(string(nz_path, "dz_source_2.npz"))
-nz_source_3 = npzread(string(nz_path, "dz_source_3.npz"))
-nz_source_4 = npzread(string(nz_path, "dz_source_4.npz"))
+nz_lens_0 = npzread(string(nz_path, "PCA_lens_0.npz"))
+nz_lens_1 = npzread(string(nz_path, "PCA_lens_1.npz"))
+nz_lens_2 = npzread(string(nz_path, "PCA_lens_2.npz"))
+nz_lens_3 = npzread(string(nz_path, "PCA_lens_3.npz"))
+nz_lens_4 = npzread(string(nz_path, "PCA_lens_4.npz"))
+nz_source_0 = npzread(string(nz_path, "PCA_source_0.npz"))
+nz_source_1 = npzread(string(nz_path, "PCA_source_1.npz"))
+nz_source_2 = npzread(string(nz_path, "PCA_source_2.npz"))
+nz_source_3 = npzread(string(nz_path, "PCA_source_3.npz"))
+nz_source_4 = npzread(string(nz_path, "PCA_source_4.npz"))
 
 zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["dndz"]
 zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["dndz"]
@@ -40,6 +40,17 @@ zs_k6, nz_k6 = nz_source_1["z"], nz_source_1["dndz"]
 zs_k7, nz_k7 = nz_source_2["z"], nz_source_2["dndz"]
 zs_k8, nz_k8 = nz_source_3["z"], nz_source_3["dndz"]
 zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["dndz"]
+
+W_source_0 = nz_source_0["W"]
+W_source_1 = nz_source_1["W"]
+W_source_2 = nz_source_2["W"]
+W_source_3 = nz_source_3["W"]
+W_source_4 = nz_source_4["W"]
+W_lens_0 = nz_lens_0["W"]
+W_lens_1 = nz_lens_1["W"]
+W_lens_2 = nz_lens_2["W"]
+W_lens_3 = nz_lens_3["W"]
+W_lens_4 = nz_lens_4["W"]
 
 meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_0=nz_lens_0,
@@ -65,10 +76,9 @@ meta.types = [
     "galaxy_shear",
     "galaxy_shear"]
 
-cov = npzread(cov_path)["TT_dz"]
+cov = npzread(cov_path)["TT_pca"]
 Γ = sqrt(cov)
 iΓ = inv(Γ)
-data = iΓ * meta.data
 
 init_params=[0.30, 0.5, 0.67, 0.81, 0.95,
             1.0, 1.0, 1.0, 1.0, 1.0,
@@ -100,6 +110,10 @@ function make_theory(;
              Nuisances=nuisances)
 end
 
+fake_data = make_theory();
+fake_data = iΓ * fake_data
+data = fake_data
+
 @model function model(data)
     Ωm ~ Uniform(0.2, 0.6)
     Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
@@ -123,6 +137,8 @@ end
                             lens_4_b=lens_4_b, 
                             A_IA=A_IA)
 
+
+
     ttheory = iΓ * theory
     d = data - ttheory
     Xi2 := dot(d, d)
@@ -142,8 +158,8 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../real_chains/analytical/"
-folname = string("CosmoDC2_3x2_dz_ana_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folpath = "../../fixed_fake_chains/analytical/"
+folname = string("CosmoDC2_3x2_PCA_ana_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
@@ -168,8 +184,7 @@ CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[
 
 # Sample
 cond_model = model(data)
-sampler = NUTS(adaptation, TAP; 
-    init_ϵ=init_ϵ, max_depth=max_depth)
+sampler = NUTS(adaptation, TAP; init_ϵ=init_ϵ, max_depth=max_depth)
 chain = sample(cond_model, sampler, iterations;
                 init_params=init_params,
                 progress=true, save_state=true)
