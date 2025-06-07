@@ -132,23 +132,23 @@ data = fake_data
 
     snw_lens_0 = chol_lens_0 * alphas_lens_0
     dz_lens_0 := snw_lens_0[1]
-    wz_lens_0 := 1 + snw_lens_0[2]
+    wz_lens_0 := 1 + 5*snw_lens_0[2]
 
     snw_lens_1 = chol_lens_1 * alphas_lens_1
     dz_lens_1 := snw_lens_1[1]
-    wz_lens_1 := 1 + snw_lens_1[2]
+    wz_lens_1 := 1 + 5*snw_lens_1[2]
 
     snw_lens_2 = chol_lens_2 * alphas_lens_2
     dz_lens_2 := snw_lens_2[1]
-    wz_lens_2 := 1 + snw_lens_2[2]
+    wz_lens_2 := 1 + 5*snw_lens_2[2]
 
     snw_lens_3 = chol_lens_3 * alphas_lens_3
     dz_lens_3 := snw_lens_3[1]
-    wz_lens_3 := 1 + snw_lens_3[2]
+    wz_lens_3 := 1 + 5*snw_lens_3[2]
 
     snw_lens_4 = chol_lens_4 * alphas_lens_4
     dz_lens_4 := snw_lens_4[1]
-    wz_lens_4 := 1 + snw_lens_4[2]
+    wz_lens_4 := 1 + 5*snw_lens_4[2]
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
                         dz_lens_0=dz_lens_0, wz_lens_0=wz_lens_0,
@@ -170,8 +170,8 @@ end
 iterations = 300
 adaptation = 100
 TAP = 0.65
-init_ϵ1 = 0.01
-init_ϵ2 = 0.03
+init_ϵ1 = 0.015
+init_ϵ2 = 0.04
 max_depth = 8
 
 println("sampling settings: ")
@@ -185,7 +185,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = "../../fixed_fake_chains/numerical/"
-folname = string("CosmoDC2_test_gcgc_Gibbs_wzdz_num",
+folname = string("CosmoDC2_test2_gcgc_Gibbs_wzdz_num",
     "_TAP_", TAP,
     "_init_ϵ1_", init_ϵ1, 
     "_init_ϵ2_", init_ϵ2,
