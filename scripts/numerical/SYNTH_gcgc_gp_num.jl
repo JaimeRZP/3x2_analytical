@@ -12,7 +12,7 @@ using Interpolations
 sacc = pyimport("sacc");
 
 
-method = "bpz"
+method = "lognormal" # "bpz" or "sompz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc.yml"
 nz_path = string("../../data/CosmoDC2/image_gp_", method, "_priors/")
@@ -153,7 +153,7 @@ init_ϵ1 = 0.01
 init_ϵ2 = 0.05
 max_depth = 8
 
-println("sampling settings: ")
+folpath = string("../../", method, "_fake_chains/numerical/")
 println("iterations ", iterations)
 println("TAP ", TAP)
 println("init_ϵ1 ", init_ϵ1)

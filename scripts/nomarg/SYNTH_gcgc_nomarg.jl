@@ -10,7 +10,7 @@ using PythonCall
 sacc = pyimport("sacc");
 
 
-method = "bpz"
+method = "lognormal" # "bpz" or "sompz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc.yml"
 nz_path = string("../../data/CosmoDC2/image_dz_", method, "_priors/")
@@ -121,7 +121,7 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../fixed_fake_chains/nomarg/"
+folpath = string("../../", method, "_fake_chains/nomarg/")
 folname = string("CosmoDC2_gcgc_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
