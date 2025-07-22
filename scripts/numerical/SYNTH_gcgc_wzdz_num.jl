@@ -38,11 +38,11 @@ mu_k2 = sum(zs_k2 .* nz_k2) / sum(nz_k2)
 mu_k3 = sum(zs_k3 .* nz_k3) / sum(nz_k3)
 mu_k4 = sum(zs_k4 .* nz_k4) / sum(nz_k4)
 
-chol_lens_0 = sqrt.(Diagonal(nz_lens_0["cov"]))
-chol_lens_1 = sqrt.(Diagonal(nz_lens_1["cov"]))
-chol_lens_2 = sqrt.(Diagonal(nz_lens_2["cov"]))
-chol_lens_3 = sqrt.(Diagonal(nz_lens_3["cov"]))
-chol_lens_4 = sqrt.(Diagonal(nz_lens_4["cov"]))
+chol_lens_0 = nz_lens_0["chol"]
+chol_lens_1 = nz_lens_1["chol"]
+chol_lens_2 = nz_lens_2["chol"]
+chol_lens_3 = nz_lens_3["chol"]
+chol_lens_4 = nz_lens_4["chol"]
 
 meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_0=nz_lens_0,
