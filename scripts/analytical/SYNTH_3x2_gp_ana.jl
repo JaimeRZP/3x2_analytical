@@ -14,7 +14,7 @@ method = "lognormal" # "bpz" or "sompz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
 nz_path = string("../../data/CosmoDC2/image_gp_", method, "_priors/")
-cov_path = string("../../covs/COSMODC2/", method, "_3x2_comp_covs.npz")
+cov_path = string("../../covs/COSMODC2/", method, "_3x2_tpts_covs.npz")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
