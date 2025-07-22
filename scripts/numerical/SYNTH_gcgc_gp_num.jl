@@ -163,7 +163,7 @@ println("adaptation ", adaptation)
 #println("nchains ", nchains)
 
 # Start sampling.
-folpath = "../../fixed_fake_chains/numerical/"
+folpath = string("../../", method, "_fake_chains/numerical/")
 folname = string("CosmoDC2_gcgc_Gibbs_gp_num",
     "_TAP_", TAP,
     "_init_ϵ1_", init_ϵ1, 
