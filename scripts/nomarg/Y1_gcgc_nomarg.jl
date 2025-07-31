@@ -122,7 +122,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = string("../../", method, "_fake_chains/nomarg/")
-folname = string("CosmoDC2_gcgc_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folname = string("Y1_gcgc_nomarg_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
