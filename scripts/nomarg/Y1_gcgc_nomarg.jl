@@ -109,7 +109,7 @@ end
 iterations = 300
 adaptation = 100
 TAP = 0.65
-init_ϵ = 0.01
+init_ϵ = 0.03
 max_depth = 8
 
 println("sampling settings: ")
