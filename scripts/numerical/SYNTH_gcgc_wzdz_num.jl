@@ -196,8 +196,7 @@ if isdir(folname)
     fol_files = readdir(folname)
     println("Found existing file ", folname)
     if length(fol_files) != 0
-        last_chain = last([file for file in fol_files if occursin("chain", file)])
-        last_n = parse(Int, last_chain[7:end-4])
+        last_n = maximun([parse(Int,file[7:end-4]) for file in fol_files if occursin("chain", file)])
         #println("Restarting chain")
     else
         #println("Starting new chain")
