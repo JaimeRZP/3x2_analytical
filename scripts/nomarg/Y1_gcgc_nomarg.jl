@@ -106,10 +106,10 @@ data = fake_data
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 300
+iterations = 500
 adaptation = 100
 TAP = 0.65
-init_ϵ = 0.03
+init_ϵ = 0.005
 max_depth = 8
 
 println("sampling settings: ")
@@ -130,7 +130,7 @@ if isdir(folname)
     println("Found existing file ", folname)
     if length(fol_files) != 0
         last_chain = last([file for file in fol_files if occursin("chain", file)])
-        last_n = parse(Int, last_chain[7])
+        last_n = parse(Int, last_chain[7:end-4])
         #println("Restarting chain")
     else
         #println("Starting new chain")

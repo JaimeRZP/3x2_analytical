@@ -104,7 +104,7 @@ end
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 300
+iterations = 500
 adaptation = 100
 TAP = 0.65
 init_ϵ = 0.03
