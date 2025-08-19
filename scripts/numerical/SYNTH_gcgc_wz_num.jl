@@ -198,6 +198,7 @@ if isdir(folname)
         #println("Starting new chain")
         last_n = 0
     end
+    println(string("Last chain number: ", last_n))
 else
     mkdir(folname)
     println(string("Created new folder ", folname))
