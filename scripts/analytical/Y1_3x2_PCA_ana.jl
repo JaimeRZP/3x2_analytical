@@ -41,17 +41,6 @@ zs_k7, nz_k7 = nz_source_2["z"], nz_source_2["dndz"]
 zs_k8, nz_k8 = nz_source_3["z"], nz_source_3["dndz"]
 zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["dndz"]
 
-W_source_0 = nz_source_0["W"]
-W_source_1 = nz_source_1["W"]
-W_source_2 = nz_source_2["W"]
-W_source_3 = nz_source_3["W"]
-W_source_4 = nz_source_4["W"]
-W_lens_0 = nz_lens_0["W"]
-W_lens_1 = nz_lens_1["W"]
-W_lens_2 = nz_lens_2["W"]
-W_lens_3 = nz_lens_3["W"]
-W_lens_4 = nz_lens_4["W"]
-
 meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_0=nz_lens_0,
                         nz_lens_1=nz_lens_1,
