@@ -13,21 +13,21 @@ sacc = pyimport("sacc");
 method = "sompz" # "bpz" or "sompz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
-nz_path = string("../../data/CosmoDC2/image_dz_", method, "_priors/")
+nz_path = string("../../data/CosmoDC2/nzs_", method, "/")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 
-nz_lens_0 = npzread(string(nz_path, "dz_lens_0.npz"))
-nz_lens_1 = npzread(string(nz_path, "dz_lens_1.npz"))
-nz_lens_2 = npzread(string(nz_path, "dz_lens_2.npz"))
-nz_lens_3 = npzread(string(nz_path, "dz_lens_3.npz"))
-nz_lens_4 = npzread(string(nz_path, "dz_lens_4.npz"))
-nz_source_0 = npzread(string(nz_path, "dz_source_0.npz"))
-nz_source_1 = npzread(string(nz_path, "dz_source_1.npz"))
-nz_source_2 = npzread(string(nz_path, "dz_source_2.npz"))
-nz_source_3 = npzread(string(nz_path, "dz_source_3.npz"))
-nz_source_4 = npzread(string(nz_path, "dz_source_4.npz"))
+nz_lens_0 = npzread(string(nz_path, "lens_0.npz"))
+nz_lens_1 = npzread(string(nz_path, "lens_1.npz"))
+nz_lens_2 = npzread(string(nz_path, "lens_2.npz"))
+nz_lens_3 = npzread(string(nz_path, "lens_3.npz"))
+nz_lens_4 = npzread(string(nz_path, "lens_4.npz"))
+nz_source_0 = npzread(string(nz_path, "source_0.npz"))
+nz_source_1 = npzread(string(nz_path, "source_1.npz"))
+nz_source_2 = npzread(string(nz_path, "source_2.npz"))
+nz_source_3 = npzread(string(nz_path, "source_3.npz"))
+nz_source_4 = npzread(string(nz_path, "source_4.npz"))
 
 zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["dndz"]
 zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["dndz"]
