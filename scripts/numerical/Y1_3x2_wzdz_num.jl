@@ -9,7 +9,6 @@ using NPZ
 using JLD2
 using PythonCall
 using Statistics
-using Interpolations
 sacc = pyimport("sacc");
 
 
