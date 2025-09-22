@@ -94,7 +94,7 @@ iΓ = inv(Γ)
 data = iΓ * meta.data
 
 init_alphas = zeros(20)
-init_params=[0.30, 0.5, 0.67, 0.81, 0.95]
+init_params=[0.27, 0.42, 0.7, 0.77, 0.99]
 init_params = [init_params; init_alphas;
                 [1.0, 1.0, 1.0, 1.0, 1.0,
                 0.0]]
@@ -258,8 +258,8 @@ end
 iterations = 300
 adaptation = 100
 TAP = 0.65
-init_ϵ1 = 0.005
-init_ϵ2 = 0.015
+init_ϵ1 = 0.015
+init_ϵ2 = 0.035
 max_depth = 8
 
 println("sampling settings: ")
