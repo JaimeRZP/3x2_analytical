@@ -88,7 +88,8 @@ meta.types = [
     "galaxy_shear",
     "galaxy_shear"]
 
-cov = 0.03*meta.cov
+scale = 0.03
+cov = scale*meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
 data = iΓ * meta.data
@@ -258,8 +259,8 @@ end
 iterations = 300
 adaptation = 100
 TAP = 0.65
-init_ϵ1 = 0.01
-init_ϵ2 = 0.02
+init_ϵ1 = sqrt(scale)*0.01
+init_ϵ2 = sqrt(scale)*0.03
 max_depth = 8
 
 println("sampling settings: ")
