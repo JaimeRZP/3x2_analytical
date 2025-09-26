@@ -81,7 +81,6 @@ scale = 0.03
 cov = scale*meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
-data = iΓ * meta.data
 
 init_alphas = zeros(10)
 init_params=[0.27, 0.42, 0.72, 0.78, 0.99]
@@ -146,6 +145,10 @@ function make_theory(;
              Nuisances=nuisances)
 end
 
+fake_data = make_theory();
+fake_data = iΓ * fake_data
+data = fake_data
+
 @model function model(data)
     Ωm ~ Uniform(0.2, 0.6)
     Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
@@ -205,7 +208,7 @@ end
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 10
+iterations = 300
 adaptation = 100
 TAP = 0.65
 init_ϵ1 = sqrt(scale)*0.01
@@ -223,7 +226,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = string("../../", method, "_fake_chains/numerical/")
-folname = string("test_Y1_3x2_Gibbs_dz_num",
+folname = string("Y1_3x2_Gibbs_dz_num",
     "_TAP_", TAP,
     "_init_ϵ1_", init_ϵ1, 
     "_init_ϵ2_", init_ϵ2,

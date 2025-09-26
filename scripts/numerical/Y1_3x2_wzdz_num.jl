@@ -92,7 +92,6 @@ scale = 0.03
 cov = scale*meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
-data = iΓ * meta.data
 
 init_alphas = zeros(20)
 init_params=[0.27, 0.42, 0.7, 0.77, 0.99]
@@ -167,6 +166,10 @@ function make_theory(;
     return Theory(cosmology, meta, files; 
              Nuisances=nuisances)
 end
+
+fake_data = make_theory();
+fake_data = iΓ * fake_data
+data = fake_data
 
 @model function model(data)
     Ωm ~ Uniform(0.2, 0.6)
