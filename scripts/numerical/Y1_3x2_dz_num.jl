@@ -84,13 +84,13 @@ iΓ = inv(Γ)
 data = iΓ * meta.data
 
 init_alphas = zeros(10)
-init_params=[0.27, 0.42, 0.7, 0.77, 0.99]
+init_params=[0.27, 0.42, 0.72, 0.78, 0.99]
 init_params = [init_params; init_alphas;
                 [1.0, 1.0, 1.0, 1.0, 1.0,
                 0.0]]
 
 function make_theory(;
-    Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
+    Ωm=0.27347, Ωb=0.04217, h=0.71899, σ8=0.779007, ns=0.99651,
     lens_0_b=0.879118, 
     lens_1_b=1.05894, 
     lens_2_b=1.22145, 
@@ -183,16 +183,16 @@ end
     dz_source_4 := (chol_source_4 * alphas_source_4)[1]
 
     theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
-                            dz_lens_0=dz_lens_0,
-                            dz_lens_1=dz_lens_1,
-                            dz_lens_2=dz_lens_2,
-                            dz_lens_3=dz_lens_3,
-                            dz_lens_4=dz_lens_4,
-                            dz_source_0=dz_source_0,
-                            dz_source_1=dz_source_1,
-                            dz_source_2=dz_source_2,
-                            dz_source_3=dz_source_3,
-                            dz_source_4=dz_source_4,
+                            #dz_lens_0=dz_lens_0,
+                            #dz_lens_1=dz_lens_1,
+                            #dz_lens_2=dz_lens_2,
+                            #dz_lens_3=dz_lens_3,
+                            #dz_lens_4=dz_lens_4,
+                            #dz_source_0=dz_source_0,
+                            #dz_source_1=dz_source_1,
+                            #dz_source_2=dz_source_2,
+                            #dz_source_3=dz_source_3,
+                            #dz_source_4=dz_source_4,
                             lens_0_b=lens_0_b, 
                             lens_1_b=lens_1_b,
                             lens_2_b=lens_2_b, 
@@ -205,7 +205,7 @@ end
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 300
+iterations = 10
 adaptation = 100
 TAP = 0.65
 init_ϵ1 = sqrt(scale)*0.01
@@ -223,7 +223,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = string("../../", method, "_fake_chains/numerical/")
-folname = string("Y1_3x2_Gibbs_dz_num",
+folname = string("test_Y1_3x2_Gibbs_dz_num",
     "_TAP_", TAP,
     "_init_ϵ1_", init_ϵ1, 
     "_init_ϵ2_", init_ϵ2,
