@@ -207,8 +207,8 @@ data = fake_data
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 200
-adaptation = 100
+iterations = 300
+adaptation = -1
 TAP = 0.65
 init_ϵ1 = sqrt(scale)*0.01
 init_ϵ2 = sqrt(scale)*0.05
