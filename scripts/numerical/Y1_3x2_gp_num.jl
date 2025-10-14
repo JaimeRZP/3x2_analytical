@@ -234,8 +234,8 @@ end
 iterations = 200
 adaptation = -1
 TAP = 0.65
-init_ϵ1 = 0.01
-init_ϵ2 = 0.05
+init_ϵ1 = sqrt(scale)*0.01
+init_ϵ2 = sqrt(scale)*0.05
 max_depth = 8
 
 println("sampling settings: ")
