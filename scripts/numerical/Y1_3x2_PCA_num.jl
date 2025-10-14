@@ -181,10 +181,10 @@ A_IA_precond = 40
     lens_4_bb ~ Uniform(lens_b_precond * 0.5, lens_b_precond * 2.5)
     A_IAA ~ Uniform(A_IA_precond * -1.0, A_IA_precond * 1.0)
 
-    Ωm := Ωm/Ωm_precond
-    Ωb := Ωb/Ωb_precond
-    σ8 := σ8/σ8_precond
-    ns := ns/ns_precond
+    Ωm := Ωmm/Ωm_precond
+    Ωb := Ωbb/Ωb_precond
+    σ8 := σ88/σ8_precond
+    ns := nss/ns_precond
     lens_0_b := lens_0_bb/lens_b_precond
     lens_1_b := lens_1_bb/lens_b_precond
     lens_2_b := lens_2_bb/lens_b_precond
