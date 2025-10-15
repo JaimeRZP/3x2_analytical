@@ -14,7 +14,7 @@ sacc = pyimport("sacc");
 
 method = "sompz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
-yaml_path = "../../data/CosmoDC2/gcg.yml"
+yaml_path = "../../data/CosmoDC2/gcgc.yml"
 nz_path = string("../../data/CosmoDC2/nzs_", method, "/wzdz_priors/")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
