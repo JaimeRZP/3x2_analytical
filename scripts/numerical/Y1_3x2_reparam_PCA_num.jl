@@ -15,21 +15,21 @@ sacc = pyimport("sacc");
 method = "sompz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
-nz_path = string("../../data/CosmoDC2/nzs_", method, "/gp_priors/")
+nz_path = string("../../data/CosmoDC2/nzs_", method, "/PCA_priors/")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 
-nz_lens_0 = npzread(string(nz_path, "gp_lens_0.npz"))
-nz_lens_1 = npzread(string(nz_path, "gp_lens_1.npz"))
-nz_lens_2 = npzread(string(nz_path, "gp_lens_2.npz"))
-nz_lens_3 = npzread(string(nz_path, "gp_lens_3.npz"))
-nz_lens_4 = npzread(string(nz_path, "gp_lens_4.npz"))
-nz_source_0 = npzread(string(nz_path, "gp_source_0.npz"))
-nz_source_1 = npzread(string(nz_path, "gp_source_1.npz"))
-nz_source_2 = npzread(string(nz_path, "gp_source_2.npz"))
-nz_source_3 = npzread(string(nz_path, "gp_source_3.npz"))
-nz_source_4 = npzread(string(nz_path, "gp_source_4.npz"))
+nz_lens_0 = npzread(string(nz_path, "PCA_lens_0.npz"))
+nz_lens_1 = npzread(string(nz_path, "PCA_lens_1.npz"))
+nz_lens_2 = npzread(string(nz_path, "PCA_lens_2.npz"))
+nz_lens_3 = npzread(string(nz_path, "PCA_lens_3.npz"))
+nz_lens_4 = npzread(string(nz_path, "PCA_lens_4.npz"))
+nz_source_0 = npzread(string(nz_path, "PCA_source_0.npz"))
+nz_source_1 = npzread(string(nz_path, "PCA_source_1.npz"))
+nz_source_2 = npzread(string(nz_path, "PCA_source_2.npz"))
+nz_source_3 = npzread(string(nz_path, "PCA_source_3.npz"))
+nz_source_4 = npzread(string(nz_path, "PCA_source_4.npz"))
 
 zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["dndz"]
 zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["dndz"]
@@ -82,8 +82,21 @@ cov = scale*meta.cov
 Γ = sqrt(cov)
 iΓ = inv(Γ)
 
+# preconditioners
+Ωm_precond = 4
+Ωb_precond = 10
+σ8_precond = 4
+ns_precond = 4
+lens_b_precond = 5
+A_IA_precond = 40
+
 init_alphas = zeros(50)
-init_params=[0.27, 0.42, 0.7, 0.77, 0.99]
+init_params=[
+    Ωm_precond * 0.27,
+    Ωb_precond * 0.042,
+    0.7,
+    σ8_precond * 0.77,
+    ns_precond * 0.99]
 init_params = [init_params; init_alphas;
                 [1.0, 1.0, 1.0, 1.0, 1.0,
                 0.0]]
@@ -161,12 +174,28 @@ fake_data = iΓ * fake_data
 data = fake_data
 
 @model function model(data)
-    Ωm ~ Uniform(0.2, 0.6)
-    Ωbb ~ Uniform(0.28, 0.65) # 10*Ωb 
-    Ωb := 0.1*Ωbb 
+    Ωmm ~ Uniform(Ωm_precond* 0.2, Ωm_precond *0.6)
+    Ωbb ~ Uniform(Ωb_precond* 0.028, Ωb_precond *0.065) # 10*Ωb 
     h ~ Truncated(Normal(0.72, 0.05), 0.64, 0.82)
-    σ8 ~ Uniform(0.4, 1.2)
-    ns ~ Uniform(0.84, 1.1)
+    σ88 ~ Uniform(σ8_precond * 0.4, σ8_precond *1.2)
+    nss ~ Uniform(ns_precond *0.84, ns_precond *1.1)
+    lens_0_bb ~ Uniform(lens_b_precond * 0.5, lens_b_precond * 2.5)
+    lens_1_bb ~ Uniform(lens_b_precond * 0.5, lens_b_precond * 2.5)
+    lens_2_bb ~ Uniform(lens_b_precond * 0.5, lens_b_precond * 2.5)
+    lens_3_bb ~ Uniform(lens_b_precond * 0.5, lens_b_precond * 2.5)
+    lens_4_bb ~ Uniform(lens_b_precond * 0.5, lens_b_precond * 2.5)
+    A_IAA ~ Uniform(A_IA_precond * -1.0, A_IA_precond * 1.0)
+
+    Ωm := Ωmm/Ωm_precond
+    Ωb := Ωbb/Ωb_precond
+    σ8 := σ88/σ8_precond
+    ns := nss/ns_precond
+    lens_0_b := lens_0_bb/lens_b_precond
+    lens_1_b := lens_1_bb/lens_b_precond
+    lens_2_b := lens_2_bb/lens_b_precond
+    lens_3_b := lens_3_bb/lens_b_precond
+    lens_4_b := lens_4_bb/lens_b_precond
+    A_IA := A_IAA/A_IA_precond
 
     alphas_lens_0 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
     alphas_lens_1 ~ filldist(truncated(Normal(0, 1), -3, 3), 5)
@@ -184,7 +213,8 @@ data = fake_data
     lens_3_b ~ Uniform(0.5, 2.5)
     lens_4_b ~ Uniform(0.5, 2.5)
     A_IA ~ Uniform(-1.0, 1.0)
-    theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
+
+    theory = make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
                           alphas_source_0=alphas_source_0,
                           alphas_source_1=alphas_source_1,
                           alphas_source_2=alphas_source_2,
@@ -207,7 +237,7 @@ data = fake_data
     data ~ MvNormal(ttheory, I)
 end
 
-iterations = 300
+iterations = 200
 adaptation = -1
 TAP = 0.65
 init_ϵ1 = sqrt(scale)*0.01
@@ -225,7 +255,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = string("../../", method, "_fake_chains/numerical/")
-folname = string("Y1_3x2_Gibbs_gp_num",
+folname = string("Y1_3x2_reparam_Gibbs_PCA_num",
     "_TAP_", TAP,
     "_init_ϵ1_", init_ϵ1, 
     "_init_ϵ2_", init_ϵ2,
@@ -258,13 +288,13 @@ cond_model = model(data)
 #    init_ϵ=init_ϵ, max_depth=max_depth)
 sampler = Gibbs(
     NUTS(adaptation, TAP,
-    :Ωm, :Ωbb, :h, :σ8, :ns,
-    :lens_0_b,
-    :lens_1_b,
-    :lens_2_b,
-    :lens_3_b,
-    :lens_4_b,
-    :A_IA;
+    :Ωmm, :Ωbb, :h, :σ88, :nss,
+    :lens_0_bb,
+    :lens_1_bb,
+    :lens_2_bb,
+    :lens_3_bb,
+    :lens_4_bb,
+    :A_IAA;
     init_ϵ=init_ϵ1, max_depth=max_depth),
     NUTS(adaptation, TAP,
     :alphas_lens_0,
