@@ -61,12 +61,12 @@ init_alphas = zeros(25)
 init_params=[0.27, 0.42, 0.7, 0.77, 0.99]
 init_params = [init_params; init_alphas;
                 [1.0, 1.0, 1.0, 1.0, 1.0]]
-
-nz_source_0 = zeros(Real, 100)
-nz_source_1 = zeros(Real, 100)
-nz_source_2 = zeros(Real, 100)
-nz_source_3 = zeros(Real, 100)
-nz_source_4 = zeros(Real, 100)
+                
+nz_lens_0 = zeros(Real, 100)
+nz_lens_1 = zeros(Real, 100)
+nz_lens_2 = zeros(Real, 100)
+nz_lens_3 = zeros(Real, 100)
+nz_lens_4 = zeros(Real, 100)
 
 function make_theory(;
     Ωm=0.27347, σ8=0.779007, Ωb=0.04217, h=0.71899, ns=0.99651,
