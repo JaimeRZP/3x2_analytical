@@ -13,7 +13,7 @@ sacc = pyimport("sacc");
 method = "sompz" # "bpz" or "sompz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc.yml"
-nz_path = string("../../data/CosmoDC2/image_dz_", method, "_priors/")
+nz_path = string("../../data/CosmoDC2/nzs_", method, "/")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
