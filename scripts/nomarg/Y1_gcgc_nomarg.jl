@@ -18,11 +18,11 @@ nz_path = string("../../data/CosmoDC2/nzs_", method, "/")
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 
-nz_lens_0 = npzread(string(nz_path, "dz_lens_0.npz"))
-nz_lens_1 = npzread(string(nz_path, "dz_lens_1.npz"))
-nz_lens_2 = npzread(string(nz_path, "dz_lens_2.npz"))
-nz_lens_3 = npzread(string(nz_path, "dz_lens_3.npz"))
-nz_lens_4 = npzread(string(nz_path, "dz_lens_4.npz"))
+nz_lens_0 = npzread(string(nz_path, "lens_0.npz"))
+nz_lens_1 = npzread(string(nz_path, "lens_1.npz"))
+nz_lens_2 = npzread(string(nz_path, "lens_2.npz"))
+nz_lens_3 = npzread(string(nz_path, "lens_3.npz"))
+nz_lens_4 = npzread(string(nz_path, "lens_4.npz"))
 
 zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["dndz"]
 zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["dndz"]
