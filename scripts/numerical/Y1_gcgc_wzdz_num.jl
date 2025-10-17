@@ -182,7 +182,7 @@ end
 iterations = 400
 adaptation = -1
 TAP = 0.65
-init_ϵ1 = sqrt(scale)*0.01
+init_ϵ1 = sqrt(scale)*0.015
 init_ϵ2 = sqrt(scale)*0.03
 max_depth = 8
 
