@@ -250,6 +250,7 @@ else
 end
 
 # Create a placeholder chain file.
+print("Creating placeholder chain file for chain ", last_n+1)
 CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[]), append=true)
 
 # Sample
