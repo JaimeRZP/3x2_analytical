@@ -23,16 +23,16 @@ sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 gp_params = npzread(param_path)
 
-W_source_0 =  npzread(string(nz_priors, "lens_0.npz"))["W"]
-W_source_1 =  npzread(string(nz_priors, "lens_1.npz"))["W"]
-W_source_2 =  npzread(string(nz_priors, "lens_2.npz"))["W"]
-W_source_3 =  npzread(string(nz_priors, "lens_3.npz"))["W"]
-W_source_4 =  npzread(string(nz_priors, "lens_4.npz"))["W"]
-W_lens_0 =  npzread(string(nz_priors, "source_0.npz"))["W"]
-W_lens_1 =  npzread(string(nz_priors, "source_1.npz"))["W"]
-W_lens_2 =  npzread(string(nz_priors, "source_2.npz"))["W"]
-W_lens_3 =  npzread(string(nz_priors, "source_3.npz"))["W"]
-W_lens_4 =  npzread(string(nz_priors, "source_4.npz"))["W"]
+W_source_0 =  npzread(string(nz_priors, "gp_lens_0.npz"))["W"]
+W_source_1 =  npzread(string(nz_priors, "gp_lens_1.npz"))["W"]
+W_source_2 =  npzread(string(nz_priors, "gp_lens_2.npz"))["W"]
+W_source_3 =  npzread(string(nz_priors, "gp_lens_3.npz"))["W"]
+W_source_4 =  npzread(string(nz_priors, "gp_lens_4.npz"))["W"]
+W_lens_0 =  npzread(string(nz_priors, "gp_source_0.npz"))["W"]
+W_lens_1 =  npzread(string(nz_priors, "gp_source_1.npz"))["W"]
+W_lens_2 =  npzread(string(nz_priors, "gp_source_2.npz"))["W"]
+W_lens_3 =  npzread(string(nz_priors, "gp_source_3.npz"))["W"]
+W_lens_4 =  npzread(string(nz_priors, "gp_source_4.npz"))["W"]
 
 W_source_0 = nz_source_0["W"]
 W_source_1 = nz_source_1["W"]

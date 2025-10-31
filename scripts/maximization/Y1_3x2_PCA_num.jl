@@ -34,16 +34,16 @@ nz_source_2 = npzread(string(nz_path, "source_2.npz"))
 nz_source_3 = npzread(string(nz_path, "source_3.npz"))
 nz_source_4 = npzread(string(nz_path, "source_4.npz"))
 
-W_source_0 =  npzread(string(nz_priors, "lens_0.npz"))["W"]
-W_source_1 =  npzread(string(nz_priors, "lens_1.npz"))["W"]
-W_source_2 =  npzread(string(nz_priors, "lens_2.npz"))["W"]
-W_source_3 =  npzread(string(nz_priors, "lens_3.npz"))["W"]
-W_source_4 =  npzread(string(nz_priors, "lens_4.npz"))["W"]
-W_lens_0 =  npzread(string(nz_priors, "source_0.npz"))["W"]
-W_lens_1 =  npzread(string(nz_priors, "source_1.npz"))["W"]
-W_lens_2 =  npzread(string(nz_priors, "source_2.npz"))["W"]
-W_lens_3 =  npzread(string(nz_priors, "source_3.npz"))["W"]
-W_lens_4 =  npzread(string(nz_priors, "source_4.npz"))["W"]
+W_source_0 =  npzread(string(nz_priors, "PCA_lens_0.npz"))["W"]
+W_source_1 =  npzread(string(nz_priors, "PCA_lens_1.npz"))["W"]
+W_source_2 =  npzread(string(nz_priors, "PCA_lens_2.npz"))["W"]
+W_source_3 =  npzread(string(nz_priors, "PCA_lens_3.npz"))["W"]
+W_source_4 =  npzread(string(nz_priors, "PCA_lens_4.npz"))["W"]
+W_lens_0 =  npzread(string(nz_priors, "PCA_source_0.npz"))["W"]
+W_lens_1 =  npzread(string(nz_priors, "PCA_source_1.npz"))["W"]
+W_lens_2 =  npzread(string(nz_priors, "PCA_source_2.npz"))["W"]
+W_lens_3 =  npzread(string(nz_priors, "PCA_source_3.npz"))["W"]
+W_lens_4 =  npzread(string(nz_priors, "PCA_source_4.npz"))["W"]
 
 for realization in 1:10_000
 
