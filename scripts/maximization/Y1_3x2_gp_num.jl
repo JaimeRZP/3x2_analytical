@@ -218,7 +218,7 @@ for realization in 1:10_000
     folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_gp_naximization/")
     filename = string("samples.csv")
     params = Dict{Symbol, Float64}()
-    for (i, name) in enumerate(names)
+    for (i, name) in enumerate(namess)
         params[Symbol(name)] = values[i]
     end
     if realization == 0
