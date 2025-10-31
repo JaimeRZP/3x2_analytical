@@ -16,7 +16,7 @@ method = "sompz"
 sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
 nz_path = string("../../data/CosmoDC2/nzs_", method, "/")
-nz_pathriors =string("../../data/CosmoDC2/nzs_", method, "/gp_5_priors/")
+nz_priors =string("../../data/CosmoDC2/nzs_", method, "/gp_5_priors/")
 param_path = string("../../data/CosmoDC2/nzs_", method, "/gp_5_priors/gp_params.npz")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)

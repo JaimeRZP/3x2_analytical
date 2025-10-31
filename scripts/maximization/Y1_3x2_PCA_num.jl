@@ -17,7 +17,7 @@ sacc_path = "../../data/CosmoDC2/summary_statistics_fourier_tjpcov.sacc"
 yaml_path = "../../data/CosmoDC2/gcgc_gcwl_wlwl.yml"
 nz_path = string("../../data/CosmoDC2/nzs_", method, "/")
 nz_priors =string("../../data/CosmoDC2/nzs_", method, "/PCA_5_priors/")
-param_path = string("../../data/CosmoDC2/nzs_", method, "/PCA_5_priors/PCA_params.npz")
+param_path = string("../../data/CosmoDC2/nzs_", method, "/PCA_5_priors/pca_params.npz")
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
@@ -45,7 +45,7 @@ W_lens_2 =  npzread(string(nz_priors, "source_2.npz"))["W"]
 W_lens_3 =  npzread(string(nz_priors, "source_3.npz"))["W"]
 W_lens_4 =  npzread(string(nz_priors, "source_4.npz"))["W"]
 
-for realization in 0:10_000
+for realization in 1:10_000
 
     alphas_0 = PCA_params["lens_0"][:, realization]
     alphas_1 = PCA_params["lens_1"][:, realization]

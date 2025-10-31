@@ -34,7 +34,7 @@ nz_source_2 = npzread(string(nz_path, "source_2.npz"))
 nz_source_3 = npzread(string(nz_path, "source_3.npz"))
 nz_source_4 = npzread(string(nz_path, "source_4.npz"))
 
-for realization in 0:10_000
+for realization in 1:10_000
 
     wzdz_0 = wzdz_params["lens_0"][:, realization]
     wzdz_1 = wzdz_params["lens_1"][:, realization]
