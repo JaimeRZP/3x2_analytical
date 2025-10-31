@@ -45,7 +45,7 @@ W_lens_2 = nz_lens_2["W"]
 W_lens_3 = nz_lens_3["W"]
 W_lens_4 = nz_lens_4["W"]
 
-for realization in 0:10_000
+for realization in 1:10_000
 
     alphas_0 = gp_params["lens_0"][:, realization]
     alphas_1 = gp_params["lens_1"][:, realization]
