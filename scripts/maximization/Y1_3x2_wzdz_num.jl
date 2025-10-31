@@ -36,16 +36,16 @@ nz_source_4 = npzread(string(nz_path, "source_4.npz"))
 
 for realization in 0:10_000
 
-    wzdz_0 = dz_params["lens_0"][:, realization]
-    wzdz_1 = dz_params["lens_1"][:, realization]
-    wzdz_2 = dz_params["lens_2"][:, realization]
-    wzdz_3 = dz_params["lens_3"][:, realization]
-    wzdz_4 = dz_params["lens_4"][:, realization]
-    wzdz_5 = dz_params["source_0"][:, realization]
-    wzdz_6 = dz_params["source_1"][:, realization]
-    wzdz_7 = dz_params["source_2"][:, realization]
-    wzdz_8 = dz_params["source_3"][:, realization]
-    wzdz_9 = dz_params["source_4"][:, realization]
+    wzdz_0 = wzdz_params["lens_0"][:, realization]
+    wzdz_1 = wzdz_params["lens_1"][:, realization]
+    wzdz_2 = wzdz_params["lens_2"][:, realization]
+    wzdz_3 = wzdz_params["lens_3"][:, realization]
+    wzdz_4 = wzdz_params["lens_4"][:, realization]
+    wzdz_5 = wzdz_params["source_0"][:, realization]
+    wzdz_6 = wzdz_params["source_1"][:, realization]
+    wzdz_7 = wzdz_params["source_2"][:, realization]
+    wzdz_8 = wzdz_params["source_3"][:, realization]
+    wzdz_9 = wzdz_params["source_4"][:, realization]
 
     zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["photo_hists"][:, realization]
     zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["photo_hists"][:, realization]
