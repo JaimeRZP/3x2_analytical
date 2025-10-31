@@ -214,7 +214,7 @@ for realization in 0:10_000
     # Find MLE estimate to use as initial parameters.
     mle = maximum_likelihood(cond_model, NelderMead())
     values = mle.values.array
-    namess = map.values.dicts[1].keys
+    namess = mle.values.dicts[1].keys
 
     folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_PCA_naximization/")
     filename = string("samples.csv")

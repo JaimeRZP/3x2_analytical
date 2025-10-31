@@ -35,7 +35,6 @@ nz_source_3 = npzread(string(nz_path, "source_3.npz"))
 nz_source_4 = npzread(string(nz_path, "source_4.npz"))
 
 for realization in 1:10_000
-    print(dz_params["lens_0"])
     dz_0 = dz_params["lens_0"][:, realization]
     dz_1 = dz_params["lens_1"][:, realization]
     dz_2 = dz_params["lens_2"][:, realization]
@@ -203,7 +202,7 @@ for realization in 1:10_000
     # Find MLE estimate to use as initial parameters.
     mle = maximum_likelihood(cond_model, NelderMead())
     values = mle.values.array
-    namess = map.values.dicts[1].keys
+    namess = mle.values.dicts[1].keys
 
     folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_dz_naximization/")
     filename = string("samples.csv")
