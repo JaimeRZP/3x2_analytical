@@ -95,22 +95,33 @@ function make_theory(;
     A_IA=0.25179439,
     meta=meta, files=files)
 
+    nz_lens_0 = files["nz_lens_0"][2]
+    nz_lens_1 = files["nz_lens_1"][2]
+    nz_lens_2 = files["nz_lens_2"][2]
+    nz_lens_3 = files["nz_lens_3"][2]
+    nz_lens_4 = files["nz_lens_4"][2]
+    nz_source_0 = files["nz_source_0"][2]
+    nz_source_1 = files["nz_source_1"][2]
+    nz_source_2 = files["nz_source_2"][2]
+    nz_source_3 = files["nz_source_3"][2]
+    nz_source_4 = files["nz_source_4"][2]
+
     nuisances = Dict(
         "lens_0_b"    => lens_0_b,
         "lens_1_b"    => lens_1_b,
         "lens_2_b"    => lens_2_b,
         "lens_3_b"    => lens_3_b,
         "lens_4_b"    => lens_4_b,
-        "lens_0_nz"   => nz_k0 + W_lens_0 * alphas_lens_0,
-        "lens_1_nz"   => nz_k1 + W_lens_1 * alphas_lens_1,
-        "lens_2_nz"   => nz_k2 + W_lens_2 * alphas_lens_2,
-        "lens_3_nz"   => nz_k3 + W_lens_3 * alphas_lens_3,
-        "lens_4_nz"   => nz_k4 + W_lens_4 * alphas_lens_4,
-        "source_0_nz" => nz_k5 + W_source_0 * alphas_source_0,
-        "source_1_nz" => nz_k6 + W_source_1 * alphas_source_1,
-        "source_2_nz" => nz_k7 + W_source_2 * alphas_source_2,
-        "source_3_nz" => nz_k8 + W_source_3 * alphas_source_3,
-        "source_4_nz" => nz_k9 + W_source_4 * alphas_source_4,
+        "lens_0_nz"   => nz_lens_0 + W_lens_0 * alphas_lens_0,
+        "lens_1_nz"   => nz_lens_1 + W_lens_1 * alphas_lens_1,
+        "lens_2_nz"   => nz_lens_2 + W_lens_2 * alphas_lens_2,
+        "lens_3_nz"   => nz_lens_3 + W_lens_3 * alphas_lens_3,
+        "lens_4_nz"   => nz_lens_4 + W_lens_4 * alphas_lens_4,
+        "source_0_nz" => nz_source_0 + W_source_0 * alphas_source_0,
+        "source_1_nz" => nz_source_1 + W_source_1 * alphas_source_1,
+        "source_2_nz" => nz_source_2 + W_source_2 * alphas_source_2,
+        "source_3_nz" => nz_source_3 + W_source_3 * alphas_source_3,
+        "source_4_nz" => nz_source_4 + W_source_4 * alphas_source_4,
         "A_IA"        => A_IA)
     
     cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
@@ -122,7 +133,6 @@ function make_theory(;
 end
 
 @model function model(data;
-    files=files,
     alphas_lens_0=zeros(5),
     alphas_lens_1=zeros(5),
     alphas_lens_2=zeros(5),
@@ -132,7 +142,8 @@ end
     alphas_source_1=zeros(5),
     alphas_source_2=zeros(5),
     alphas_source_3=zeros(5),
-    alphas_source_4=zeros(5))
+    alphas_source_4=zeros(5),
+    files=files, meta=meta)
     Ωm ~ Uniform(0.2, 0.4)
     Ωbb ~ Uniform(0.3, 0.5) # 10*Ωb 
     Ωb = 0.1*Ωbb 
@@ -161,7 +172,8 @@ end
         lens_1_b=lens_1_b,
         lens_2_b=lens_2_b, 
         lens_3_b=lens_3_b,
-        lens_4_b=lens_4_b)
+        lens_4_b=lens_4_b,
+        files=files, meta=meta)
     ttheory = iΓ * theory
     d = data - ttheory
     Xi2 := dot(d, d)
@@ -191,18 +203,30 @@ for realization in 1:500
     zs_k8, nz_k8 = nz_source_3["z"], nz_source_3["photo_hists"][:, realization]
     zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["photo_hists"][:, realization]
 
-    files["nz_lens_0"] = Vector([zs_k0, nz_k0])
-    files["nz_lens_1"] = Vector([zs_k1, nz_k1])
-    files["nz_lens_2"] = Vector([zs_k2, nz_k2])
-    files["nz_lens_3"] = Vector([zs_k3, nz_k3])
-    files["nz_lens_4"] = Vector([zs_k4, nz_k4])
-    files["nz_source_0"] = Vector([zs_k5, nz_k5])
-    files["nz_source_1"] = Vector([zs_k6, nz_k6])
-    files["nz_source_2"] = Vector([zs_k7, nz_k7])
-    files["nz_source_3"] = Vector([zs_k8, nz_k8])
-    files["nz_source_4"] = Vector([zs_k9, nz_k9])
+    _nz_lens_0 = Vector([zs_k0, nz_k0])
+    _nz_lens_1 = Vector([zs_k1, nz_k1])
+    _nz_lens_2 = Vector([zs_k2, nz_k2])
+    _nz_lens_3 = Vector([zs_k3, nz_k3])
+    _nz_lens_4 = Vector([zs_k4, nz_k4])
+    _nz_source_0 = Vector([zs_k5, nz_k5])
+    _nz_source_1 = Vector([zs_k6, nz_k6])
+    _nz_source_2 = Vector([zs_k7, nz_k7])
+    _nz_source_3 = Vector([zs_k8, nz_k8])
+    _nz_source_4 = Vector([zs_k9, nz_k9])
 
-    fake_data = make_theory(files=files);
+    _, new_files = make_data(sacc_file, yaml_file;
+        nz_lens_0=_nz_lens_0,
+        nz_lens_1=_nz_lens_1,
+        nz_lens_2=_nz_lens_2,
+        nz_lens_3=_nz_lens_3,
+        nz_lens_4=_nz_lens_4,
+        nz_source_0=_nz_source_0,
+        nz_source_1=_nz_source_1,
+        nz_source_2=_nz_source_2,
+        nz_source_3=_nz_source_3,
+        nz_source_4=_nz_source_4)
+
+    fake_data = make_theory(files=new_files);
     fake_data = iΓ * fake_data
     data = fake_data
     folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_PCA_maximization/")
