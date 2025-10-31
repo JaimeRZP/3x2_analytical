@@ -35,16 +35,16 @@ nz_source_3 = npzread(string(nz_path, "source_3.npz"))
 nz_source_4 = npzread(string(nz_path, "source_4.npz"))
 
 meta, files = make_data(sacc_file, yaml_file;
-    nz_lens_0=_nz_lens_0,
-    nz_lens_1=_nz_lens_1,
-    nz_lens_2=_nz_lens_2,
-    nz_lens_3=_nz_lens_3,
-    nz_lens_4=_nz_lens_4,
-    nz_source_0=_nz_source_0,
-    nz_source_1=_nz_source_1,
-    nz_source_2=_nz_source_2,
-    nz_source_3=_nz_source_3,
-    nz_source_4=_nz_source_4)
+    nz_lens_0=nz_lens_0,
+    nz_lens_1=nz_lens_1,
+    nz_lens_2=nz_lens_2,
+    nz_lens_3=nz_lens_3,
+    nz_lens_4=nz_lens_4,
+    nz_source_0=nz_source_0,
+    nz_source_1=nz_source_1,
+    nz_source_2=nz_source_2,
+    nz_source_3=nz_source_3,
+    nz_source_4=nz_source_4)
 
 meta.types = [ 
     "galaxy_density",
