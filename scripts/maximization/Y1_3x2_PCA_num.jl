@@ -21,7 +21,7 @@ param_path = string("../../data/CosmoDC2/nzs_", method, "/PCA_5_priors/pca_param
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
-PCA_params = npzread(string("../../data/CosmoDC2/nzs_", method, "/PCA_5_priors/PCA_params.npz"))
+PCA_params = npzread(param_path)
 
 nz_lens_0 = npzread(string(nz_path, "lens_0.npz"))
 nz_lens_1 = npzread(string(nz_path, "lens_1.npz"))
