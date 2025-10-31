@@ -159,6 +159,7 @@ for realization in 1:10_000
     fake_data = make_theory();
     fake_data = iΓ * fake_data
     data = fake_data
+    folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_dz_maximization/")
     npzwrite(joinpath(folpath, string("data_", realization+1,".npz")), data=make_theory())
     println(string("Written data for ", realization+1,"!"))
 
@@ -205,17 +206,14 @@ for realization in 1:10_000
     mle = maximum_likelihood(cond_model, NelderMead())
     values = mle.values.array
     namess = mle.values.dicts[1].keys
-
-    folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_dz_naximization/")
-    filename = string("samples.csv")
     params = Dict{Symbol, Float64}()
     for (i, name) in enumerate(namess)
         params[Symbol(name)] = values[i]
     end
     if realization == 0
-        CSV.write(joinpath(folpath, filename), DataFrame(params))
+        CSV.write(joinpath(folpath, "samples.csv"), DataFrame(params))
     else
-        CSV.write(joinpath(folpath, filename), DataFrame(params); append=true)
+        CSV.write(joinpath(folpath, "samples.csv"), DataFrame(params); append=true)
     end
     npzwrite(joinpath(folpath, string("data_", realization+1,".npz")), data=make_theory())
     println(string("Done with chain ", realization+1,"!"))
