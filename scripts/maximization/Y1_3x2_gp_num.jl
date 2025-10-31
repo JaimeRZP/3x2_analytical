@@ -23,16 +23,16 @@ sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 gp_params = npzread(param_path)
 
-W_source_0 =  npzread(string(nz_priors, "gp_lens_0.npz"))["W"]
-W_source_1 =  npzread(string(nz_priors, "gp_lens_1.npz"))["W"]
-W_source_2 =  npzread(string(nz_priors, "gp_lens_2.npz"))["W"]
-W_source_3 =  npzread(string(nz_priors, "gp_lens_3.npz"))["W"]
-W_source_4 =  npzread(string(nz_priors, "gp_lens_4.npz"))["W"]
-W_lens_0 =  npzread(string(nz_priors, "gp_source_0.npz"))["W"]
-W_lens_1 =  npzread(string(nz_priors, "gp_source_1.npz"))["W"]
-W_lens_2 =  npzread(string(nz_priors, "gp_source_2.npz"))["W"]
-W_lens_3 =  npzread(string(nz_priors, "gp_source_3.npz"))["W"]
-W_lens_4 =  npzread(string(nz_priors, "gp_source_4.npz"))["W"]
+nz_source_0 =  npzread(string(nz_priors, "gp_lens_0.npz"))
+nz_source_1 =  npzread(string(nz_priors, "gp_lens_1.npz"))
+nz_source_2 =  npzread(string(nz_priors, "gp_lens_2.npz"))
+nz_source_3 =  npzread(string(nz_priors, "gp_lens_3.npz"))
+nz_source_4 =  npzread(string(nz_priors, "gp_lens_4.npz"))
+nz_lens_0 =  npzread(string(nz_priors, "gp_source_0.npz"))
+nz_lens_1 =  npzread(string(nz_priors, "gp_source_1.npz"))
+nz_lens_2 =  npzread(string(nz_priors, "gp_source_2.npz"))
+nz_lens_3 =  npzread(string(nz_priors, "gp_source_3.npz"))
+nz_lens_4 =  npzread(string(nz_priors, "gp_source_4.npz"))
 
 W_source_0 = nz_source_0["W"]
 W_source_1 = nz_source_1["W"]
@@ -171,6 +171,8 @@ for realization in 1:10_000
     fake_data = make_theory();
     fake_data = iΓ * fake_data
     data = fake_data
+    npzwrite(joinpath(folpath, string("data_", realization+1,".npz")), data=make_theory())
+    println(string("Written data for ", realization+1,"!"))
 
     @model function model(data)
         Ωm ~ Uniform(0.2, 0.4)

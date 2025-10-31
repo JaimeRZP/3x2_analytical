@@ -34,16 +34,16 @@ nz_source_2 = npzread(string(nz_path, "source_2.npz"))
 nz_source_3 = npzread(string(nz_path, "source_3.npz"))
 nz_source_4 = npzread(string(nz_path, "source_4.npz"))
 
-W_source_0 =  npzread(string(nz_priors, "PCA_lens_0.npz"))["W"]
-W_source_1 =  npzread(string(nz_priors, "PCA_lens_1.npz"))["W"]
-W_source_2 =  npzread(string(nz_priors, "PCA_lens_2.npz"))["W"]
-W_source_3 =  npzread(string(nz_priors, "PCA_lens_3.npz"))["W"]
-W_source_4 =  npzread(string(nz_priors, "PCA_lens_4.npz"))["W"]
-W_lens_0 =  npzread(string(nz_priors, "PCA_source_0.npz"))["W"]
-W_lens_1 =  npzread(string(nz_priors, "PCA_source_1.npz"))["W"]
-W_lens_2 =  npzread(string(nz_priors, "PCA_source_2.npz"))["W"]
-W_lens_3 =  npzread(string(nz_priors, "PCA_source_3.npz"))["W"]
-W_lens_4 =  npzread(string(nz_priors, "PCA_source_4.npz"))["W"]
+W_source_0 =  nz_lens_0["W"]
+W_source_1 =  nz_lens_1["W"]
+W_source_2 =  nz_lens_2["W"]
+W_source_3 =  nz_lens_3["W"]
+W_source_4 =  nz_lens_4["W"]
+W_lens_0 =  nz_source_0["W"]
+W_lens_1 =  nz_source_1["W"]
+W_lens_2 =  nz_source_2["W"]
+W_lens_3 =  nz_source_3["W"]
+W_lens_4 =  nz_source_4["W"]
 
 for realization in 1:10_000
 
@@ -172,6 +172,8 @@ for realization in 1:10_000
     fake_data = make_theory();
     fake_data = iΓ * fake_data
     data = fake_data
+    npzwrite(joinpath(folpath, string("data_", realization+1,".npz")), data=make_theory())
+    println(string("Written data for ", realization+1,"!"))
 
     @model function model(data)
         Ωm ~ Uniform(0.2, 0.4)
@@ -227,6 +229,4 @@ for realization in 1:10_000
     else
         CSV.write(joinpath(folpath, filename), DataFrame(params); append=true)
     end
-    npzwrite(joinpath(folpath, string("data_", realization+1,".npz")), data=make_theory())
-    println(string("Done with chain ", realization+1,"!"))
 end
