@@ -146,27 +146,27 @@ end
     lens_3_b ~ Uniform(1.20, 1.50)
     lens_4_b ~ Uniform(1.40, 1.80)
 
-    theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
-                        alphas_lens_0=alphas_lens_0,
-                        alphas_lens_1=alphas_lens_1,
-                        alphas_lens_2=alphas_lens_2,
-                        alphas_lens_3=alphas_lens_3,
-                        alphas_lens_4=alphas_lens_4,
-                        alphas_source_0=alphas_source_0,
-                        alphas_source_1=alphas_source_1,
-                        alphas_source_2=alphas_source_2,
-                        alphas_source_3=alphas_source_3,
-                        alphas_source_4=alphas_source_4,
-                        lens_0_b=lens_0_b,
-                        lens_1_b=lens_1_b,
-                        lens_2_b=lens_2_b, 
-                        lens_3_b=lens_3_b,
-                        lens_4_b=lens_4_b)
-        ttheory = iΓ * theory
-        d = data - ttheory
-        Xi2 := dot(d, d)
-        data ~ MvNormal(ttheory, I)
-    end
+    theory = make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
+        alphas_lens_0=alphas_lens_0,
+        alphas_lens_1=alphas_lens_1,
+        alphas_lens_2=alphas_lens_2,
+        alphas_lens_3=alphas_lens_3,
+        alphas_lens_4=alphas_lens_4,
+        alphas_source_0=alphas_source_0,
+        alphas_source_1=alphas_source_1,
+        alphas_source_2=alphas_source_2,
+        alphas_source_3=alphas_source_3,
+        alphas_source_4=alphas_source_4,
+        lens_0_b=lens_0_b,
+        lens_1_b=lens_1_b,
+        lens_2_b=lens_2_b, 
+        lens_3_b=lens_3_b,
+        lens_4_b=lens_4_b)
+    ttheory = iΓ * theory
+    d = data - ttheory
+    Xi2 := dot(d, d)
+    data ~ MvNormal(ttheory, I)
+end
 
 for realization in 1:500
     alphas_0 = PCA_params["lens_0"][:, realization]
