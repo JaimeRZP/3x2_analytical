@@ -173,8 +173,8 @@ for realization in 1:10_000
     fake_data = iΓ * fake_data
     data = fake_data
     folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_PCA_maximization/")
-    npzwrite(joinpath(folpath, string("data_", realization+1,".npz")), data=make_theory())
-    println(string("Written data for ", realization+1,"!"))
+    npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
+    println(string("Written data for ", realization,"!"))
 
     @model function model(data)
         Ωm ~ Uniform(0.2, 0.4)

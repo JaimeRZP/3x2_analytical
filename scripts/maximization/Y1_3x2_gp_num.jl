@@ -110,7 +110,6 @@ for realization in 1:10_000
     Γ = sqrt(cov)
     iΓ = inv(Γ)
 
-
     function make_theory(;
         Ωm=0.27347, Ωb=0.04217, h=0.71899, σ8=0.779007, ns=0.99651,
         lens_0_b=0.879118, 
@@ -172,8 +171,8 @@ for realization in 1:10_000
     fake_data = iΓ * fake_data
     data = fake_data
     folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_PCA_maximization/")
-    npzwrite(joinpath(folpath, string("data_", realization+1,".npz")), data=make_theory())
-    println(string("Written data for ", realization+1,"!"))
+    npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
+    println(string("Written data for ", realization,"!"))
 
     @model function model(data)
         Ωm ~ Uniform(0.2, 0.4)
