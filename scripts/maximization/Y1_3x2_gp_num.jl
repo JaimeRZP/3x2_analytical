@@ -69,17 +69,29 @@ for realization in 0:10_000
     zs_k8, nz_k8 = nz_source_3["z"], nz_source_3["photo_hists"][:, realization]
     zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["photo_hists"][:, realization]
 
+    _nz_lens_0 = Dict("z"=>  zs_k0, "dndz"=>  nz_k0)
+    _nz_lens_1 = Dict("z"=>  zs_k1, "dndz"=>  nz_k1)
+    _nz_lens_2 = Dict("z"=>  zs_k2, "dndz"=>  nz_k2)
+    _nz_lens_3 = Dict("z"=>  zs_k3, "dndz"=>  nz_k3)
+    _nz_lens_4 = Dict("z"=>  zs_k4, "dndz"=>  nz_k4)
+    _nz_source_0 = Dict("z"=>  zs_k5, "dndz"=>  nz_k5)
+    _nz_source_1 = Dict("z"=>  zs_k6, "dndz"=>  nz_k6)
+    _nz_source_2 = Dict("z"=>  zs_k7, "dndz"=>  nz_k7)
+    _nz_source_3 = Dict("z"=>  zs_k8, "dndz"=>  nz_k8)
+    _nz_source_4 = Dict("z"=>  zs_k9, "dndz"=>  nz_k9)
+
     meta, files = make_data(sacc_file, yaml_file;
-                            nz_lens_0=nz_k0,
-                            nz_lens_1=nz_k1,
-                            nz_lens_2=nz_k2,
-                            nz_lens_3=nz_k3,
-                            nz_lens_4=nz_k4,
-                            nz_source_0=nz_k5,
-                            nz_source_1=nz_k6,
-                            nz_source_2=nz_k7,
-                            nz_source_3=nz_k8,
-                            nz_source_4=nz_k9)
+                                nz_lens_0=_nz_lens_0,
+                                nz_lens_1=_nz_lens_1,
+                                nz_lens_2=_nz_lens_2,
+                                nz_lens_3=_nz_lens_3,
+                                nz_lens_4=_nz_lens_4,
+                                nz_source_0=_nz_source_0,
+                                nz_source_1=_nz_source_1,
+                                nz_source_2=_nz_source_2,
+                                nz_source_3=_nz_source_3,
+                                nz_source_4=_nz_source_4)
+
 
     meta.types = [ 
         "galaxy_density",
@@ -201,7 +213,7 @@ for realization in 0:10_000
     # Find MLE estimate to use as initial parameters.
     mle = maximum_likelihood(cond_model, NelderMead())
     values = mle.values.array
-    names = mle.names.array
+    namess = map.values.dicts[1].keys
 
     folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_gp_naximization/")
     filename = string("samples.csv")
