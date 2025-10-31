@@ -34,6 +34,17 @@ nz_source_2 = npzread(string(nz_path, "source_2.npz"))
 nz_source_3 = npzread(string(nz_path, "source_3.npz"))
 nz_source_4 = npzread(string(nz_path, "source_4.npz"))
 
+zs_k0, nz_k0 = nz_lens_0["z"], nz_lens_0["dndz"]
+zs_k1, nz_k1 = nz_lens_1["z"], nz_lens_1["dndz"]
+zs_k2, nz_k2 = nz_lens_2["z"], nz_lens_2["dndz"]
+zs_k3, nz_k3 = nz_lens_3["z"], nz_lens_3["dndz"]
+zs_k4, nz_k4 = nz_lens_4["z"], nz_lens_4["dndz"]
+zs_k5, nz_k5 = nz_source_0["z"], nz_source_0["dndz"]
+zs_k6, nz_k6 = nz_source_1["z"], nz_source_1["dndz"]
+zs_k7, nz_k7 = nz_source_2["z"], nz_source_2["dndz"]
+zs_k8, nz_k8 = nz_source_3["z"], nz_source_3["dndz"]
+zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["dndz"]
+
 meta, files = make_data(sacc_file, yaml_file;
     nz_lens_0=nz_lens_0,
     nz_lens_1=nz_lens_1,
