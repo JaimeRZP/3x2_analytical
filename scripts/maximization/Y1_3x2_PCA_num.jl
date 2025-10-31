@@ -23,27 +23,27 @@ sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
 PCA_params = npzread(param_path)
 
-nz_lens_0 = npzread(string(nz_path, "lens_0.npz"))
-nz_lens_1 = npzread(string(nz_path, "lens_1.npz"))
-nz_lens_2 = npzread(string(nz_path, "lens_2.npz"))
-nz_lens_3 = npzread(string(nz_path, "lens_3.npz"))
-nz_lens_4 = npzread(string(nz_path, "lens_4.npz"))
-nz_source_0 = npzread(string(nz_path, "source_0.npz"))
-nz_source_1 = npzread(string(nz_path, "source_1.npz"))
-nz_source_2 = npzread(string(nz_path, "source_2.npz"))
-nz_source_3 = npzread(string(nz_path, "source_3.npz"))
-nz_source_4 = npzread(string(nz_path, "source_4.npz"))
+nz_lens_0 =  npzread(string(nz_path, "lens_0.npz"))
+nz_lens_1 =  npzread(string(nz_path, "lens_1.npz"))
+nz_lens_2 =  npzread(string(nz_path, "lens_2.npz"))
+nz_lens_3 =  npzread(string(nz_path, "lens_3.npz"))
+nz_lens_4 =  npzread(string(nz_path, "lens_4.npz"))
+nz_source_0 =  npzread(string(nz_path, "source_0.npz"))
+nz_source_1 =  npzread(string(nz_path, "source_1.npz"))
+nz_source_2 =  npzread(string(nz_path, "source_2.npz"))
+nz_source_3 =  npzread(string(nz_path, "source_3.npz"))
+nz_source_4 =  npzread(string(nz_path, "source_4.npz"))
 
-W_source_0 =  nz_lens_0["W"]
-W_source_1 =  nz_lens_1["W"]
-W_source_2 =  nz_lens_2["W"]
-W_source_3 =  nz_lens_3["W"]
-W_source_4 =  nz_lens_4["W"]
-W_lens_0 =  nz_source_0["W"]
-W_lens_1 =  nz_source_1["W"]
-W_lens_2 =  nz_source_2["W"]
-W_lens_3 =  nz_source_3["W"]
-W_lens_4 =  nz_source_4["W"]
+W_lens_0 = npzread(string(nz_priors, "PCA_lens_0.npz"))["W"]
+W_lens_1 = npzread(string(nz_priors, "PCA_lens_1.npz"))["W"]
+W_lens_2 = npzread(string(nz_priors, "PCA_lens_2.npz"))["W"]
+W_lens_3 = npzread(string(nz_priors, "PCA_lens_3.npz"))["W"]
+W_lens_4 = npzread(string(nz_priors, "PCA_lens_4.npz"))["W"]
+W_source_0 = npzread(string(nz_priors, "PCA_source_0.npz"))["W"]
+W_source_1 = npzread(string(nz_priors, "PCA_source_1.npz"))["W"]
+W_source_2 = npzread(string(nz_priors, "PCA_source_2.npz"))["W"]
+W_source_3 = npzread(string(nz_priors, "PCA_source_3.npz"))["W"]
+W_source_4 = npzread(string(nz_priors, "PCA_source_4.npz"))["W"]
 
 for realization in 1:10_000
 
