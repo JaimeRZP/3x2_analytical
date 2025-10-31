@@ -229,3 +229,4 @@ for realization in 0:10_000
     end
     npzwrite(joinpath(folpath, string("data_", realization+1,".npz")), data=make_theory())
     println(string("Done with chain ", realization+1,"!"))
+end
