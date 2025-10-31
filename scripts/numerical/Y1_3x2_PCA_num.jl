@@ -53,6 +53,18 @@ W_lens_2 = nz_lens_2["W"]
 W_lens_3 = nz_lens_3["W"]
 W_lens_4 = nz_lens_4["W"]
 
+chol_source_0 = nz_source_0["W"]
+chol_source_1 = nz_source_1["W"]
+chol_source_2 = nz_source_2["W"]
+chol_source_3 = nz_source_3["W"]
+chol_source_4 = nz_source_4["W"]
+chol_lens_0 = nz_lens_0["W"]
+chol_lens_1 = nz_lens_1["W"]
+chol_lens_2 = nz_lens_2["W"]
+chol_lens_3 = nz_lens_3["W"]
+chol_lens_4 = nz_lens_4["W"]
+
+
 meta, files = make_data(sacc_file, yaml_file;
                         nz_lens_0=nz_lens_0,
                         nz_lens_1=nz_lens_1,
@@ -119,16 +131,16 @@ function make_theory(;
     A_IA=0.25179439,
     meta=meta, files=files)
 
-    nz_lens_0 .= nz_k0 + W_lens_0 * alphas_lens_0
-    nz_lens_1 .= nz_k1 + W_lens_1 * alphas_lens_1
-    nz_lens_2 .= nz_k2 + W_lens_2 * alphas_lens_2
-    nz_lens_3 .= nz_k3 + W_lens_3 * alphas_lens_3
-    nz_lens_4 .= nz_k4 + W_lens_4 * alphas_lens_4
-    nz_source_0 .= nz_k5 + W_source_0 * alphas_source_0
-    nz_source_1 .= nz_k6 + W_source_1 * alphas_source_1
-    nz_source_2 .= nz_k7 + W_source_2 * alphas_source_2
-    nz_source_3 .= nz_k8 + W_source_3 * alphas_source_3
-    nz_source_4 .= nz_k9 + W_source_4 * alphas_source_4
+    nz_lens_0 .= nz_k0 + (W_lens_0 @ chol_lens_0) * alphas_lens_0
+    nz_lens_1 .= nz_k1 + (W_lens_1 @ chol_lens_1) * alphas_lens_1
+    nz_lens_2 .= nz_k2 + (W_lens_2 @ chol_lens_2) * alphas_lens_2
+    nz_lens_3 .= nz_k3 + (W_lens_3 @ chol_lens_3) * alphas_lens_3
+    nz_lens_4 .= nz_k4 + (W_lens_4 @ chol_lens_4) * alphas_lens_4
+    nz_source_0 .= nz_k5 + (W_source_0 @ chol_source_0) * alphas_source_0
+    nz_source_1 .= nz_k6 + (W_source_1 @ chol_source_1) * alphas_source_1
+    nz_source_2 .= nz_k7 + (W_source_2 @ chol_source_2) * alphas_source_2
+    nz_source_3 .= nz_k8 + (W_source_3 @ chol_source_3) * alphas_source_3
+    nz_source_4 .= nz_k9 + (W_source_4 @ chol_source_4) * alphas_source_4
 
     nuisances = Dict(
         "lens_0_b"    => lens_0_b,

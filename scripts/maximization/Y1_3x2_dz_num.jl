@@ -21,8 +21,8 @@ param_path = string("../../data/CosmoDC2/nzs_", method, "/dz_priors/dz_params.np
 
 sacc_file = sacc.Sacc().load_fits(sacc_path)
 yaml_file = YAML.load_file(yaml_path)
-
 dz_params = npzread(string("data/CosmoDC2/nzs_", method, "/dz_priors/dz_params.npz"))
+
 nz_lens_0 = npzread(string(nz_path, "lens_0.npz"))
 nz_lens_1 = npzread(string(nz_path, "lens_1.npz"))
 nz_lens_2 = npzread(string(nz_path, "lens_2.npz"))
@@ -35,6 +35,7 @@ nz_source_3 = npzread(string(nz_path, "source_3.npz"))
 nz_source_4 = npzread(string(nz_path, "source_4.npz"))
 
 for realization in 0:10_000
+
     dz_0 = dz_params["lens_0"][:, realization]
     dz_1 = dz_params["lens_1"][:, realization]
     dz_2 = dz_params["lens_2"][:, realization]
@@ -58,16 +59,16 @@ for realization in 0:10_000
     zs_k9, nz_k9 = nz_source_4["z"], nz_source_4["photo_hists"][:, realization]
 
     meta, files = make_data(sacc_file, yaml_file;
-                            nz_lens_0=nz_lens_0,
-                            nz_lens_1=nz_lens_1,
-                            nz_lens_2=nz_lens_2,
-                            nz_lens_3=nz_lens_3,
-                            nz_lens_4=nz_lens_4,
-                            nz_source_0=nz_source_0,
-                            nz_source_1=nz_source_1,
-                            nz_source_2=nz_source_2,
-                            nz_source_3=nz_source_3,
-                            nz_source_4=nz_source_4)
+                            nz_lens_0=nz_k0,
+                            nz_lens_1=nz_k1,
+                            nz_lens_2=nz_k2,
+                            nz_lens_3=nz_k3,
+                            nz_lens_4=nz_k4,
+                            nz_source_0=nz_k5,
+                            nz_source_1=nz_k6,
+                            nz_source_2=nz_k7,
+                            nz_source_3=nz_k8,
+                            nz_source_4=nz_k9)
 
     meta.types = [ 
         "galaxy_density",
@@ -161,18 +162,6 @@ for realization in 0:10_000
         lens_2_b ~ Uniform(1.10, 1.30)
         lens_3_b ~ Uniform(1.20, 1.50)
         lens_4_b ~ Uniform(1.40, 1.80)
-        #A_IA ~ Uniform(-1.0, 1.0)
-
-        #dz_lens_0 := (chol_lens_0 * alphas_lens_0)[1]
-        #dz_lens_1 := (chol_lens_1 * alphas_lens_1)[1]
-        #dz_lens_2 := (chol_lens_2 * alphas_lens_2)[1]
-        #dz_lens_3 := (chol_lens_3 * alphas_lens_3)[1]
-        #dz_lens_4 := (chol_lens_4 * alphas_lens_4)[1]
-        #dz_source_0 := (chol_source_0 * alphas_source_0)[1]
-        #dz_source_1 := (chol_source_1 * alphas_source_1)[1]
-        #dz_source_2 := (chol_source_2 * alphas_source_2)[1]
-        #dz_source_3 := (chol_source_3 * alphas_source_3)[1]
-        #dz_source_4 := (chol_source_4 * alphas_source_4)[1]
 
         theory := make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
                                 dz_lens_0=dz_0,
@@ -190,7 +179,6 @@ for realization in 0:10_000
                                 lens_2_b=lens_2_b, 
                                 lens_3_b=lens_3_b,
                                 lens_4_b=lens_4_b, 
-                                #A_IA=A_IA,
                                 )
             ttheory = iΓ * theory
             d = data - ttheory
@@ -200,80 +188,21 @@ for realization in 0:10_000
 
     cond_model = model(data)
 
-    # Find MAP estimate to use as initial parameters.
-    map = maximum_a_posteriori(cond_model, NelderMead())
+    # Find MLE estimate to use as initial parameters.
+    mle = maximum_likelihood(cond_model, NelderMead())
+    values = mle.values.array
+    names = mle.names.array
 
-println("sampling settings: ")
-println("iterations ", iterations)
-println("TAP ", TAP)
-println("init_ϵ1 ", init_ϵ1)
-println("init_ϵ2 ", init_ϵ2)
-println("max_depth ", max_depth)
-println("adaptation ", adaptation)
-#println("nchains ", nchains)
-
-# Start sampling.
-folpath = string("../../", method, "_fake_chains/numerical/")
-folname = string("Y1_3x2_Gibbs_dz_num",
-    "_TAP_", TAP,
-    "_init_ϵ1_", init_ϵ1, 
-    "_init_ϵ2_", init_ϵ2,
-)
-folname = joinpath(folpath, folname)
-
-if isdir(folname)
-    fol_files = readdir(folname)
-    println("Found existing file ", folname)
-    if length(fol_files) != 0
-        ns = [parse(Int, file[7:end-4]) for file in fol_files if occursin("chain", file)]
-        last_n = maximum(ns)
-        #println("Restarting chain")
-    else
-        #println("Starting new chain")
-        last_n = 0
+    folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_dz_naximization/")
+    filename = string("samples.csv")
+    params = Dict{Symbol, Float64}()
+    for (i, name) in enumerate(names)
+        params[Symbol(name)] = values[i]
     end
-else
-    mkdir(folname)
-    println(string("Created new folder ", folname))
-    last_n = 0
-end
-
-# Create a placeholder chain file.
-CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), Dict("params"=>[]), append=true)
-
-# Sample
-cond_model = model(data)
-#sampler = NUTS(adaptation, TAP;
-#    init_ϵ=init_ϵ, max_depth=max_depth)
-sampler = Gibbs(
-    NUTS(adaptation, TAP,
-    :Ωm, :Ωbb, :h, :σ8, :ns,
-    :lens_0_b, 
-    :lens_1_b, 
-    :lens_2_b, 
-    :lens_3_b, 
-    :lens_4_b,
-    :A_IA;
-    init_ϵ=init_ϵ1, max_depth=max_depth),
-    NUTS(adaptation, TAP,
-    :alphas_lens_0,
-    :alphas_lens_1,
-    :alphas_lens_2,
-    :alphas_lens_3,
-    :alphas_lens_4,
-    :alphas_source_0,
-    :alphas_source_1,
-    :alphas_source_2,
-    :alphas_source_3,
-    :alphas_source_4;
-    init_ϵ=init_ϵ2, max_depth=max_depth))
-chain = sample(cond_model, sampler, iterations;
-                init_params=init_params,
-                progress=true, save_state=true)
-
-# Save the actual chain.       
-@save joinpath(folname, string("chain_", last_n+1,".jls")) chain
-CSV.write(joinpath(folname, string("chain_", last_n+1,".csv")), chain)
-CSV.write(joinpath(folname, string("summary_", last_n+1,".csv")), describe(chain)[1])
-npzwrite(joinpath(folname, string("data_", last_n+1,".npz")), data=make_theory())
-println(string("Done with chain ", last_n+1,"!"))
+    if realization == 0
+        CSV.write(joinpath(folpath, filename), DataFrame(params))
+    else
+        CSV.write(joinpath(folpath, filename), DataFrame(params); append=true)
+    end
+    npzwrite(joinpath(folpath, string("data_", realization+1,".npz")), data=make_theory())
+    println(string("Done with chain ", realization+1,"!"))

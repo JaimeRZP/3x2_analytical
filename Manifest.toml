@@ -1202,11 +1202,9 @@ version = "2.41.2+0"
 
 [[deps.LimberJack]]
 deps = ["Artifacts", "Interpolations", "LinearAlgebra", "NPZ", "NumericalIntegration", "PythonCall", "QuadGK", "Statistics"]
-git-tree-sha1 = "aaec5e147eb26fb29af81968404d349571997b24"
-repo-rev = "bandpowers"
-repo-url = "https://github.com/JaimeRZP/LimberJack.jl.git"
+git-tree-sha1 = "d97a09795fe92561b9f29bda7fe00a169898ba7f"
 uuid = "6b86205d-155a-4b14-b82d-b6a149ea78f2"
-version = "0.1.5"
+version = "0.1.6"
 
 [[deps.LineSearches]]
 deps = ["LinearAlgebra", "NLSolversBase", "NaNMath", "Parameters", "Printf"]
