@@ -170,7 +170,7 @@ for realization in 1:10_000
     fake_data = make_theory();
     fake_data = iΓ * fake_data
     data = fake_data
-    folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_wzdz_naximization/")
+    folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_wzdz_maximization/")
     npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
     println(string("Written data for ", realization,"!"))
 

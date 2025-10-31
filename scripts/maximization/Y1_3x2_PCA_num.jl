@@ -132,33 +132,22 @@ for realization in 1:10_000
         A_IA=0.25179439,
         meta=meta, files=files)
 
-        nz_lens_0 .= nz_k0 + W_lens_0 * alphas_lens_0
-        nz_lens_1 .= nz_k1 + W_lens_1 * alphas_lens_1
-        nz_lens_2 .= nz_k2 + W_lens_2 * alphas_lens_2
-        nz_lens_3 .= nz_k3 + W_lens_3 * alphas_lens_3
-        nz_lens_4 .= nz_k4 + W_lens_4 * alphas_lens_4
-        nz_source_0 .= nz_k5 + W_source_0 * alphas_source_0
-        nz_source_1 .= nz_k6 + W_source_1 * alphas_source_1
-        nz_source_2 .= nz_k7 + W_source_2 * alphas_source_2
-        nz_source_3 .= nz_k8 + W_source_3 * alphas_source_3
-        nz_source_4 .= nz_k9 + W_source_4 * alphas_source_4
-
         nuisances = Dict(
             "lens_0_b"    => lens_0_b,
             "lens_1_b"    => lens_1_b,
             "lens_2_b"    => lens_2_b,
             "lens_3_b"    => lens_3_b,
             "lens_4_b"    => lens_4_b,
-            "lens_0_nz"   => nz_lens_0,
-            "lens_1_nz"   => nz_lens_1,
-            "lens_2_nz"   => nz_lens_2,
-            "lens_3_nz"   => nz_lens_3,
-            "lens_4_nz"   => nz_lens_4,
-            "source_0_nz" => nz_source_0,
-            "source_1_nz" => nz_source_1,
-            "source_2_nz" => nz_source_2,
-            "source_3_nz" => nz_source_3,
-            "source_4_nz" => nz_source_4,
+            "lens_0_nz"   => nz_k0 + W_lens_0 * alphas_lens_0,
+            "lens_1_nz"   => nz_k1 + W_lens_1 * alphas_lens_1,
+            "lens_2_nz"   => nz_k2 + W_lens_2 * alphas_lens_2,
+            "lens_3_nz"   => nz_k3 + W_lens_3 * alphas_lens_3,
+            "lens_4_nz"   => nz_k4 + W_lens_4 * alphas_lens_4,
+            "source_0_nz" => nz_k5 + W_source_0 * alphas_source_0,
+            "source_1_nz" => nz_k6 + W_source_1 * alphas_source_1,
+            "source_2_nz" => nz_k7 + W_source_2 * alphas_source_2,
+            "source_3_nz" => nz_k8 + W_source_3 * alphas_source_3,
+            "source_4_nz" => nz_k9 + W_source_4 * alphas_source_4,
             "A_IA"        => A_IA)
         
         cosmology = Cosmology(Ωm=Ωm, Ωb=Ωb, h=h, ns=ns, σ8=σ8,
