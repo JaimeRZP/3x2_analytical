@@ -151,11 +151,11 @@ end
     σ8 ~ Uniform(0.6, 0.9)
     ns ~ Uniform(0.9, 1.0)
 
-    lens_0_b ~ Uniform(0.75, 0.95)
-    lens_1_b ~ Uniform(0.95, 1.15)
-    lens_2_b ~ Uniform(1.10, 1.30)
-    lens_3_b ~ Uniform(1.20, 1.50)
-    lens_4_b ~ Uniform(1.40, 1.80)
+    lens_0_b ~ Uniform(0.75, 1.15)
+    lens_1_b ~ Uniform(0.95, 1.30)
+    lens_2_b ~ Uniform(1.10, 1.50)
+    lens_3_b ~ Uniform(1.20, 1.80)
+    lens_4_b ~ Uniform(1.40, 2.00)
 
     theory = make_theory(Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
         alphas_lens_0=alphas_lens_0,
@@ -229,8 +229,8 @@ for realization in 1:500
     fake_data = make_theory(files=new_files);
     fake_data = iΓ * fake_data
     data = fake_data
-    folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_PCA_maximization/")
-    npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
+    folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_gp_maximization/")
+    #npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
     println(string("Written data for ", realization,"!"))
 
     # Create the conditioned model with the alphas values fixed.

@@ -230,7 +230,7 @@ for realization in 1:500
     fake_data = iΓ * fake_data
     data = fake_data
     folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_PCA_maximization/")
-    npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
+    #npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
     println(string("Written data for ", realization,"!"))
 
     # Create the conditioned model with the dz values fixed.

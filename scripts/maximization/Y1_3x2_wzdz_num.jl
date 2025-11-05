@@ -105,16 +105,16 @@ function make_theory(;
     mu_source_3 = sum(z_source_3 .* nz_source_3) / sum(nz_source_3)
     mu_source_4 = sum(z_source_4 .* nz_source_4) / sum(nz_source_4)
 
-    lens_0_zs   = @.((z_lens_0 - mu_lens_0 + dz_lens_0) / wz_lens_0 + mu_lens_0)
-    lens_1_zs   = @.((z_lens_1 - mu_lens_1 + dz_lens_1) / wz_lens_1 + mu_lens_1)
-    lens_2_zs   = @.((z_lens_2 - mu_lens_2 + dz_lens_2) / wz_lens_2 + mu_lens_2)
-    lens_3_zs   = @.((z_lens_3 - mu_lens_3 + dz_lens_3) / wz_lens_3 + mu_lens_3)
-    lens_4_zs   = @.((z_lens_4 - mu_lens_4 + dz_lens_4) / wz_lens_4 + mu_lens_4)
-    source_0_zs = @.((z_source_0 - mu_source_0 + dz_source_0) / wz_source_0 + mu_source_0)
-    source_1_zs = @.((z_source_1 - mu_source_1 + dz_source_1) / wz_source_1 + mu_source_1)
-    source_2_zs = @.((z_source_2 - mu_source_2 + dz_source_2) / wz_source_2 + mu_source_2)
-    source_3_zs = @.((z_source_3 - mu_source_3 + dz_source_3) / wz_source_3 + mu_source_3)
-    source_4_zs = @.((z_source_4 - mu_source_4 + dz_source_4) / wz_source_4 + mu_source_4)
+    lens_0_zs   = @.((z_lens_0 - mu_lens_0 + dz_lens_0) * wz_lens_0 + mu_lens_0)
+    lens_1_zs   = @.((z_lens_1 - mu_lens_1 + dz_lens_1) * wz_lens_1 + mu_lens_1)
+    lens_2_zs   = @.((z_lens_2 - mu_lens_2 + dz_lens_2) * wz_lens_2 + mu_lens_2)
+    lens_3_zs   = @.((z_lens_3 - mu_lens_3 + dz_lens_3) * wz_lens_3 + mu_lens_3)
+    lens_4_zs   = @.((z_lens_4 - mu_lens_4 + dz_lens_4) * wz_lens_4 + mu_lens_4)
+    source_0_zs = @.((z_source_0 - mu_source_0 + dz_source_0) * wz_source_0 + mu_source_0)
+    source_1_zs = @.((z_source_1 - mu_source_1 + dz_source_1) * wz_source_1 + mu_source_1)
+    source_2_zs = @.((z_source_2 - mu_source_2 + dz_source_2) * wz_source_2 + mu_source_2)
+    source_3_zs = @.((z_source_3 - mu_source_3 + dz_source_3) * wz_source_3 + mu_source_3)
+    source_4_zs = @.((z_source_4 - mu_source_4 + dz_source_4) * wz_source_4 + mu_source_4)
 
     nuisances = Dict(
     "lens_0_b"    => lens_0_b,
@@ -161,11 +161,11 @@ end
     σ8 ~ Uniform(0.6, 0.9)
     ns ~ Uniform(0.9, 1.0)
 
-    lens_0_b ~ Uniform(0.75, 0.95)
-    lens_1_b ~ Uniform(0.95, 1.15)
-    lens_2_b ~ Uniform(1.10, 1.30)
-    lens_3_b ~ Uniform(1.20, 1.50)
-    lens_4_b ~ Uniform(1.40, 1.80)
+    lens_0_b ~ Uniform(0.75, 1.15)
+    lens_1_b ~ Uniform(0.95, 1.30)
+    lens_2_b ~ Uniform(1.10, 1.50)
+    lens_3_b ~ Uniform(1.20, 1.80)
+    lens_4_b ~ Uniform(1.40, 2.00)
 
     theory = make_theory(
         Ωm=Ωm, Ωb=Ωb, h=h, σ8=σ8, ns=ns,
@@ -241,7 +241,7 @@ for realization in 1:500
     fake_data = iΓ * fake_data
     data = fake_data
     folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_wzdz_maximization/")
-    npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
+    #npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
     println(string("Written data for ", realization,"!"))
 
     # Create the conditioned model with the dz values fixed.
@@ -271,6 +271,4 @@ for realization in 1:500
     else
         CSV.write(joinpath(folpath, "samples.csv"), DataFrame(params); append=true)
     end
-    npzwrite(joinpath(folpath, string("data_", realization+1,".npz")), data=make_theory())
-    println(string("Done with chain ", realization+1,"!"))
 end

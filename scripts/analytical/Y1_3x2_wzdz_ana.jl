@@ -146,7 +146,7 @@ println("adaptation ", adaptation)
 
 # Start sampling.
 folpath = string("../../", method, "_fake_chains/analytical/")
-folname = string("Y1_3x2_wzdz_ana_TAP_", TAP, "_init_ϵ_", init_ϵ)
+folname = string("Y1_3x2_fixed_wzdz_ana_TAP_", TAP, "_init_ϵ_", init_ϵ)
 folname = joinpath(folpath, folname)
 
 if isdir(folname)
