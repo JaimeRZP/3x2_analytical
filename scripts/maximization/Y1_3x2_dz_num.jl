@@ -257,8 +257,8 @@ for realization in 1:500
         params[Symbol(name)] = values[i]
     end
     if realization == 0
-        CSV.write(joinpath(folpath, "samples_small.csv"), DataFrame(params))
+        CSV.write(joinpath(folpath, "samples.csv"), DataFrame(params))
     else
-        CSV.write(joinpath(folpath, "samples_small.csv"), DataFrame(params); append=true)
+        CSV.write(joinpath(folpath, "samples.csv"), DataFrame(params); append=true)
     end
 end
