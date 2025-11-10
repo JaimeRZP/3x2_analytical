@@ -231,7 +231,7 @@ for realization in 1:500
     fake_data = iΓ * fake_data
     data = fake_data
     folpath = string("../../", method, "_fake_chains/maximization/Y1_3x2_dz_maximization/")
-    npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
+    #npzwrite(joinpath(folpath, string("data_", realization,".npz")), data=make_theory())
     println(string("Written data for ", realization,"!"))
 
     # Create the conditioned model with the dz values fixed.
@@ -257,8 +257,8 @@ for realization in 1:500
         params[Symbol(name)] = values[i]
     end
     if realization == 0
-        CSV.write(joinpath(folpath, "samples.csv"), DataFrame(params))
+        CSV.write(joinpath(folpath, "samples_small.csv"), DataFrame(params))
     else
-        CSV.write(joinpath(folpath, "samples.csv"), DataFrame(params); append=true)
+        CSV.write(joinpath(folpath, "samples_small.csv"), DataFrame(params); append=true)
     end
 end
